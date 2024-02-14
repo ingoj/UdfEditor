@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class xudfPageObjectGUI
  *
- * @author            Theodor Truffer <tt@studer-raimann.ch>
+ *
+ *
  *
  * @ilCtrl_isCalledBy xudfPageObjectGUI: xudfContentGUI
  * @ilCtrl_Calls      xudfPageObjectGUI: ilPageEditorGUI, ilEditClipboardGUI, ilMediaPoolTargetSelector
@@ -11,7 +11,6 @@
  */
 class xudfPageObjectGUI extends ilPageObjectGUI
 {
-
     public function __construct(xudfContentGUI $parent_gui)
     {
         $this->checkAndAddCOPageDefinition();
@@ -32,18 +31,22 @@ class xudfPageObjectGUI extends ilPageObjectGUI
         global $DIC;
         $tpl = $DIC["tpl"];
         $tpl->setCurrentBlock("SyntaxStyle");
-        $tpl->setVariable("LOCATION_SYNTAX_STYLESHEET",
-            ilObjStyleSheet::getSyntaxStylePath());
+        $tpl->setVariable(
+            "LOCATION_SYNTAX_STYLESHEET",
+            ilObjStyleSheet::getSyntaxStylePath()
+        );
         $tpl->parseCurrentBlock();
 
         $tpl->setCurrentBlock("ContentStyle");
-        $tpl->setVariable("LOCATION_CONTENT_STYLESHEET",
-            ilObjStyleSheet::getContentStylePath($parent_gui->getObject()->getStyleSheetId()));
+        $tpl->setVariable(
+            "LOCATION_CONTENT_STYLESHEET",
+            ilObjStyleSheet::getContentStylePath($parent_gui->getObject()->getStyleSheetId())
+        );
         $tpl->parseCurrentBlock();
     }
 
 
-    function executeCommand()
+    public function executeCommand()
     {
         return parent::executeCommand();
     }
@@ -57,12 +60,12 @@ class xudfPageObjectGUI extends ilPageObjectGUI
         global $DIC;
         $sql_query = $DIC->database()->query('SELECT * FROM copg_pobj_def WHERE parent_type = "xudf"');
         if ($DIC->database()->numRows($sql_query) === 0) {
-            $DIC->database()->insert('copg_pobj_def', array(
-                'parent_type' => array('text', 'xudf'),
-                'class_name'  => array('text', 'xudfPageObject'),
-                'directory'   => array('text', 'classes/Content/PageEditor'),
-                'component'   => array('text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor')
-            ));
+            $DIC->database()->insert('copg_pobj_def', [
+                'parent_type' => ['text', 'xudf'],
+                'class_name' => ['text', 'xudfPageObject'],
+                'directory' => ['text', 'classes/Content/PageEditor'],
+                'component' => ['text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor']
+            ]);
         }
     }
 }

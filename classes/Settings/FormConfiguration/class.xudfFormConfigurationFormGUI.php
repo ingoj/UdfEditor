@@ -2,20 +2,14 @@
 
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
-/**
- * Class xudfFormConfigurationFormGUI
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
 class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
 {
-
-    const F_TITLE = 'title';
-    const F_DESCRIPTION = 'description';
-    const F_UDF_FIELD = 'udf_field';
-    const F_IS_SEPARATOR = 'is_separator';
-    const F_ELEMENT_ID = 'element_id';
-    const F_REQUIRED = 'is_required';
+    public const F_TITLE = 'title';
+    public const F_DESCRIPTION = 'description';
+    public const F_UDF_FIELD = 'udf_field';
+    public const F_IS_SEPARATOR = 'is_separator';
+    public const F_ELEMENT_ID = 'element_id';
+    public const F_REQUIRED = 'is_required';
     /**
      * @var ilCtrl
      */
@@ -38,12 +32,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     protected $element;
 
 
-    /**
-     * xudfFormConfigurationFormGUI constructor.
-     *
-     * @param xudfFormConfigurationGUI $parent_gui
-     * @param xudfContentElement       $element
-     */
+
     public function __construct(xudfFormConfigurationGUI $parent_gui, xudfContentElement $element)
     {
         global $DIC;
@@ -59,9 +48,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function initForm()
     {
         $input = new ilHiddenInputGUI(self::F_IS_SEPARATOR);
@@ -85,9 +72,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function initUdfFieldForm()
     {
         // UDF FIELD
@@ -95,7 +80,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
 
         /** @var ilUserDefinedFields $udf_fields */
         $udf_fields = ilUserDefinedFields::_getInstance()->getDefinitions();
-        $options = array();
+        $options = [];
         foreach ($udf_fields as $udf_field) {
             $options[$udf_field['field_id']] = $udf_field['field_name'];
         }
@@ -113,9 +98,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function initSeparatorForm()
     {
         // TITLE
@@ -128,9 +111,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     }
 
 
-    /**
-     *
-     */
+
     public function fillForm()
     {
         try {
@@ -139,12 +120,12 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
             ilUtil::sendInfo($this->pl->txt('msg_choose_new_type'));
             $title = '';
         }
-        $values = array(
-            self::F_TITLE       => $title,
+        $values = [
+            self::F_TITLE => $title,
             self::F_DESCRIPTION => $this->element->getDescription(),
-            self::F_UDF_FIELD   => $this->element->getUdfFieldId(),
-            self::F_REQUIRED    => $this->element->isRequired()
-        );
+            self::F_UDF_FIELD => $this->element->getUdfFieldId(),
+            self::F_REQUIRED => $this->element->isRequired()
+        ];
 
         $this->setValuesByArray($values, true);
     }

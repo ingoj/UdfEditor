@@ -4,31 +4,28 @@ use srag\Notifications4Plugin\UdfEditor\Notification\NotificationCtrl;
 use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
 
 /**
- * Class xudfFormConfigurationGUI
  *
- * @author            Theodor Truffer <tt@studer-raimann.ch>
+ *
+ *
  *
  * @ilCtrl_isCalledBy xudfFormConfigurationGUI: ilObjUdfEditorGUI
  */
 class xudfFormConfigurationGUI extends xudfGUI
 {
+    public const SUBTAB_SETTINGS = 'settings';
+    public const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
+    public const CMD_FORM_CONFIGURATION = 'index';
+    public const CMD_ADD_UDF_FIELD = 'addUdfField';
+    public const CMD_ADD_SEPARATOR = 'addSeparator';
+    public const CMD_CREATE = 'create';
+    public const CMD_EDIT = 'edit';
+    public const CMD_UPDATE = 'update';
+    public const CMD_DELETE = 'delete';
+    public const CMD_CONFIRM_DELETE = 'confirmDelete';
+    public const CMD_REORDER = 'reorder';
 
-    const SUBTAB_SETTINGS = 'settings';
-    const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
-    const CMD_FORM_CONFIGURATION = 'index';
-    const CMD_ADD_UDF_FIELD = 'addUdfField';
-    const CMD_ADD_SEPARATOR = 'addSeparator';
-    const CMD_CREATE = 'create';
-    const CMD_EDIT = 'edit';
-    const CMD_UPDATE = 'update';
-    const CMD_DELETE = 'delete';
-    const CMD_CONFIRM_DELETE = 'confirmDelete';
-    const CMD_REORDER = 'reorder';
 
 
-    /**
-     * @param $cmd
-     */
     protected function performCommand($cmd)
     {
         switch ($cmd) {
@@ -42,25 +39,24 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function setSubtabs()
     {
         $this->tabs->addSubTab(self::SUBTAB_SETTINGS, $this->lng->txt(self::SUBTAB_SETTINGS), $this->ctrl->getLinkTargetByClass(xudfSettingsGUI::class));
         $this->tabs->addSubTab(self::SUBTAB_FORM_CONFIGURATION, $this->pl->txt(self::SUBTAB_FORM_CONFIGURATION), $this->ctrl->getLinkTargetByClass(xudfFormConfigurationGUI::class, self::CMD_STANDARD));
         $this->ctrl->setParameterByClass(NotificationCtrl::class, NotificationCtrl::GET_PARAM_NOTIFICATION_ID, $this->getObject()->getSettings()->getNotification()->getId());
         if ($this->getObject()->getSettings()->hasMailNotification()) {
-            $this->tabs->addSubTab(xudfSettingsGUI::SUBTAB_MAIL_TEMPLATE, $this->pl->txt("notification"),
-                $this->ctrl->getLinkTargetByClass([xudfSettingsGUI::class, NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION));
+            $this->tabs->addSubTab(
+                xudfSettingsGUI::SUBTAB_MAIL_TEMPLATE,
+                $this->pl->txt("notification"),
+                $this->ctrl->getLinkTargetByClass([xudfSettingsGUI::class, NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION)
+            );
         }   $this->tabs->setSubTabActive(self::SUBTAB_FORM_CONFIGURATION);
 
     }
 
 
-    /**
-     *
-     */
+
     protected function initToolbar()
     {
         $add_udf_field = ilLinkButton::getInstance();
@@ -75,9 +71,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function index()
     {
         $xudfFormConfigurationTableGUI = new xudfFormConfigurationTableGUI($this, self::CMD_STANDARD);
@@ -85,9 +79,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function addUdfField()
     {
         $udf_fields = ilUserDefinedFields::_getInstance()->getDefinitions();
@@ -100,9 +92,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function addSeparator()
     {
         $element = new xudfContentElement();
@@ -112,9 +102,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function create()
     {
         $element = new xudfContentElement($_POST['element_id']);
@@ -133,9 +121,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function update()
     {
         $element = new xudfContentElement($_POST['element_id']);
@@ -153,9 +139,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function edit()
     {
         $element = xudfContentElement::find($_GET['element_id']);
@@ -165,9 +149,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function delete()
     {
         $element = new xudfContentElement($_GET['element_id']);
@@ -187,9 +169,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function confirmDelete()
     {
         $element = new xudfContentElement($_POST['element_id']);
@@ -199,9 +179,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function reorder()
     {
         $sort = 10;

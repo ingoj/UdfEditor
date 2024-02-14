@@ -4,17 +4,11 @@ use srag\CustomInputGUIs\UdfEditor\PropertyFormGUI\PropertyFormGUI;
 use srag\CustomInputGUIs\UdfEditor\TableGUI\TableGUI;
 use srag\DIC\UdfEditor\Exception\DICException;
 
-/**
- * Class xudfLogTableGUI
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
 class xudfLogTableGUI extends TableGUI
 {
-
-    const ID_PREFIX = 'xudf_log_table_';
-    const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
-    const ROW_TEMPLATE = 'tpl.log_table_row.html';
+    public const ID_PREFIX = 'xudf_log_table_';
+    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
+    public const ROW_TEMPLATE = 'tpl.log_table_row.html';
     /**
      * @var xudfLogGUI
      */
@@ -22,10 +16,8 @@ class xudfLogTableGUI extends TableGUI
 
 
     /**
-     * xudfLogTableGUI constructor.
      *
-     * @param $parent
-     * @param $parent_cmd
+     *
      *
      * @throws DICException
      */
@@ -38,21 +30,17 @@ class xudfLogTableGUI extends TableGUI
 
 
     /**
-     * @param string       $column
      * @param array|object $row
-     * @param int          $format
      *
      * @return string|void
      */
-    protected function getColumnValue(string $column, /*array*/ $row, int $format = self::DEFAULT_FORMAT) : string
+    protected function getColumnValue(string $column, /*array*/ $row, int $format = self::DEFAULT_FORMAT): string
     {
     }
 
 
-    /**
-     * @return array
-     */
-    protected function getSelectableColumns2() : array
+
+    protected function getSelectableColumns2(): array
     {
         return [];
     }
@@ -61,7 +49,7 @@ class xudfLogTableGUI extends TableGUI
     /**
      * @throws DICException
      */
-    protected function initColumns() : void
+    protected function initColumns(): void
     {
         $this->addColumn(self::plugin()->translate('values'));
         $this->addColumn(self::dic()->language()->txt('user'), 'user');
@@ -73,7 +61,7 @@ class xudfLogTableGUI extends TableGUI
      *
      * @throws Exception
      */
-    protected function initData() : void
+    protected function initData(): void
     {
         $filter_values = $this->getFilterValues();
         $filter_user = $filter_values['user'];
@@ -86,33 +74,27 @@ class xudfLogTableGUI extends TableGUI
     }
 
 
-    /**
-     *
-     */
-    protected function initFilterFields() : void
+
+    protected function initFilterFields(): void
     {
         $this->filter_fields = [
             "user" => [
-                PropertyFormGUI::PROPERTY_CLASS   => ilSelectInputGUI::class,
+                PropertyFormGUI::PROPERTY_CLASS => ilSelectInputGUI::class,
                 PropertyFormGUI::PROPERTY_OPTIONS => $this->getUserFilterOptions()
             ]
         ];
     }
 
 
-    /**
-     *
-     */
-    protected function initId() : void
+
+    protected function initId(): void
     {
         $this->setId(self::ID_PREFIX . $this->parent_obj->getObjId());
     }
 
 
-    /**
-     *
-     */
-    protected function initTitle() : void
+
+    protected function initTitle(): void
     {
         $this->setTitle(self::dic()->language()->txt('history'));
     }
@@ -123,7 +105,7 @@ class xudfLogTableGUI extends TableGUI
      *
      * @throws DICException
      */
-    protected function fillRow($row) : void
+    protected function fillRow($row): void
     {
         $this->tpl->setVariable('VALUES', $this->formatValues($row['values']));
         $this->tpl->setVariable('USER', ilObjUser::_lookupFullname($row['usr_id']) . ', [' . ilObjUser::_lookupLogin($row['usr_id']) . ']');
@@ -132,12 +114,10 @@ class xudfLogTableGUI extends TableGUI
 
 
     /**
-     * @param array $values
      *
-     * @return string
      * @throws DICException
      */
-    protected function formatValues(array $values) : string
+    protected function formatValues(array $values): string
     {
         // this should be a template, but i'm too lazy
         $string = '<table class="xudf_log_values">';
@@ -154,10 +134,9 @@ class xudfLogTableGUI extends TableGUI
 
 
     /**
-     * @return array
      * @throws DICException
      */
-    protected function getUserFilterOptions() : array
+    protected function getUserFilterOptions(): array
     {
         $result = self::dic()->database()->query(
             'SELECT DISTINCT(usr_id) FROM ' . xudfLogEntry::TABLE_NAME

@@ -2,7 +2,7 @@
  * xoctWaiter
  *
  * GUI-Overlay
- * @author Fabian Schmid <fs@studer-raimann.ch>
+ *
  */
 var xoctWaiter = {
 	possible_types: ['waiter', 'percentage'],

@@ -4,22 +4,19 @@ use srag\DIC\UdfEditor\DICTrait;
 use srag\Notifications4Plugin\UdfEditor\Notification\NotificationInterface;
 use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
 
-/**
- * Class xudfSetting
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
-class xudfSetting extends ActiveRecord {
+class xudfSetting extends ActiveRecord
+{
     use DICTrait;
     use Notifications4PluginTrait;
-    const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
-    const DB_TABLE_NAME = 'xudf_setting';
+    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
+    public const DB_TABLE_NAME = 'xudf_setting';
 
-    const REDIRECT_STAY_IN_FORM = 'stay_in_form';
-    const REDIRECT_TO_ILIAS_OBJECT = 'to_ilias_object';
-    const REDIRECT_TO_URL = 'to_url';
+    public const REDIRECT_STAY_IN_FORM = 'stay_in_form';
+    public const REDIRECT_TO_ILIAS_OBJECT = 'to_ilias_object';
+    public const REDIRECT_TO_URL = 'to_url';
 
-    public function getConnectorContainerName() {
+    public function getConnectorContainerName()
+    {
         return self::DB_TABLE_NAME;
     }
 
@@ -60,13 +57,13 @@ class xudfSetting extends ActiveRecord {
      * @con_is_notnull   true
      */
     protected $mail_notification = false;
-	/**
-	 * @var string
-	 *
-	 * @con_has_field    true
-	 * @con_fieldtype    text
-	 * @con_length       256
-	 */
+    /**
+     * @var string
+     *
+     * @con_has_field    true
+     * @con_fieldtype    text
+     * @con_length       256
+     */
     protected $additional_notification = '';
     /**
      * @var string
@@ -97,123 +94,122 @@ class xudfSetting extends ActiveRecord {
     /**
      * @return int
      */
-    public function getObjId() {
+    public function getObjId()
+    {
         return $this->obj_id;
     }
 
     /**
      * @param int $obj_id
      */
-    public function setObjId($obj_id) {
+    public function setObjId($obj_id)
+    {
         $this->obj_id = $obj_id;
     }
 
     /**
      * @return bool
      */
-    public function isOnline() {
+    public function isOnline()
+    {
         return $this->is_online;
     }
 
     /**
      * @param bool $is_online
      */
-    public function setIsOnline($is_online) {
+    public function setIsOnline($is_online)
+    {
         $this->is_online = $is_online;
     }
 
     /**
      * @return bool
      */
-    public function isShowInfoTab() {
+    public function isShowInfoTab()
+    {
         return $this->show_info_tab;
     }
 
     /**
      * @param bool $show_info_tab
      */
-    public function setShowInfoTab($show_info_tab) {
+    public function setShowInfoTab($show_info_tab)
+    {
         $this->show_info_tab = $show_info_tab;
     }
 
     /**
      * @return bool
      */
-    public function hasMailNotification() {
+    public function hasMailNotification()
+    {
         return $this->mail_notification;
     }
 
     /**
      * @param bool $mail_notification
      */
-    public function setMailNotification($mail_notification) {
+    public function setMailNotification($mail_notification)
+    {
         $this->mail_notification = $mail_notification;
     }
-
-	/**
-	 * @return string
-	 */
-	public function getAdditionalNotification() {
-		return $this->additional_notification;
-	}
-
-	/**
-	 * @param string $additional_notification
-	 */
-	public function setAdditionalNotification($additional_notification) {
-		$this->additional_notification = $additional_notification;
-	}
-
 
     /**
      * @return string
      */
-    public function getRedirectType() : string
+    public function getAdditionalNotification()
+    {
+        return $this->additional_notification;
+    }
+
+    /**
+     * @param string $additional_notification
+     */
+    public function setAdditionalNotification($additional_notification)
+    {
+        $this->additional_notification = $additional_notification;
+    }
+
+
+
+    public function getRedirectType(): string
     {
         return $this->redirect_type ?: self::REDIRECT_STAY_IN_FORM;
     }
 
 
-    /**
-     * @param string $redirect_type
-     */
+
     public function setRedirectType(string $redirect_type)
     {
         $this->redirect_type = $redirect_type;
     }
 
 
-    /**
-     * @return string
-     */
-    public function getRedirectValue() : string
+
+    public function getRedirectValue(): string
     {
         return $this->redirect_value;
     }
 
 
-    /**
-     * @param string $redirect_value
-     */
+
     public function setRedirectValue(string $redirect_value)
     {
         $this->redirect_value = $redirect_value;
     }
 
     /**
-     * @param $primary_key
-     * @param array $add_constructor_args
      * @return self
      */
-    public static function find($primary_key, array $add_constructor_args = array()) {
+    public static function find($primary_key, array $add_constructor_args = [])
+    {
         return parent::find($primary_key, $add_constructor_args); // TODO: Change the autogenerated stub
     }
 
 
-    /**
-     * @return NotificationInterface
-     */
-    public function getNotification() : NotificationInterface
+
+    public function getNotification(): NotificationInterface
     {
         if (empty($this->notification_name)) {
             $this->notification_name = "object_" . $this->getObjId();

@@ -4,14 +4,9 @@ use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-/**
- * Class ilObjUdfEditor
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+
 class ilObjUdfEditor extends ilObjectPlugin
 {
-
     /**
      * @var xudfSetting
      */
@@ -27,9 +22,7 @@ class ilObjUdfEditor extends ilObjectPlugin
     }
 
 
-    /**
-     *
-     */
+
     protected function doCreate()
     {
         $xudfSetting = new xudfSetting();
@@ -38,9 +31,7 @@ class ilObjUdfEditor extends ilObjectPlugin
     }
 
 
-    /**
-     *
-     */
+
     protected function beforeDelete()
     {
         xudfSetting::find($this->getId())->delete();
@@ -49,7 +40,6 @@ class ilObjUdfEditor extends ilObjectPlugin
 
     /**
      * @param self $new_obj
-     * @param      $a_target_id
      * @param null $a_copy_id
      */
     protected function doCloneObject($new_obj, $a_target_id, $a_copy_id = null)
@@ -60,9 +50,7 @@ class ilObjUdfEditor extends ilObjectPlugin
     }
 
 
-    /**
-     *
-     */
+
     public function getStyleSheetId()
     {
         ilObjStyleSheet::lookupObjectStyle($this->getId());

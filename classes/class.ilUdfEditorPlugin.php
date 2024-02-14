@@ -7,18 +7,15 @@ use srag\CustomInputGUIs\UdfEditor\Loader\CustomInputGUIsLoaderDetector;
 use srag\DIC\UdfEditor\DICTrait;
 use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
 
-/**
- * Class ilUdfEditorPlugin
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
-class ilUdfEditorPlugin extends ilRepositoryObjectPlugin {
+class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
+{
     use DICTrait;
     use Notifications4PluginTrait;
-    const PLUGIN_ID = 'xudf';
-    const PLUGIN_CLASS_NAME = self::class;
+    public const PLUGIN_ID = 'xudf';
+    public const PLUGIN_CLASS_NAME = self::class;
 
-    function getPluginName() {
+    public function getPluginName()
+    {
         return 'UdfEditor';
     }
 
@@ -29,9 +26,7 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin {
     protected static $init_notifications = false;
 
 
-    /**
-     *
-     */
+
     public static function initNotifications()/*:void*/
     {
         if (!self::$init_notifications) {
@@ -48,7 +43,7 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin {
     /**
      * @var ilUdfEditorPlugin
      */
-    protected static $instance = NULL;
+    protected static $instance = null;
 
 
     /**
@@ -63,8 +58,9 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin {
     /**
      * @return ilUdfEditorPlugin
      */
-    public static function getInstance() {
-        if (self::$instance === NULL) {
+    public static function getInstance()
+    {
+        if (self::$instance === null) {
             self::$instance = new self();
         }
 
@@ -72,18 +68,14 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin {
     }
 
 
-    /**
-     * @inheritDoc
-     */
+
     protected function init()/*:void*/
     {
         self::initNotifications();
     }
 
 
-    /**
-     * @inheritDoc
-     */
+
     public function updateLanguages(/*array*/ $a_lang_keys = null)/*:void*/
     {
         parent::updateLanguages($a_lang_keys);
@@ -92,7 +84,8 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin {
     }
 
 
-    protected function uninstallCustom() {
+    protected function uninstallCustom()
+    {
         global $DIC;
         $DIC->database()->dropTable(xudfSetting::DB_TABLE_NAME, false);
         $DIC->database()->dropTable(xudfContentElement::DB_TABLE_NAME, false);
@@ -101,10 +94,8 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin {
     }
 
 
-    /**
-     * @inheritDoc
-     */
-    public function exchangeUIRendererAfterInitialization(Container $dic) : Closure
+
+    public function exchangeUIRendererAfterInitialization(Container $dic): Closure
     {
         return CustomInputGUIsLoaderDetector::exchangeUIRendererAfterInitialization();
     }

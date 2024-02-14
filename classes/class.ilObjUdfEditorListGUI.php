@@ -1,21 +1,17 @@
 <?php
+
 require_once __DIR__ . "/../vendor/autoload.php";
 
-/**
- * Class ilObjUdfEditorListGUI
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+
 class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
 {
-
-    function getGuiClass()
+    public function getGuiClass()
     {
         return ilObjUdfEditorGUI::class;
     }
 
 
-    function initCommands()
+    public function initCommands()
     {
         $this->timings_enabled = true;
         $this->subscribe_enabled = false;
@@ -32,13 +28,13 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
         $commands = [
             [
                 "permission" => "read",
-                "cmd"        => ilObjUdfEditorGUI::CMD_INDEX,
-                "default"    => true,
+                "cmd" => ilObjUdfEditorGUI::CMD_INDEX,
+                "default" => true,
             ],
             [
                 "permission" => "write",
-                "cmd"        => ilObjUdfEditorGUI::CMD_SETTINGS,
-                "lang_var"   => 'settings'
+                "cmd" => ilObjUdfEditorGUI::CMD_SETTINGS,
+                "lang_var" => 'settings'
             ]
         ];
 
@@ -46,10 +42,8 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
     }
 
 
-    /**
-     *
-     */
-    function initType()
+
+    public function initType()
     {
         $this->setType(ilUdfEditorPlugin::PLUGIN_ID);
     }
@@ -62,8 +56,8 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
      */
     public function getAlertProperties()
     {
-        $alert = array();
-        foreach ((array) $this->getCustomProperties(array()) as $prop) {
+        $alert = [];
+        foreach ((array) $this->getCustomProperties([]) as $prop) {
             if ($prop['alert'] == true) {
                 $alert[] = $prop;
             }
@@ -83,17 +77,17 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
      */
     public function getCustomProperties($a_prop)
     {
-        $props = parent::getCustomProperties(array());
+        $props = parent::getCustomProperties([]);
 
         $settings = xudfSetting::find($this->obj_id);
         if (!$settings->isOnline()) {
-            $props[] = array(
-                'alert'               => true,
-                'newline'             => true,
-                'property'            => 'Status',
-                'value'               => 'Offline',
+            $props[] = [
+                'alert' => true,
+                'newline' => true,
+                'property' => 'Status',
+                'value' => 'Offline',
                 'propertyNameVisible' => true
-            );
+            ];
         }
 
         return $props;

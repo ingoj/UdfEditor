@@ -1,14 +1,9 @@
 <?php
 
-/**
- * Class xudfGUI
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+
 abstract class xudfGUI
 {
-
-    const CMD_STANDARD = 'index';
+    public const CMD_STANDARD = 'index';
     /**
      * @var ilCtrl
      */
@@ -37,17 +32,11 @@ abstract class xudfGUI
      * @var ilUdfEditorPlugin
      */
     protected $pl;
-    /**
-     * @var
-     */
+
     protected $parent_gui;
 
 
-    /**
-     * xudfGUI constructor.
-     *
-     * @param ilObjUdfEditorGUI $parent_gui
-     */
+
     public function __construct(ilObjUdfEditorGUI $parent_gui)
     {
         global $DIC;
@@ -63,9 +52,7 @@ abstract class xudfGUI
     }
 
 
-    /**
-     *
-     */
+
     public function executeCommand()
     {
         $this->setSubtabs();
@@ -79,18 +66,14 @@ abstract class xudfGUI
     }
 
 
-    /**
-     * @param $cmd
-     */
+
     protected function performCommand($cmd)
     {
         $this->{$cmd}();
     }
 
 
-    /**
-     *
-     */
+
     protected function setSubtabs()
     {
         // overwrite if class has subtabs
@@ -115,8 +98,6 @@ abstract class xudfGUI
     }
 
 
-    /**
-     *
-     */
-    protected abstract function index();
+
+    abstract protected function index();
 }

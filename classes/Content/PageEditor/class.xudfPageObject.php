@@ -1,17 +1,12 @@
 <?php
 
-/**
- * Class xudfPageObject
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+
 class xudfPageObject extends ilPageObject
 {
+    public const PARENT_TYPE = 'xudf';
 
-    const PARENT_TYPE = 'xudf';
 
-
-    function getParentType()
+    public function getParentType()
     {
         return 'xudf';
     }

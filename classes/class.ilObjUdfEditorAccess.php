@@ -1,18 +1,11 @@
 <?php
+
 require_once __DIR__ . "/../vendor/autoload.php";
 
-/**
- * Class ilObjUdfEditorAccess
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+
 class ilObjUdfEditorAccess extends ilObjectPluginAccess
 {
-
-    /**
-     * @var ilObjUdfEditorAccess
-     */
-    protected static $instance = null;
+    protected static ?ilObjUdfEditorAccess $instance = null;
 
 
     /**
@@ -28,19 +21,13 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
     }
 
 
-    /**
-     * @var ilAccessHandler
-     */
-    protected $access;
-    /**
-     * @var ilObjUser
-     */
-    protected $usr;
+
+    protected ilAccessHandler $access;
+
+    protected ilObjUser $usr;
 
 
-    /**
-     *
-     */
+
     public function __construct()
     {
         global $DIC;

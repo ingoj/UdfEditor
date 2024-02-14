@@ -6,28 +6,27 @@ use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 use srag\DIC\UdfEditor\DICTrait;
 
 /**
- * Class xudfContentGUI
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
+ *
+ *
  *
  * @ilCtrl_isCalledBy xudfContentGUI: ilObjUdfEditorGUI
  */
-class xudfContentGUI extends xudfGUI {
+class xudfContentGUI extends xudfGUI
+{
+    use DICTrait;
+    use Notifications4PluginTrait;
+    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
 
-	use DICTrait;
-	use Notifications4PluginTrait;
-	const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
+    public const SUBTAB_SHOW = 'show';
+    public const SUBTAB_EDIT_PAGE = 'edit_page';
 
-    const SUBTAB_SHOW = 'show';
-    const SUBTAB_EDIT_PAGE = 'edit_page';
-
-    const CMD_RETURN_TO_PARENT = 'returnToParent';
+    public const CMD_RETURN_TO_PARENT = 'returnToParent';
 
 
-    /**
-     *
-     */
-    protected function setSubtabs() {
+
+    protected function setSubtabs()
+    {
         if (ilObjUdfEditorAccess::hasWriteAccess()) {
             self::dic()->tabs()->addSubTab(self::SUBTAB_SHOW, $this->lng->txt(self::SUBTAB_SHOW), self::dic()->ctrl()->getLinkTarget($this));
             self::dic()->tabs()->addSubTab(self::SUBTAB_EDIT_PAGE, $this->lng->txt(self::SUBTAB_EDIT_PAGE), self::dic()->ctrl()->getLinkTargetByClass(xudfPageObjectGUI::class, 'edit'));
@@ -38,7 +37,8 @@ class xudfContentGUI extends xudfGUI {
     /**
      * @throws ilCtrlException
      */
-    public function executeCommand() {
+    public function executeCommand()
+    {
         $this->setSubtabs();
         $next_class = self::dic()->ctrl()->getNextClass();
         switch ($next_class) {
@@ -65,12 +65,11 @@ class xudfContentGUI extends xudfGUI {
     }
 
 
-    /**
-     *
-     */
-    protected function index() {
+
+    protected function index()
+    {
         $has_open_fields = false;
-        $where = xudfContentElement::where(array('obj_id' => $this->getObjId()));
+        $where = xudfContentElement::where(['obj_id' => $this->getObjId()]);
         if (!$_GET['edit'] && $where->count()) {
             $udf_values = self::dic()->user()->getUserDefinedData();
             /** @var xudfContentElement $element */
@@ -101,10 +100,9 @@ class xudfContentGUI extends xudfGUI {
         $this->tpl->setContent($page_obj_gui->getHTML() . $form->getHTML());
     }
 
-    /**
-     *
-     */
-    protected function update() {
+
+    protected function update()
+    {
         $form = new xudfContentFormGUI($this);
         $form->setValuesByPost();
         if (!$form->saveForm()) {
@@ -119,10 +117,9 @@ class xudfContentGUI extends xudfGUI {
         self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
     }
 
-    /**
-     *
-     */
-    protected function checkAndSendNotification() {
+
+    protected function checkAndSendNotification()
+    {
         $xudfSettings = $this->getObject()->getSettings();
 
         if ($xudfSettings->hasMailNotification()) {
@@ -135,7 +132,7 @@ class xudfContentGUI extends xudfGUI {
 
             $user_defined_data = [];
             $udf_data = self::dic()->user()->getUserDefinedData();
-            foreach (xudfContentElement::where(array('obj_id' => $this->getObjId(), 'is_separator' => false))->get() as $element) {
+            foreach (xudfContentElement::where(['obj_id' => $this->getObjId(), 'is_separator' => false])->get() as $element) {
                 /** @var xudfContentElement $element */
                 try {
                     $user_defined_data[$element->getTitle()] = $udf_data['f_' . $element->getUdfFieldId()];
@@ -162,33 +159,30 @@ class xudfContentGUI extends xudfGUI {
     }
 
 
-    /**
-     *
-     */
-    protected function returnToParent() {
+
+    protected function returnToParent()
+    {
         self::dic()->ctrl()->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->tree->getParentId($_GET['ref_id']));
         self::dic()->ctrl()->redirectByClass(ilRepositoryGUI::class);
     }
 
 
-    /**
-     *
-     */
+
     protected function redirectAfterSave()
     {
-       switch ($this->getObject()->getSettings()->getRedirectType())  {
-           case xudfSetting::REDIRECT_STAY_IN_FORM:
-               $this->ctrl->redirect($this);
-               break;
-           case xudfSetting::REDIRECT_TO_ILIAS_OBJECT:
-               $ref_id = $this->getObject()->getSettings()->getRedirectValue();
-               $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $ref_id);
-               $this->ctrl->redirectByClass(ilRepositoryGUI::class);
-               break;
-           case xudfSetting::REDIRECT_TO_URL:
-               $url = $this->getObject()->getSettings()->getRedirectValue();
-               $this->ctrl->redirectToURL($url);
-               break;
-       }
+        switch ($this->getObject()->getSettings()->getRedirectType()) {
+            case xudfSetting::REDIRECT_STAY_IN_FORM:
+                $this->ctrl->redirect($this);
+                break;
+            case xudfSetting::REDIRECT_TO_ILIAS_OBJECT:
+                $ref_id = $this->getObject()->getSettings()->getRedirectValue();
+                $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $ref_id);
+                $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+                break;
+            case xudfSetting::REDIRECT_TO_URL:
+                $url = $this->getObject()->getSettings()->getRedirectValue();
+                $this->ctrl->redirectToURL($url);
+                break;
+        }
     }
 }

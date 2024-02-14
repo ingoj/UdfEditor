@@ -5,24 +5,24 @@ use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
 use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
 
 /**
- * Class xudfSettingsGUI
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
+ *
+ *
  *
  * @ilCtrl_isCalledBy xudfSettingsGUI: ilObjUdfEditorGUI, ilPropertyFormGUI
  * @ilCtrl_Calls      xudfSettingsGUI: xudfSettingsFormGUI
  *
  * @ilCtrl_isCalledBy srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl: xudfSettingsGUI
  */
-class xudfSettingsGUI extends xudfGUI {
-
+class xudfSettingsGUI extends xudfGUI
+{
     use Notifications4PluginTrait;
 
-    const SUBTAB_SETTINGS = 'settings';
-    const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
-    const SUBTAB_MAIL_TEMPLATE = NotificationsCtrl::TAB_NOTIFICATIONS;
+    public const SUBTAB_SETTINGS = 'settings';
+    public const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
+    public const SUBTAB_MAIL_TEMPLATE = NotificationsCtrl::TAB_NOTIFICATIONS;
 
-    const CMD_UPDATE = 'update';
+    public const CMD_UPDATE = 'update';
 
 
     /**
@@ -53,28 +53,32 @@ class xudfSettingsGUI extends xudfGUI {
     }
 
 
-    protected function setSubtabs() {
+    protected function setSubtabs()
+    {
         $this->tabs->addSubTab(self::SUBTAB_SETTINGS, $this->lng->txt(self::SUBTAB_SETTINGS), $this->ctrl->getLinkTarget($this, self::CMD_STANDARD));
         $this->tabs->addSubTab(self::SUBTAB_FORM_CONFIGURATION, $this->pl->txt(self::SUBTAB_FORM_CONFIGURATION), $this->ctrl->getLinkTargetByClass(xudfFormConfigurationGUI::class));
         $this->ctrl->setParameterByClass(NotificationCtrl::class, NotificationCtrl::GET_PARAM_NOTIFICATION_ID, $this->getObject()->getSettings()->getNotification()->getId());
         if ($this->getObject()->getSettings()->hasMailNotification()) {
-            $this->tabs->addSubTab(self::SUBTAB_MAIL_TEMPLATE, $this->pl->txt("notification"),
-                $this->ctrl->getLinkTargetByClass([NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION));
+            $this->tabs->addSubTab(
+                self::SUBTAB_MAIL_TEMPLATE,
+                $this->pl->txt("notification"),
+                $this->ctrl->getLinkTargetByClass([NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION)
+            );
         }
         $this->tabs->setSubTabActive(self::SUBTAB_SETTINGS);
     }
 
 
-    protected function index() {
+    protected function index()
+    {
         $xudfSettingsFormGUI = new xudfSettingsFormGUI($this);
         $xudfSettingsFormGUI->fillForm();
         $this->tpl->setContent($xudfSettingsFormGUI->getHTML());
     }
 
-    /**
-     *
-     */
-    protected function update() {
+
+    protected function update()
+    {
         $xudfSettingsFormGUI = new xudfSettingsFormGUI($this);
         $xudfSettingsFormGUI->setValuesByPost();
         if (!$xudfSettingsFormGUI->saveForm()) {

@@ -1,32 +1,31 @@
 <?php
 
 /**
- * Class xudfSettingsFormGUI
  *
- * @author            Theodor Truffer <tt@studer-raimann.ch>
+ *
+ *
  *
  * @ilCtrl_Calls      xudfSettingsFormGUI: ilFormPropertyDispatchGUI
  */
 class xudfSettingsFormGUI extends ilPropertyFormGUI
 {
-
-    const F_TITLE = 'title';
-    const F_DESCRIPTION = 'description';
-    const F_ONLINE = 'online';
-    const F_SHOW_INFOTAB = 'show_infotab';
-    const F_MAIL_NOTIFICATION = 'mail_notification';
-    const F_ADDITIONAL_NOTIFICATION = 'additional_notification';
-    const F_REDIRECT_TYPE = 'redirect_type';
-    const F_REF_ID = 'ref_id';
-    const F_URL = 'url';
+    public const F_TITLE = 'title';
+    public const F_DESCRIPTION = 'description';
+    public const F_ONLINE = 'online';
+    public const F_SHOW_INFOTAB = 'show_infotab';
+    public const F_MAIL_NOTIFICATION = 'mail_notification';
+    public const F_ADDITIONAL_NOTIFICATION = 'additional_notification';
+    public const F_REDIRECT_TYPE = 'redirect_type';
+    public const F_REF_ID = 'ref_id';
+    public const F_URL = 'url';
     /**
      * @var array
      */
     protected static $redirect_type_to_postvar
         = [
-            xudfSetting::REDIRECT_STAY_IN_FORM    => false,
+            xudfSetting::REDIRECT_STAY_IN_FORM => false,
             xudfSetting::REDIRECT_TO_ILIAS_OBJECT => self::F_REF_ID,
-            xudfSetting::REDIRECT_TO_URL          => self::F_URL
+            xudfSetting::REDIRECT_TO_URL => self::F_URL
         ];
     /**
      * @var ilCtrl
@@ -50,11 +49,7 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
     protected $settings;
 
 
-    /**
-     * xudfSettingsFormGUI constructor.
-     *
-     * @param xudfSettingsGUI $parent_gui
-     */
+
     public function __construct(xudfSettingsGUI $parent_gui)
     {
         global $DIC;
@@ -69,9 +64,7 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
     }
 
 
-    /**
-     *
-     */
+
     protected function initForm()
     {
         // TITLE
@@ -124,20 +117,18 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
     }
 
 
-    /**
-     *
-     */
+
     public function fillForm()
     {
-        $values = array(
-            self::F_TITLE                   => $this->parent_gui->getObject()->getTitle(),
-            self::F_DESCRIPTION             => $this->parent_gui->getObject()->getDescription(),
-            self::F_ONLINE                  => $this->settings->isOnline(),
-            self::F_SHOW_INFOTAB            => $this->settings->isShowInfoTab(),
-            self::F_MAIL_NOTIFICATION       => $this->settings->hasMailNotification(),
+        $values = [
+            self::F_TITLE => $this->parent_gui->getObject()->getTitle(),
+            self::F_DESCRIPTION => $this->parent_gui->getObject()->getDescription(),
+            self::F_ONLINE => $this->settings->isOnline(),
+            self::F_SHOW_INFOTAB => $this->settings->isShowInfoTab(),
+            self::F_MAIL_NOTIFICATION => $this->settings->hasMailNotification(),
             self::F_ADDITIONAL_NOTIFICATION => $this->settings->getAdditionalNotification(),
-            self::F_REDIRECT_TYPE           => $this->settings->getRedirectType()
-        );
+            self::F_REDIRECT_TYPE => $this->settings->getRedirectType()
+        ];
         $redirect_value_postvar = self::$redirect_type_to_postvar[$this->settings->getRedirectType()];
         if ($redirect_value_postvar !== false) {
             $values[$redirect_value_postvar] = $this->settings->getRedirectValue();

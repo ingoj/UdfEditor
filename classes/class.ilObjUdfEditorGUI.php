@@ -7,39 +7,34 @@ use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
- * Class ilObjUdfEditorGUI
  *
- * @author            Theodor Truffer <tt@studer-raimann.ch>
+ *
+ *
  *
  * @ilCtrl_isCalledBy ilObjUdfEditorGUI: ilRepositoryGUI, ilObjPluginDispatchGUI, ilAdministrationGUI
  * @ilCtrl_Calls      ilObjUdfEditorGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilCommonActionDispatcherGUI, ilEditClipboardGUI
  */
 class ilObjUdfEditorGUI extends ilObjectPluginGUI
 {
-
     use DICTrait;
-    const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
-    const TAB_CONTENT = 'content';
-    const TAB_INFO = 'info';
-    const TAB_SETTINGS = 'settings';
-    const TAB_HISTORY = 'log_history';
-    const TAB_PERMISSIONS = 'permissions';
-    const CMD_INDEX = 'index';
-    const CMD_SETTINGS = 'showSettings';
+    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
+    public const TAB_CONTENT = 'content';
+    public const TAB_INFO = 'info';
+    public const TAB_SETTINGS = 'settings';
+    public const TAB_HISTORY = 'log_history';
+    public const TAB_PERMISSIONS = 'permissions';
+    public const CMD_INDEX = 'index';
+    public const CMD_SETTINGS = 'showSettings';
 
 
-    /**
-     * ilObjUdfEditorGUI constructor.
-     */
+
     public function __construct($a_ref_id = 0, $a_id_type = self::REPOSITORY_NODE_ID, $a_parent_node_id = 0)
     {
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
     }
 
 
-    /**
-     *
-     */
+
     public function executeCommand()
     {
         $next_class = self::dic()->ctrl()->getNextClass();
@@ -51,7 +46,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         if (self::version()->is6()) {
             $this->tpl->loadStandardTemplate();
         } else {
-        $this->tpl->getStandardTemplate();
+            $this->tpl->getStandardTemplate();
         }
 
         try {
@@ -67,7 +62,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     if (self::version()->is6()) {
                         $this->tpl->printToStdout();
                     } else {
-                    $this->tpl->show();
+                        $this->tpl->show();
                     }
                     break;
                 case strtolower(xudfSettingsGUI::class):
@@ -85,7 +80,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     if (self::version()->is6()) {
                         $this->tpl->printToStdout();
                     } else {
-                    $this->tpl->show();
+                        $this->tpl->show();
                     }
                     break;
                 case strtolower(xudfFormConfigurationGUI::class):
@@ -103,7 +98,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     if (self::version()->is6()) {
                         $this->tpl->printToStdout();
                     } else {
-                    $this->tpl->show();
+                        $this->tpl->show();
                     }
                     break;
                 case strtolower(xudfLogGUI::class):
@@ -121,7 +116,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     if (self::version()->is6()) {
                         $this->tpl->printToStdout();
                     } else {
-                    $this->tpl->show();
+                        $this->tpl->show();
                     }
                     break;
                 case strtolower(ilInfoScreenGUI::class):
@@ -135,7 +130,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     if (self::version()->is6()) {
                         $this->tpl->printToStdout();
                     } else {
-                    $this->tpl->show();
+                        $this->tpl->show();
                     }
                     break;
                 case strtolower(ilPermissionGUI::class):
@@ -157,7 +152,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                 if (self::version()->is6()) {
                     $this->tpl->printToStdout();
                 } else {
-                $this->tpl->show();
+                    $this->tpl->show();
                 }
             }
         }
@@ -182,36 +177,28 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
     }
 
 
-    /**
-     * @param $cmd
-     */
+
     protected function performCommand($cmd)
     {
         $this->{$cmd}();
     }
 
 
-    /**
-     *
-     */
+
     protected function index()
     {
         self::dic()->ctrl()->redirectByClass(xudfContentGUI::class);
     }
 
 
-    /**
-     *
-     */
+
     protected function showSettings()
     {
         self::dic()->ctrl()->redirectByClass(xudfSettingsGUI::class);
     }
 
 
-    /**
-     *
-     */
+
     protected function initHeader($render_locator = true)
     {
         if ($render_locator) {
@@ -254,10 +241,10 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         }
 
         if ($this->checkPermissionBool("edit_permission")) {
-            self::dic()->tabs()->addTab("perm_settings", $lng->txt("perm_settings"), self::dic()->ctrl()->getLinkTargetByClass(array(
+            self::dic()->tabs()->addTab("perm_settings", $lng->txt("perm_settings"), self::dic()->ctrl()->getLinkTargetByClass([
                 get_class($this),
                 "ilpermissiongui",
-            ), "perm"));
+            ], "perm"));
         }
 
         return true;
@@ -269,11 +256,11 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
      *
      * @throws DICException
      */
-    function addInfoItems($info)
+    public function addInfoItems($info)
     {
         $info->addSection(self::plugin()->translate('info_section_title'));
         $fields_string = '';
-        foreach (xudfContentElement::where(array('obj_id' => $this->getObjId(), 'is_separator' => 0))->get() as $element) {
+        foreach (xudfContentElement::where(['obj_id' => $this->getObjId(), 'is_separator' => 0])->get() as $element) {
             /** @var $element xudfContentElement */
             try {
                 $fields_string .= $element->getTitle() . '<br>';
@@ -289,7 +276,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
     /**
      * @return string
      */
-    function getAfterCreationCmd()
+    public function getAfterCreationCmd()
     {
         return self::CMD_SETTINGS;
     }
@@ -298,7 +285,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
     /**
      * @return string
      */
-    function getStandardCmd()
+    public function getStandardCmd()
     {
         return self::CMD_INDEX;
     }
@@ -307,7 +294,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
     /**
      * @return string
      */
-    function getType()
+    public function getType()
     {
         return ilUdfEditorPlugin::PLUGIN_ID;
     }

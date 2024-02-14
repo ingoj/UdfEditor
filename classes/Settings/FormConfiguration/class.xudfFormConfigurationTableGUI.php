@@ -3,16 +3,10 @@
 use srag\DIC\UdfEditor\DICTrait;
 use srag\DIC\UdfEditor\Exception\DICException;
 
-/**
- * Class xudfFormConfigurationTableGUI
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
 class xudfFormConfigurationTableGUI extends ilTable2GUI
 {
-
     use DICTrait;
-    const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
+    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     /**
      * @var ilUdfEditorPlugin
      */
@@ -20,10 +14,8 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
 
 
     /**
-     * xudfFormConfigurationTableGUI constructor.
      *
-     * @param $parent_gui
-     * @param $parent_cmd
+     *
      *
      * @throws DICException
      * @throws arException
@@ -79,16 +71,20 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         }
 
         $this->tpl->setVariable('ID', $a_set['id']);
-        $this->tpl->setVariable('TITLE',
+        $this->tpl->setVariable(
+            'TITLE',
             $a_set['is_separator'] ?
                 $a_set['title']
-                : ($udf_definition['field_name'] ?: self::plugin()->translate('field_not_found')));
+                : ($udf_definition['field_name'] ?: self::plugin()->translate('field_not_found'))
+        );
         $this->tpl->setVariable('DESCRIPTION', $a_set['description']);
         $this->tpl->setVariable('TYPE', $a_set['is_separator'] ? 'Separator' : self::plugin()->translate('udf_field'));
 
-        $this->tpl->setVariable('UDF_TYPE',
+        $this->tpl->setVariable(
+            'UDF_TYPE',
             $a_set['is_separator'] ? '&nbsp'
-                : ($udf_definition['field_type'] ? self::plugin()->translate('udf_field_type_' . $udf_definition['field_type']) : self::plugin()->translate('field_not_found')));
+                : ($udf_definition['field_type'] ? self::plugin()->translate('udf_field_type_' . $udf_definition['field_type']) : self::plugin()->translate('field_not_found'))
+        );
 
         if ($a_set['is_separator']) {
             $udf_required = '&nbsp';
@@ -120,7 +116,6 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
 
 
     /**
-     * @param $id
      *
      * @return string
      */

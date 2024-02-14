@@ -2,15 +2,9 @@
 
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
-/**
- * Class xudfContentElement
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
 class xudfContentElement extends ActiveRecord
 {
-
-    const DB_TABLE_NAME = 'xudf_element';
+    public const DB_TABLE_NAME = 'xudf_element';
 
 
     /**
@@ -22,9 +16,7 @@ class xudfContentElement extends ActiveRecord
     }
 
 
-    /**
-     *
-     */
+
     public function create()
     {
         $element = self::orderBy('sort')->first();
@@ -35,19 +27,16 @@ class xudfContentElement extends ActiveRecord
 
 
     /**
-     * @param       $primary_key
-     * @param array $add_constructor_args
      *
      * @return self
      */
-    public static function find($primary_key, array $add_constructor_args = array())
+    public static function find($primary_key, array $add_constructor_args = [])
     {
         return parent::find($primary_key, $add_constructor_args);
     }
 
 
     /**
-     * @var int
      *
      * @con_has_field    true
      * @con_sequence     true
@@ -56,64 +45,57 @@ class xudfContentElement extends ActiveRecord
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected $id;
+    protected int $id;
     /**
-     * @var int
      *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      * @con_is_notnull   true
      */
-    protected $obj_id;
+    protected int $obj_id;
     /**
-     * @var int
      *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      */
-    protected $sort;
+    protected int $sort;
     /**
-     * @var bool
      *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      */
-    protected $is_separator = false;
+    protected bool $is_separator = false;
     /**
-     * @var int
      *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      */
-    protected $udf_field;
+    protected int $udf_field;
     /**
-     * @var String
      *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected $title;
+    protected string $title;
     /**
-     * @var String
      *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected $description;
+    protected string $description;
     /**
-     * @var bool
      *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      */
-    protected $is_required = false;
+    protected bool $is_required = false;
 
 
     /**

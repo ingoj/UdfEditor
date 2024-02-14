@@ -1,14 +1,9 @@
 <?php
 
-/**
- * Class xudfLogEntry
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+
 class xudfLogEntry extends ActiveRecord
 {
-
-    const TABLE_NAME = 'xudf_log_entry';
+    public const TABLE_NAME = 'xudf_log_entry';
 
 
     /**
@@ -73,10 +68,9 @@ class xudfLogEntry extends ActiveRecord
      * @param $usr_id int
      * @param $values array
      *
-     * @return xudfLogEntry
      * @throws ilDateTimeException
      */
-    public static function createNew(int $obj_id, int $usr_id, array $values) : self
+    public static function createNew(int $obj_id, int $usr_id, array $values): self
     {
         $new = new self();
         $new->obj_id = $obj_id;
@@ -89,53 +83,42 @@ class xudfLogEntry extends ActiveRecord
     }
 
 
-    /**
-     * @return int
-     */
-    public function getId() : int
+
+    public function getId(): int
     {
         return $this->id;
     }
 
 
-    /**
-     * @return int
-     */
-    public function getObjId() : int
+
+    public function getObjId(): int
     {
         return $this->obj_id;
     }
 
 
-    /**
-     * @return int
-     */
-    public function getUsrId() : int
+
+    public function getUsrId(): int
     {
         return $this->usr_id;
     }
 
 
-    /**
-     * @return array
-     */
-    public function getValues() : array
+
+    public function getValues(): array
     {
         return $this->values;
     }
 
 
-    /**
-     * @return ilDateTime
-     */
-    public function getTimestamp() : ilDateTime
+
+    public function getTimestamp(): ilDateTime
     {
         return $this->timestamp;
     }
 
 
     /**
-     * @param $field_name
      *
      * @return false|int|mixed|string
      */
@@ -153,8 +136,6 @@ class xudfLogEntry extends ActiveRecord
 
 
     /**
-     * @param $field_name
-     * @param $field_value
      *
      * @return ilDateTime|mixed
      * @throws ilDateTimeException
