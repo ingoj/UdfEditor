@@ -1,12 +1,7 @@
 {
-  "name": "fluxapp/udf-editor",
+  "name": "plugin/udf-editor",
   "version": "2.0.0",
   "description": "ILIAS UDFEditor Plugin",
-  "keywords": [
-    "ilias",
-    "fluxlabs",
-    "udf-editor"
-  ],
   "type": "plugin",
   "license": "GPL-3.0+",
   "authors": [
@@ -15,37 +10,36 @@
       "email": "martin@fluxlabs.ch",
       "homepage": "https://fluxlabs.ch",
       "role": "Maintainer, Developer"
+    },
+    {
+      "name": "mbeym",
+      "email": "mbeym@databay.de"
     }
   ],
-  "support": {
-    "issues": "https://git.fluxlabs.ch"
-  },
   "minimum-stability": "beta",
   "prefer-stable": true,
   "require": {
-    "php": ">=7.4",
-    "srag/librariesnamespacechanger": "0.16.1",
-    "srag/dic": "0.34.1",
-    "srag/notifications4plugin": "5.7.4",
-    "srag/custominputguis": "0.43.1"
+    "php": ">=8.1 <8.3"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "friendsofphp/php-cs-fixer": "^3.12",
+    "captainhook/captainhook": "^5.10"
   },
   "autoload": {
+    "psr-4": {
+      "srag\\Plugins\\UdfEditor\\": "src/",
+      "srag\\Plugins\\UdfEditor\\Libs\\": "libs/"
+    },
     "classmap": [
       "./classes/",
-      "./src/"
+      "./libs"
     ]
   },
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
     "classmap-authoritative": true
-  },
-  "scripts": {
-    "pre-autoload-dump": [
-      "vendor/srag/notifications4plugin/bin/twig_php74_patch.php",
-      "srag\\LibrariesNamespaceChanger\\LibrariesNamespaceChanger::rewriteLibrariesNamespaces",
-      "srag\\LibrariesNamespaceChanger\\PHP72Backport::PHP72Backport"
-    ]
   }
 }
 
