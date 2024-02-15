@@ -71,7 +71,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     {
         $udf_fields = ilUserDefinedFields::_getInstance()->getDefinitions();
         if (!count($udf_fields)) {
-            ilUtil::sendFailure($this->pl->txt('msg_no_udfs'), true);
+            $this->tpl->setOnScreenMessage("failure", $this->pl->txt('msg_no_udfs'), true);
             $this->ctrl->redirect($this, self::CMD_STANDARD);
         }
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, new xudfContentElement());
@@ -94,12 +94,12 @@ class xudfFormConfigurationGUI extends xudfGUI
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, $element);
         $xudfFormConfigurationFormGUI->setValuesByPost();
         if (!$xudfFormConfigurationFormGUI->saveForm()) {
-            ilUtil::sendFailure($this->pl->txt('msg_incomplete'));
+            $this->tpl->setOnScreenMessage("failure", $this->pl->txt('msg_incomplete'));
             $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
 
             return;
         }
-        ilUtil::sendSuccess($this->pl->txt('form_saved'), true);
+        $this->tpl->setOnScreenMessage("success", $this->pl->txt('form_saved'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
@@ -110,12 +110,12 @@ class xudfFormConfigurationGUI extends xudfGUI
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, $element);
         $xudfFormConfigurationFormGUI->setValuesByPost();
         if (!$xudfFormConfigurationFormGUI->saveForm()) {
-            ilUtil::sendFailure($this->pl->txt('msg_incomplete'));
+            $this->tpl->setOnScreenMessage("failure", $this->pl->txt('msg_incomplete'));
             $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
 
             return;
         }
-        ilUtil::sendSuccess($this->pl->txt('form_saved'), true);
+        $this->tpl->setOnScreenMessage("success", $this->pl->txt('form_saved'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
@@ -149,7 +149,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     {
         $element = new xudfContentElement($_POST['element_id']);
         $element->delete();
-        ilUtil::sendSuccess($this->pl->txt('msg_successfully_deleted'), true);
+        $this->tpl->setOnScreenMessage("success", $this->pl->txt('msg_successfully_deleted'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 

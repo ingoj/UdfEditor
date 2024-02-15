@@ -37,7 +37,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         $next_class = $this->dic->ctrl()->getNextClass();
         $cmd = $this->dic->ctrl()->getCmd();
         if (!ilObjUdfEditorAccess::hasReadAccess() && $next_class != strtolower(ilInfoScreenGUI::class) && $cmd != "infoScreen") {
-            ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
+            $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('access_denied'), true);
             $this->dic->ctrl()->returnToParent($this);
         }
         $this->tpl->loadStandardTemplate();
@@ -56,7 +56,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     break;
                 case strtolower(xudfSettingsGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
-                        ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
+                        $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('access_denied'), true);
                         $this->dic->ctrl()->returnToParent($this);
                     }
                     if (!$this->dic->ctrl()->isAsynch()) {
@@ -70,7 +70,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     break;
                 case strtolower(xudfFormConfigurationGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
-                        ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
+                        $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('access_denied'), true);
                         $this->dic->ctrl()->returnToParent($this);
                     }
                     if (!$this->dic->ctrl()->isAsynch()) {
@@ -84,7 +84,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     break;
                 case strtolower(xudfLogGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
-                        ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
+                        $this->tpl->setOnScreenMessage("failure", $this->plugin->txt('access_denied'), true);
                         $this->dic->ctrl()->returnToParent($this);
                     }
                     if (!$this->dic->ctrl()->isAsynch()) {
@@ -120,7 +120,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     break;
             }
         } catch (Exception $e) {
-            ilUtil::sendFailure($e->getMessage());
+            $this->tpl->setOnScreenMessage("failure", $e->getMessage());
             if (!$this->creation_mode) {
                 $this->tpl->printToStdout();
             }

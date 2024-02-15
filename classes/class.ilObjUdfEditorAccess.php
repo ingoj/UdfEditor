@@ -70,7 +70,7 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
 
         $ctrl = $DIC->ctrl();
 
-        ilUtil::sendFailure($DIC->language()->txt("permission_denied"), true);
+        $DIC->ui()->mainTemplate()->setOnScreenMessage("failure", $DIC->language()->txt("permission_denied"), true);
 
         if (is_object($class)) {
             $ctrl->clearParameters($class);

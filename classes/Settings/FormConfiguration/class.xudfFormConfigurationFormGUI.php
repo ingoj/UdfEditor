@@ -98,7 +98,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         try {
             $title = $this->element->getTitle();
         } catch (UDFNotFoundException $e) {
-            ilUtil::sendInfo($this->pl->txt('msg_choose_new_type'));
+            $this->global_tpl->setOnScreenMessage("info", $this->pl->txt('msg_choose_new_type'));
             $title = '';
         }
         $values = [
