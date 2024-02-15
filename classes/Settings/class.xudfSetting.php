@@ -170,7 +170,7 @@ class xudfSetting extends ActiveRecord
         if ($notification === null) {
             $notification = self::notifications4plugin()->notifications()->factory()->newInstance();
 
-            $notification->setTitle(self::plugin()->translate("notification"));
+            $notification->setTitle(ilUdfEditorPlugin::getInstance()->txt("notification"));
 
             $notification->setName($this->notification_name);
 

@@ -39,7 +39,7 @@ class xudfContentGUI extends xudfGUI
         switch ($next_class) {
             case 'xudfpageobjectgui':
                 if (!ilObjUdfEditorAccess::hasWriteAccess()) {
-                    ilUtil::sendFailure(self::plugin()->translate('access_denied'), true);
+                    ilUtil::sendFailure($this->pl->txt('access_denied'), true);
                     $this->dic->ctrl()->returnToParent($this);
                 }
                 $this->dic->tabs()->activateSubTab(self::SUBTAB_EDIT_PAGE);
@@ -99,13 +99,13 @@ class xudfContentGUI extends xudfGUI
         $form = new xudfContentFormGUI($this);
         $form->setValuesByPost();
         if (!$form->saveForm()) {
-            ilUtil::sendFailure(self::plugin()->translate('msg_incomplete'));
+            ilUtil::sendFailure($this->pl->txt('msg_incomplete'));
             $page_obj_gui = new xudfPageObjectGUI($this);
             $this->tpl->setContent($page_obj_gui->getHTML() . $form->getHTML());
             return;
         }
         $this->checkAndSendNotification();
-        ilUtil::sendSuccess(self::plugin()->translate('content_form_saved'), true);
+        ilUtil::sendSuccess($this->pl->txt('content_form_saved'), true);
         $this->redirectAfterSave();
         $this->dic->ctrl()->redirect($this, self::CMD_STANDARD);
     }

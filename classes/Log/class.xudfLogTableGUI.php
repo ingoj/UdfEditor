@@ -12,6 +12,7 @@ class xudfLogTableGUI extends TableGUI
 
     protected xudfLogGUI $parent_obj;
     private Container $dic;
+    private ilUdfEditorPlugin $plugin;
 
     public function __construct($parent, $parent_cmd)
     {
@@ -19,7 +20,8 @@ class xudfLogTableGUI extends TableGUI
         parent::__construct($parent, $parent_cmd);
         global $DIC;
         $this->dic = $DIC;
-        $this->dic->ui()->mainTemplate()->addCss($this->self::plugin()->directory() . '/templates/default/log_table.css');
+        $this->plugin = ilUdfEditorPlugin::getInstance();
+        $this->dic->ui()->mainTemplate()->addCss($this->plugin->getDirectory() . '/templates/default/log_table.css');
     }
 
     protected function getColumnValue(string $column, array|object $row, int $format = self::DEFAULT_FORMAT): string
@@ -33,7 +35,7 @@ class xudfLogTableGUI extends TableGUI
 
     protected function initColumns(): void
     {
-        $this->addColumn(self::plugin()->translate('values'));
+        $this->addColumn($this->plugin->txt('values'));
         $this->addColumn($this->dic->language()->txt('user'), 'user');
         $this->addColumn($this->dic->language()->txt('date'), 'timestamp');
     }
@@ -85,7 +87,7 @@ class xudfLogTableGUI extends TableGUI
     {
         // this should be a template, but i'm too lazy
         $string = '<table class="xudf_log_values">';
-        $string .= '<tr><th>' . self::plugin()->translate('udf_field') . '</th><th>' . $this->dic->language()->txt('value') . '</th></tr>';
+        $string .= '<tr><th>' . $this->plugin->txt('udf_field') . '</th><th>' . $this->dic->language()->txt('value') . '</th></tr>';
         foreach ($values as $title => $value) {
             $string .= '<tr>';
             $string .= '<td>' . $title . '</td>';

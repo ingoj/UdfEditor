@@ -25,11 +25,11 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         parent::__construct($parent_gui, $parent_cmd);
 
         $this->setFormAction($this->dic->ctrl()->getFormAction($parent_gui));
-        $this->setRowTemplate(self::plugin()->directory() . '/templates/default/tpl.form_configuration_table_row.html');
+        $this->setRowTemplate($this->pl->getDirectory() . '/templates/default/tpl.form_configuration_table_row.html');
 
-        $this->dic->ui()->mainTemplate()->addJavaScript(self::plugin()->directory() . '/templates/default/sortable.js');
-        $this->dic->ui()->mainTemplate()->addJavaScript(self::plugin()->directory() . '/templates/default/waiter.js');
-        $this->dic->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/default/waiter.css');
+        $this->dic->ui()->mainTemplate()->addJavaScript($this->ppl->directory() . '/templates/default/sortable.js');
+        $this->dic->ui()->mainTemplate()->addJavaScript($this->ppl->directory() . '/templates/default/waiter.js');
+        $this->dic->ui()->mainTemplate()->addCss($this->ppl->directory() . '/templates/default/waiter.css');
         $this->dic->ui()->mainTemplate()->addOnLoadCode("xoctWaiter.init();");
 
         $base_link = $this->dic->ctrl()->getLinkTarget($parent_gui, xudfFormConfigurationGUI::CMD_REORDER, '', true);
@@ -45,8 +45,8 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         $this->addColumn($this->dic->language()->txt('title'), 'title', 50);
         $this->addColumn($this->dic->language()->txt('description'), 'description', 100);
         $this->addColumn($this->dic->language()->txt('type'), 'type', 30);
-        $this->addColumn(self::plugin()->translate('udf_type'), 'udf_type', 30);
-        $this->addColumn(self::plugin()->translate('is_required'), 'is_required', 30);
+        $this->addColumn($this->ppl->txt('udf_type'), 'udf_type', 30);
+        $this->addColumn($this->ppl->txt('is_required'), 'is_required', 30);
         $this->addColumn('', '', 10, true);
     }
 
@@ -63,15 +63,15 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
             'TITLE',
             $a_set['is_separator'] ?
                 $a_set['title']
-                : ($udf_definition['field_name'] ?: self::plugin()->translate('field_not_found'))
+                : ($udf_definition['field_name'] ?: $this->ppl->txt('field_not_found'))
         );
         $this->tpl->setVariable('DESCRIPTION', $a_set['description']);
-        $this->tpl->setVariable('TYPE', $a_set['is_separator'] ? 'Separator' : self::plugin()->translate('udf_field'));
+        $this->tpl->setVariable('TYPE', $a_set['is_separator'] ? 'Separator' : $this->ppl->txt('udf_field'));
 
         $this->tpl->setVariable(
             'UDF_TYPE',
             $a_set['is_separator'] ? '&nbsp'
-                : ($udf_definition['field_type'] ? self::plugin()->translate('udf_field_type_' . $udf_definition['field_type']) : self::plugin()->translate('field_not_found'))
+                : ($udf_definition['field_type'] ? $this->ppl->txt('udf_field_type_' . $udf_definition['field_type']) : $this->ppl->txt('field_not_found'))
         );
 
         if ($a_set['is_separator']) {
@@ -93,7 +93,7 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
     {
         static $already_shown;
         if (!$already_shown) {
-            ilUtil::sendFailure(self::plugin()->translate('msg_missing_udf'), true);
+            ilUtil::sendFailure($this->ppl->txt('msg_missing_udf'), true);
             $already_shown = true;
         }
     }

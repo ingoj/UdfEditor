@@ -37,7 +37,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         $next_class = $this->dic->ctrl()->getNextClass();
         $cmd = $this->dic->ctrl()->getCmd();
         if (!ilObjUdfEditorAccess::hasReadAccess() && $next_class != strtolower(ilInfoScreenGUI::class) && $cmd != "infoScreen") {
-            ilUtil::sendFailure(self::plugin()->translate('access_denied'), true);
+            ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
             $this->dic->ctrl()->returnToParent($this);
         }
         $this->tpl->loadStandardTemplate();
@@ -56,7 +56,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     break;
                 case strtolower(xudfSettingsGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
-                        ilUtil::sendFailure(self::plugin()->translate('access_denied'), true);
+                        ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
                         $this->dic->ctrl()->returnToParent($this);
                     }
                     if (!$this->dic->ctrl()->isAsynch()) {
@@ -70,7 +70,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     break;
                 case strtolower(xudfFormConfigurationGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
-                        ilUtil::sendFailure(self::plugin()->translate('access_denied'), true);
+                        ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
                         $this->dic->ctrl()->returnToParent($this);
                     }
                     if (!$this->dic->ctrl()->isAsynch()) {
@@ -84,7 +84,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     break;
                 case strtolower(xudfLogGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
-                        ilUtil::sendFailure(self::plugin()->translate('access_denied'), true);
+                        ilUtil::sendFailure($this->plugin->txt('access_denied'), true);
                         $this->dic->ctrl()->returnToParent($this);
                     }
                     if (!$this->dic->ctrl()->isAsynch()) {
@@ -199,7 +199,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
 
     public function addInfoItems(ilInfoScreenGUI $info): void
     {
-        $info->addSection(self::plugin()->translate('info_section_title'));
+        $info->addSection($this->plugin->txt('info_section_title'));
         $fields_string = '';
         foreach (xudfContentElement::where(['obj_id' => $this->getObjId(), 'is_separator' => 0])->get() as $element) {
             /** @var $element xudfContentElement */
@@ -210,7 +210,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                 $this->dic->logger()->root()->alert($e->getTraceAsString());
             }
         }
-        $info->addProperty(self::plugin()->translate('info_section_subtitle'), $fields_string ? $fields_string : '-');
+        $info->addProperty($this->plugin->txt('info_section_subtitle'), $fields_string ? $fields_string : '-');
     }
 
     public function getAfterCreationCmd(): string
