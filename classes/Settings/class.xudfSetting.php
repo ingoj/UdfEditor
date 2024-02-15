@@ -1,12 +1,12 @@
 <?php
 
-use srag\DIC\UdfEditor\DICTrait;
+
 use srag\Notifications4Plugin\UdfEditor\Notification\NotificationInterface;
 use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
 
 class xudfSetting extends ActiveRecord
 {
-    use DICTrait;
+    
     use Notifications4PluginTrait;
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;

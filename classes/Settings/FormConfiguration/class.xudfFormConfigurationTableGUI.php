@@ -1,15 +1,16 @@
 <?php
 
-use srag\DIC\UdfEditor\DICTrait;
-use srag\DIC\UdfEditor\Exception\DICException;
+
+use ILIAS\DI\Container;
 
 class xudfFormConfigurationTableGUI extends ilTable2GUI
 {
-    use DICTrait;
+    
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
 
     protected ilUdfEditorPlugin $pl;
+    private Container $dic;
 
 
     /**
@@ -17,20 +18,22 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
      */
     public function __construct($parent_gui, $parent_cmd)
     {
+        global $DIC;
+        $this->dic = $DIC;
         $this->pl = ilUdfEditorPlugin::getInstance();
 
         parent::__construct($parent_gui, $parent_cmd);
 
-        $this->setFormAction(self::dic()->ctrl()->getFormAction($parent_gui));
+        $this->setFormAction($this->dic->ctrl()->getFormAction($parent_gui));
         $this->setRowTemplate(self::plugin()->directory() . '/templates/default/tpl.form_configuration_table_row.html');
 
-        self::dic()->ui()->mainTemplate()->addJavaScript(self::plugin()->directory() . '/templates/default/sortable.js');
-        self::dic()->ui()->mainTemplate()->addJavaScript(self::plugin()->directory() . '/templates/default/waiter.js');
-        self::dic()->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/default/waiter.css');
-        self::dic()->ui()->mainTemplate()->addOnLoadCode("xoctWaiter.init();");
+        $this->dic->ui()->mainTemplate()->addJavaScript(self::plugin()->directory() . '/templates/default/sortable.js');
+        $this->dic->ui()->mainTemplate()->addJavaScript(self::plugin()->directory() . '/templates/default/waiter.js');
+        $this->dic->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/default/waiter.css');
+        $this->dic->ui()->mainTemplate()->addOnLoadCode("xoctWaiter.init();");
 
-        $base_link = self::dic()->ctrl()->getLinkTarget($parent_gui, xudfFormConfigurationGUI::CMD_REORDER, '', true);
-        self::dic()->ui()->mainTemplate()->addOnLoadCode("xudf = {'base_link': '$base_link'};");
+        $base_link = $this->dic->ctrl()->getLinkTarget($parent_gui, xudfFormConfigurationGUI::CMD_REORDER, '', true);
+        $this->dic->ui()->mainTemplate()->addOnLoadCode("xudf = {'base_link': '$base_link'};");
 
         $this->initColumns();
         $this->setData(xudfContentElement::where(['obj_id' => ilObjUdfEditor::_lookupObjectId(filter_input(INPUT_GET, 'ref_id'))])->orderBy('sort')->getArray());
@@ -39,9 +42,9 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
     protected function initColumns(): void
     {
         $this->addColumn('', '', 10, true);
-        $this->addColumn(self::dic()->language()->txt('title'), 'title', 50);
-        $this->addColumn(self::dic()->language()->txt('description'), 'description', 100);
-        $this->addColumn(self::dic()->language()->txt('type'), 'type', 30);
+        $this->addColumn($this->dic->language()->txt('title'), 'title', 50);
+        $this->addColumn($this->dic->language()->txt('description'), 'description', 100);
+        $this->addColumn($this->dic->language()->txt('type'), 'type', 30);
         $this->addColumn(self::plugin()->translate('udf_type'), 'udf_type', 30);
         $this->addColumn(self::plugin()->translate('is_required'), 'is_required', 30);
         $this->addColumn('', '', 10, true);
@@ -98,11 +101,11 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
     protected function buildActions($id): string
     {
         $actions = new ilAdvancedSelectionListGUI();
-        $actions->setListTitle(self::dic()->language()->txt('actions'));
-        self::dic()->ctrl()->setParameter($this->parent_obj, 'element_id', $id);
+        $actions->setListTitle($this->dic->language()->txt('actions'));
+        $this->dic->ctrl()->setParameter($this->parent_obj, 'element_id', $id);
 
-        $actions->addItem(self::dic()->language()->txt('edit'), 'edit', self::dic()->ctrl()->getLinkTarget($this->parent_obj, xudfFormConfigurationGUI::CMD_EDIT));
-        $actions->addItem(self::dic()->language()->txt('delete'), 'delete', self::dic()->ctrl()->getLinkTarget($this->parent_obj, xudfFormConfigurationGUI::CMD_DELETE));
+        $actions->addItem($this->dic->language()->txt('edit'), 'edit', $this->dic->ctrl()->getLinkTarget($this->parent_obj, xudfFormConfigurationGUI::CMD_EDIT));
+        $actions->addItem($this->dic->language()->txt('delete'), 'delete', $this->dic->ctrl()->getLinkTarget($this->parent_obj, xudfFormConfigurationGUI::CMD_DELETE));
 
         return $actions->getHTML();
     }

@@ -1,18 +1,20 @@
 <?php
 
-use srag\DIC\UdfEditor\DICTrait;
+
+use ILIAS\DI\Container;
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 use srag\Plugins\UdfEditor\Exception\UnknownUdfTypeException;
 
 class xudfContentFormGUI extends ilPropertyFormGUI
 {
-    use DICTrait;
+    
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
 
     protected xudfContentGUI $parent_gui;
 
     protected int $obj_id;
+    private Container $dic;
 
 
     /**
@@ -23,7 +25,9 @@ class xudfContentFormGUI extends ilPropertyFormGUI
         parent::__construct();
         $this->parent_gui = $parent_gui;
         $this->obj_id = $parent_gui->getObjId();
-        $this->setFormAction(self::dic()->ctrl()->getFormAction($parent_gui));
+        global $DIC;
+        $this->dic = $DIC;
+        $this->setFormAction($this->dic->ctrl()->getFormAction($parent_gui));
         $this->initForm($editable);
     }
 
@@ -40,8 +44,8 @@ class xudfContentFormGUI extends ilPropertyFormGUI
                 try {
                     $definition = $element->getUdfFieldDefinition();
                 } catch (UDFNotFoundException $e) {
-                    self::dic()->logger()->root()->alert($e->getMessage());
-                    self::dic()->logger()->root()->alert($e->getTraceAsString());
+                    $this->dic->logger()->root()->alert($e->getMessage());
+                    $this->dic->logger()->root()->alert($e->getTraceAsString());
                     continue;
                 }
 
@@ -51,7 +55,7 @@ class xudfContentFormGUI extends ilPropertyFormGUI
                         break;
                     case 2:
                         $input = new ilSelectInputGUI($element->getTitle(), $element->getUdfFieldId());
-                        $options = ['' => self::dic()->language()->txt('please_choose')];
+                        $options = ['' => $this->dic->language()->txt('please_choose')];
                         foreach ($definition['field_values'] as $key => $values) {
                             $options[$values] = $values;
                         }
@@ -79,13 +83,13 @@ class xudfContentFormGUI extends ilPropertyFormGUI
         }
 
         if ($editable) {
-            $this->addCommandButton(xudfSettingsGUI::CMD_UPDATE, self::dic()->language()->txt('save'));
+            $this->addCommandButton(xudfSettingsGUI::CMD_UPDATE, $this->dic->language()->txt('save'));
         }
     }
 
     public function fillForm(): void
     {
-        $udf_data = self::dic()->user()->getUserDefinedData();
+        $udf_data = $this->dic->user()->getUserDefinedData();
         $values = [];
 
         /** @var xudfContentElement $element */
@@ -106,7 +110,7 @@ class xudfContentFormGUI extends ilPropertyFormGUI
         }
 
         $log_values = [];
-        $udf_data = self::dic()->user()->getUserDefinedData();
+        $udf_data = $this->dic->user()->getUserDefinedData();
 
         /** @var xudfContentElement $element */
         foreach (xudfContentElement::where(['obj_id' => $this->obj_id, 'is_separator' => false])->get() as $element) {
@@ -119,10 +123,10 @@ class xudfContentFormGUI extends ilPropertyFormGUI
             $udf_data[$element->getUdfFieldId()] = $value;
             $log_values[$element->getTitle()] = $value;
         }
-        self::dic()->user()->setUserDefinedData($udf_data);
-        self::dic()->user()->update();
+        $this->dic->user()->setUserDefinedData($udf_data);
+        $this->dic->user()->update();
 
-        xudfLogEntry::createNew($this->obj_id, self::dic()->user()->getId(), $log_values);
+        xudfLogEntry::createNew($this->obj_id, $this->dic->user()->getId(), $log_values);
 
         return true;
     }

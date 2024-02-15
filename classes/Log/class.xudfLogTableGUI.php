@@ -1,8 +1,9 @@
 <?php
 
+use ILIAS\DI\Container;
 use srag\CustomInputGUIs\UdfEditor\PropertyFormGUI\PropertyFormGUI;
 use srag\CustomInputGUIs\UdfEditor\TableGUI\TableGUI;
-use srag\DIC\UdfEditor\Exception\DICException;
+
 
 class xudfLogTableGUI extends TableGUI
 {
@@ -11,12 +12,15 @@ class xudfLogTableGUI extends TableGUI
     public const ROW_TEMPLATE = 'tpl.log_table_row.html';
 
     protected xudfLogGUI $parent_obj;
+    private Container $dic;
 
     public function __construct($parent, $parent_cmd)
     {
         $this->parent_obj = $parent;
         parent::__construct($parent, $parent_cmd);
-        self::dic()->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/default/log_table.css');
+        global $DIC;
+        $this->dic = $DIC;
+        $this->dic->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/default/log_table.css');
     }
 
     protected function getColumnValue(string $column, array|object $row, int $format = self::DEFAULT_FORMAT): string
@@ -31,8 +35,8 @@ class xudfLogTableGUI extends TableGUI
     protected function initColumns(): void
     {
         $this->addColumn(self::plugin()->translate('values'));
-        $this->addColumn(self::dic()->language()->txt('user'), 'user');
-        $this->addColumn(self::dic()->language()->txt('date'), 'timestamp');
+        $this->addColumn($this->dic->language()->txt('user'), 'user');
+        $this->addColumn($this->dic->language()->txt('date'), 'timestamp');
     }
 
 
@@ -68,7 +72,7 @@ class xudfLogTableGUI extends TableGUI
 
     protected function initTitle(): void
     {
-        $this->setTitle(self::dic()->language()->txt('history'));
+        $this->setTitle($this->dic->language()->txt('history'));
     }
 
     protected function fillRow(array $row): void
@@ -82,7 +86,7 @@ class xudfLogTableGUI extends TableGUI
     {
         // this should be a template, but i'm too lazy
         $string = '<table class="xudf_log_values">';
-        $string .= '<tr><th>' . self::plugin()->translate('udf_field') . '</th><th>' . self::dic()->language()->txt('value') . '</th></tr>';
+        $string .= '<tr><th>' . self::plugin()->translate('udf_field') . '</th><th>' . $this->dic->language()->txt('value') . '</th></tr>';
         foreach ($values as $title => $value) {
             $string .= '<tr>';
             $string .= '<td>' . $title . '</td>';
@@ -95,11 +99,11 @@ class xudfLogTableGUI extends TableGUI
 
     protected function getUserFilterOptions(): array
     {
-        $result = self::dic()->database()->query(
+        $result = $this->dic->database()->query(
             'SELECT DISTINCT(usr_id) FROM ' . xudfLogEntry::TABLE_NAME
         );
         $options = ['' => '-'];
-        while ($rec = self::dic()->database()->fetchAssoc($result)) {
+        while ($rec = $this->dic->database()->fetchAssoc($result)) {
             $options[$rec['usr_id']] = ilObjUser::_lookupFullname($rec['usr_id']) . ', [' . ilObjUser::_lookupLogin($rec['usr_id']) . ']';
         }
 

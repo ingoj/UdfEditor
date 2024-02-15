@@ -1,5 +1,7 @@
 <?php
 
+use ILIAS\DI\Container;
+
 abstract class xudfGUI
 {
     public const CMD_STANDARD = 'index';
@@ -9,7 +11,7 @@ abstract class xudfGUI
     protected ilObjUser $user;
 
     protected ilLanguage $lng;
-    protected ilGlobalPageTemplate $tpl;
+    protected ilGlobalTemplateInterface $tpl;
 
     protected ilTabsGUI $tabs;
 
@@ -18,16 +20,18 @@ abstract class xudfGUI
     protected ilUdfEditorPlugin $pl;
 
     protected ilObjUdfEditorGUI $parent_gui;
+    protected Container $dic;
 
     public function __construct(ilObjUdfEditorGUI $parent_gui)
     {
         global $DIC;
-        $this->ctrl = $DIC['ilCtrl'];
-        $this->user = $DIC['ilUser'];
-        $this->lng = $DIC['lng'];
-        $this->tpl = $DIC['tpl'];
-        $this->tabs = $DIC['ilTabs'];
-        $this->toolbar = $DIC['ilToolbar'];
+        $this->dic = $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->user = $DIC->user();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->tabs = $DIC->tabs();
+        $this->toolbar = $DIC->toolbar();
         $this->tree = $DIC->repositoryTree();
         $this->pl = ilUdfEditorPlugin::getInstance();
         $this->parent_gui = $parent_gui;

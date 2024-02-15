@@ -25,7 +25,7 @@ class xudfPageObjectGUI extends ilPageObjectGUI
         include_once("./Services/Style/Content/classes/class.ilObjStyleSheet.php");
 
         global $DIC;
-        $tpl = $DIC["tpl"];
+        $tpl = $DIC->ui()->mainTemplate();
         $tpl->setCurrentBlock("SyntaxStyle");
         $tpl->setVariable(
             "LOCATION_SYNTAX_STYLESHEET",

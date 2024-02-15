@@ -4,12 +4,12 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 use ILIAS\DI\Container;
 use srag\CustomInputGUIs\UdfEditor\Loader\CustomInputGUIsLoaderDetector;
-use srag\DIC\UdfEditor\DICTrait;
+
 use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
 
 class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
 {
-    use DICTrait;
+    
     use Notifications4PluginTrait;
 
     public const PLUGIN_ID = 'xudf';

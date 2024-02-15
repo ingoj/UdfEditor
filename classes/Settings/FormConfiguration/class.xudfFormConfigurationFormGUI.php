@@ -25,8 +25,8 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     {
         parent::__construct();
         global $DIC;
-        $this->ctrl = $DIC['ilCtrl'];
-        $this->lng = $DIC['lng'];
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
         $this->pl = ilUdfEditorPlugin::getInstance();
         $this->parent_gui = $parent_gui;
         $this->element = $element;

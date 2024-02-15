@@ -1,6 +1,6 @@
 <?php
 
-use srag\DIC\UdfEditor\Exception\DICException;
+
 
 /**
  * @ilCtrl_isCalledBy xudfLogGUI: ilObjUdfEditorGUI
