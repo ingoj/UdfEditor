@@ -1,8 +1,8 @@
 <?php
 
 
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationInterface;
-use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationInterface;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginTrait;
 
 class xudfSetting extends ActiveRecord
 {

@@ -1,13 +1,13 @@
 <?php
 
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationCtrl;
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
-use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginTrait;
 
 /**
  * @ilCtrl_isCalledBy xudfSettingsGUI: ilObjUdfEditorGUI, ilPropertyFormGUI
  * @ilCtrl_Calls      xudfSettingsGUI: xudfSettingsFormGUI
- * @ilCtrl_isCalledBy srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl: xudfSettingsGUI
+ * @ilCtrl_isCalledBy srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl: xudfSettingsGUI
  */
 class xudfSettingsGUI extends xudfGUI
 {

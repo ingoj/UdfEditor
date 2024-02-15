@@ -1,8 +1,7 @@
 <?php
 
 use ILIAS\DI\Container;
-use srag\CustomInputGUIs\UdfEditor\PropertyFormGUI\PropertyFormGUI;
-use srag\CustomInputGUIs\UdfEditor\TableGUI\TableGUI;
+use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\PropertyFormGUI\PropertyFormGUI;
 
 
 class xudfLogTableGUI extends TableGUI

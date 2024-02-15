@@ -1,8 +1,8 @@
 <?php
 
 
-use srag\Notifications4Plugin\UdfEditor\Exception\Notifications4PluginException;
-use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Exception\Notifications4PluginException;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginTrait;
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
 /**

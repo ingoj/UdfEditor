@@ -3,9 +3,9 @@
 require_once __DIR__ . "/../vendor/autoload.php";
 
 use ILIAS\DI\Container;
-use srag\CustomInputGUIs\UdfEditor\Loader\CustomInputGUIsLoaderDetector;
+use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\Loader\CustomInputGUIsLoaderDetector;
 
-use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginTrait;
 
 class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
 {

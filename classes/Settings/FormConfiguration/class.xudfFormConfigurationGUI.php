@@ -1,7 +1,7 @@
 <?php
 
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationCtrl;
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
 
 /**
  * @ilCtrl_isCalledBy xudfFormConfigurationGUI: ilObjUdfEditorGUI
