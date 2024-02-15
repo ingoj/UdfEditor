@@ -7,7 +7,7 @@ use srag\Plugins\UdfEditor\Exception\UnknownUdfTypeException;
 
 class xudfContentFormGUI extends ilPropertyFormGUI
 {
-    
+
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
 

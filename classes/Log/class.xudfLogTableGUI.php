@@ -19,7 +19,7 @@ class xudfLogTableGUI extends TableGUI
         parent::__construct($parent, $parent_cmd);
         global $DIC;
         $this->dic = $DIC;
-        $this->dic->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/default/log_table.css');
+        $this->dic->ui()->mainTemplate()->addCss($this->self::plugin()->directory() . '/templates/default/log_table.css');
     }
 
     protected function getColumnValue(string $column, array|object $row, int $format = self::DEFAULT_FORMAT): string

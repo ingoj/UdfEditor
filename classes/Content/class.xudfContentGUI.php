@@ -1,16 +1,16 @@
 <?php
 
 
+use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Exception\Notifications4PluginException;
 use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginTrait;
-use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
 /**
  * @ilCtrl_isCalledBy xudfContentGUI: ilObjUdfEditorGUI
  */
 class xudfContentGUI extends xudfGUI
 {
-    
+
     use Notifications4PluginTrait;
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;

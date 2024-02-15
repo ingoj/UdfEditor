@@ -1,9 +1,8 @@
 <?php
 
 use ILIAS\DI\Container;
-
-
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
+
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
@@ -13,7 +12,7 @@ require_once __DIR__ . "/../vendor/autoload.php";
  */
 class ilObjUdfEditorGUI extends ilObjectPluginGUI
 {
-    
+
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     public const TAB_CONTENT = 'content';
@@ -41,11 +40,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
             ilUtil::sendFailure(self::plugin()->translate('access_denied'), true);
             $this->dic->ctrl()->returnToParent($this);
         }
-        if (self::version()->is6()) {
-            $this->tpl->loadStandardTemplate();
-        } else {
-            $this->tpl->getStandardTemplate();
-        }
+        $this->tpl->loadStandardTemplate();
 
         try {
             switch ($next_class) {
@@ -57,11 +52,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     $this->dic->tabs()->activateTab(self::TAB_CONTENT);
                     $xvmpGUI = new xudfContentGUI($this);
                     $this->dic->ctrl()->forwardCommand($xvmpGUI);
-                    if (self::version()->is6()) {
-                        $this->tpl->printToStdout();
-                    } else {
-                        $this->tpl->show();
-                    }
+                    $this->tpl->printToStdout();
                     break;
                 case strtolower(xudfSettingsGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
@@ -75,11 +66,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     $this->dic->tabs()->activateTab(self::TAB_SETTINGS);
                     $xvmpGUI = new xudfSettingsGUI($this);
                     $this->dic->ctrl()->forwardCommand($xvmpGUI);
-                    if (self::version()->is6()) {
-                        $this->tpl->printToStdout();
-                    } else {
-                        $this->tpl->show();
-                    }
+                    $this->tpl->printToStdout();
                     break;
                 case strtolower(xudfFormConfigurationGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
@@ -93,11 +80,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     $this->dic->tabs()->activateTab(self::TAB_SETTINGS);
                     $xvmpGUI = new xudfFormConfigurationGUI($this);
                     $this->dic->ctrl()->forwardCommand($xvmpGUI);
-                    if (self::version()->is6()) {
-                        $this->tpl->printToStdout();
-                    } else {
-                        $this->tpl->show();
-                    }
+                    $this->tpl->printToStdout();
                     break;
                 case strtolower(xudfLogGUI::class):
                     if (!ilObjUdfEditorAccess::hasWriteAccess()) {
@@ -111,11 +94,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     $this->dic->tabs()->activateTab(self::TAB_HISTORY);
                     $xvmpGUI = new xudfLogGUI($this);
                     $this->dic->ctrl()->forwardCommand($xvmpGUI);
-                    if (self::version()->is6()) {
-                        $this->tpl->printToStdout();
-                    } else {
-                        $this->tpl->show();
-                    }
+                    $this->tpl->printToStdout();
                     break;
                 case strtolower(ilInfoScreenGUI::class):
                     if (!$this->dic->ctrl()->isAsynch()) {
@@ -125,11 +104,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                     $this->dic->tabs()->activateTab(self::TAB_INFO);
                     $this->checkPermission("visible");
                     $this->infoScreen();    // forwards command
-                    if (self::version()->is6()) {
-                        $this->tpl->printToStdout();
-                    } else {
-                        $this->tpl->show();
-                    }
+                    $this->tpl->printToStdout();
                     break;
                 case strtolower(ilPermissionGUI::class):
                     $this->initHeader(false);
@@ -147,11 +122,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         } catch (Exception $e) {
             ilUtil::sendFailure($e->getMessage());
             if (!$this->creation_mode) {
-                if (self::version()->is6()) {
-                    $this->tpl->printToStdout();
-                } else {
-                    $this->tpl->show();
-                }
+                $this->tpl->printToStdout();
             }
         }
     }

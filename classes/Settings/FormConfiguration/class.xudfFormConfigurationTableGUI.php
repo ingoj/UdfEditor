@@ -5,7 +5,7 @@ use ILIAS\DI\Container;
 
 class xudfFormConfigurationTableGUI extends ilTable2GUI
 {
-    
+
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
 

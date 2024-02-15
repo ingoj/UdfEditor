@@ -6,7 +6,7 @@ use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginT
 
 class xudfSetting extends ActiveRecord
 {
-    
+
     use Notifications4PluginTrait;
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;

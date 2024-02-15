@@ -1,7 +1,6 @@
 <?php
 
 
-
 /**
  * @ilCtrl_isCalledBy xudfLogGUI: ilObjUdfEditorGUI
  */
