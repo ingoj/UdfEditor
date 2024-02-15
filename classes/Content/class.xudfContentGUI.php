@@ -1,21 +1,18 @@
 <?php
 
+use srag\DIC\UdfEditor\DICTrait;
 use srag\Notifications4Plugin\UdfEditor\Exception\Notifications4PluginException;
 use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
-use srag\DIC\UdfEditor\DICTrait;
 
 /**
- *
- *
- *
- *
  * @ilCtrl_isCalledBy xudfContentGUI: ilObjUdfEditorGUI
  */
 class xudfContentGUI extends xudfGUI
 {
     use DICTrait;
     use Notifications4PluginTrait;
+
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
 
     public const SUBTAB_SHOW = 'show';
@@ -23,9 +20,7 @@ class xudfContentGUI extends xudfGUI
 
     public const CMD_RETURN_TO_PARENT = 'returnToParent';
 
-
-
-    protected function setSubtabs()
+    protected function setSubtabs(): void
     {
         if (ilObjUdfEditorAccess::hasWriteAccess()) {
             self::dic()->tabs()->addSubTab(self::SUBTAB_SHOW, $this->lng->txt(self::SUBTAB_SHOW), self::dic()->ctrl()->getLinkTarget($this));
@@ -37,7 +32,7 @@ class xudfContentGUI extends xudfGUI
     /**
      * @throws ilCtrlException
      */
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $this->setSubtabs();
         $next_class = self::dic()->ctrl()->getNextClass();
@@ -64,14 +59,13 @@ class xudfContentGUI extends xudfGUI
         self::dic()->tabs()->removeTab('pg');
     }
 
-
-
-    protected function index()
+    protected function index(): void
     {
         $has_open_fields = false;
         $where = xudfContentElement::where(['obj_id' => $this->getObjId()]);
         if (!$_GET['edit'] && $where->count()) {
             $udf_values = self::dic()->user()->getUserDefinedData();
+
             /** @var xudfContentElement $element */
             foreach ($where->get() as $element) {
                 if (!$element->isSeparator() && !$udf_values['f_' . $element->getUdfFieldId()]) {
@@ -100,8 +94,7 @@ class xudfContentGUI extends xudfGUI
         $this->tpl->setContent($page_obj_gui->getHTML() . $form->getHTML());
     }
 
-
-    protected function update()
+    protected function update(): void
     {
         $form = new xudfContentFormGUI($this);
         $form->setValuesByPost();
@@ -117,13 +110,11 @@ class xudfContentGUI extends xudfGUI
         self::dic()->ctrl()->redirect($this, self::CMD_STANDARD);
     }
 
-
-    protected function checkAndSendNotification()
+    protected function checkAndSendNotification(): void
     {
         $xudfSettings = $this->getObject()->getSettings();
 
         if ($xudfSettings->hasMailNotification()) {
-
             $notification = $xudfSettings->getNotification();
 
             $sender = self::notifications4plugin()->sender()->factory()->internalMail(ANONYMOUS_USER_ID, self::dic()->user()->getId());
@@ -158,17 +149,13 @@ class xudfContentGUI extends xudfGUI
         }
     }
 
-
-
-    protected function returnToParent()
+    protected function returnToParent(): void
     {
         self::dic()->ctrl()->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->tree->getParentId($_GET['ref_id']));
         self::dic()->ctrl()->redirectByClass(ilRepositoryGUI::class);
     }
 
-
-
-    protected function redirectAfterSave()
+    protected function redirectAfterSave(): void
     {
         switch ($this->getObject()->getSettings()->getRedirectType()) {
             case xudfSetting::REDIRECT_STAY_IN_FORM:

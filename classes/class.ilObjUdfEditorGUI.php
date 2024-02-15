@@ -7,16 +7,13 @@ use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
- *
- *
- *
- *
  * @ilCtrl_isCalledBy ilObjUdfEditorGUI: ilRepositoryGUI, ilObjPluginDispatchGUI, ilAdministrationGUI
  * @ilCtrl_Calls      ilObjUdfEditorGUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilCommonActionDispatcherGUI, ilEditClipboardGUI
  */
 class ilObjUdfEditorGUI extends ilObjectPluginGUI
 {
     use DICTrait;
+
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     public const TAB_CONTENT = 'content';
     public const TAB_INFO = 'info';
@@ -26,16 +23,12 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
     public const CMD_INDEX = 'index';
     public const CMD_SETTINGS = 'showSettings';
 
-
-
     public function __construct($a_ref_id = 0, $a_id_type = self::REPOSITORY_NODE_ID, $a_parent_node_id = 0)
     {
         parent::__construct($a_ref_id, $a_id_type, $a_parent_node_id);
     }
 
-
-
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $next_class = self::dic()->ctrl()->getNextClass();
         $cmd = self::dic()->ctrl()->getCmd();
@@ -158,48 +151,32 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         }
     }
 
-
-    /**
-     * @return int
-     */
-    public function getObjId()
+    public function getObjId(): int
     {
         return $this->obj_id;
     }
 
-
-    /**
-     * @return ilObjUdfEditor
-     */
-    public function getObject()
+    public function getObject(): ilObjUdfEditor
     {
         return $this->object;
     }
 
-
-
-    protected function performCommand($cmd)
+    protected function performCommand($cmd): void
     {
         $this->{$cmd}();
     }
 
-
-
-    protected function index()
+    protected function index(): void
     {
         self::dic()->ctrl()->redirectByClass(xudfContentGUI::class);
     }
 
-
-
-    protected function showSettings()
+    protected function showSettings(): void
     {
         self::dic()->ctrl()->redirectByClass(xudfSettingsGUI::class);
     }
 
-
-
-    protected function initHeader($render_locator = true)
+    protected function initHeader($render_locator = true): void
     {
         if ($render_locator) {
             $this->setLocator();
@@ -217,11 +194,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         }
     }
 
-
-    /**
-     * @return bool
-     */
-    protected function setTabs()
+    protected function setTabs(): void
     {
         global $DIC;
         $lng = $DIC['lng'];
@@ -246,17 +219,9 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
                 "ilpermissiongui",
             ], "perm"));
         }
-
-        return true;
     }
 
-
-    /**
-     * @param ilInfoScreenGUI $info
-     *
-     * @throws DICException
-     */
-    public function addInfoItems($info)
+    public function addInfoItems(ilInfoScreenGUI $info): void
     {
         $info->addSection(self::plugin()->translate('info_section_title'));
         $fields_string = '';
@@ -272,38 +237,22 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         $info->addProperty(self::plugin()->translate('info_section_subtitle'), $fields_string ? $fields_string : '-');
     }
 
-
-    /**
-     * @return string
-     */
-    public function getAfterCreationCmd()
+    public function getAfterCreationCmd(): string
     {
         return self::CMD_SETTINGS;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getStandardCmd()
+    public function getStandardCmd(): string
     {
         return self::CMD_INDEX;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return ilUdfEditorPlugin::PLUGIN_ID;
     }
 
-
-    /**
-     * @return bool
-     */
-    protected function supportsCloning()
+    protected function supportsCloning(): bool
     {
         return false;
     }

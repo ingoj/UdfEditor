@@ -9,18 +9,9 @@ class xudfLogTableGUI extends TableGUI
     public const ID_PREFIX = 'xudf_log_table_';
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     public const ROW_TEMPLATE = 'tpl.log_table_row.html';
-    /**
-     * @var xudfLogGUI
-     */
-    protected $parent_obj;
 
+    protected xudfLogGUI $parent_obj;
 
-    /**
-     *
-     *
-     *
-     * @throws DICException
-     */
     public function __construct($parent, $parent_cmd)
     {
         $this->parent_obj = $parent;
@@ -28,27 +19,15 @@ class xudfLogTableGUI extends TableGUI
         self::dic()->ui()->mainTemplate()->addCss(self::plugin()->directory() . '/templates/default/log_table.css');
     }
 
-
-    /**
-     * @param array|object $row
-     *
-     * @return string|void
-     */
-    protected function getColumnValue(string $column, /*array*/ $row, int $format = self::DEFAULT_FORMAT): string
+    protected function getColumnValue(string $column, array|object $row, int $format = self::DEFAULT_FORMAT): string
     {
     }
-
-
 
     protected function getSelectableColumns2(): array
     {
         return [];
     }
 
-
-    /**
-     * @throws DICException
-     */
     protected function initColumns(): void
     {
         $this->addColumn(self::plugin()->translate('values'));
@@ -58,7 +37,6 @@ class xudfLogTableGUI extends TableGUI
 
 
     /**
-     *
      * @throws Exception
      */
     protected function initData(): void
@@ -73,8 +51,6 @@ class xudfLogTableGUI extends TableGUI
         $this->setData($where->getArray());
     }
 
-
-
     protected function initFilterFields(): void
     {
         $this->filter_fields = [
@@ -85,38 +61,23 @@ class xudfLogTableGUI extends TableGUI
         ];
     }
 
-
-
     protected function initId(): void
     {
         $this->setId(self::ID_PREFIX . $this->parent_obj->getObjId());
     }
-
-
 
     protected function initTitle(): void
     {
         $this->setTitle(self::dic()->language()->txt('history'));
     }
 
-
-    /**
-     * @param array $row
-     *
-     * @throws DICException
-     */
-    protected function fillRow($row): void
+    protected function fillRow(array $row): void
     {
         $this->tpl->setVariable('VALUES', $this->formatValues($row['values']));
         $this->tpl->setVariable('USER', ilObjUser::_lookupFullname($row['usr_id']) . ', [' . ilObjUser::_lookupLogin($row['usr_id']) . ']');
         $this->tpl->setVariable('DATE', $row['timestamp']->get(IL_CAL_FKT_DATE, 'd.m.Y H:i:s'));
     }
 
-
-    /**
-     *
-     * @throws DICException
-     */
     protected function formatValues(array $values): string
     {
         // this should be a template, but i'm too lazy
@@ -132,10 +93,6 @@ class xudfLogTableGUI extends TableGUI
         return $string . '</table>';
     }
 
-
-    /**
-     * @throws DICException
-     */
     protected function getUserFilterOptions(): array
     {
         $result = self::dic()->database()->query(

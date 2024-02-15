@@ -6,18 +6,13 @@ use srag\DIC\UdfEditor\Exception\DICException;
 class xudfFormConfigurationTableGUI extends ilTable2GUI
 {
     use DICTrait;
+
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
-    /**
-     * @var ilUdfEditorPlugin
-     */
-    protected $pl;
+
+    protected ilUdfEditorPlugin $pl;
 
 
     /**
-     *
-     *
-     *
-     * @throws DICException
      * @throws arException
      */
     public function __construct($parent_gui, $parent_cmd)
@@ -41,11 +36,7 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         $this->setData(xudfContentElement::where(['obj_id' => ilObjUdfEditor::_lookupObjectId(filter_input(INPUT_GET, 'ref_id'))])->orderBy('sort')->getArray());
     }
 
-
-    /**
-     * @throws DICException
-     */
-    protected function initColumns()
+    protected function initColumns(): void
     {
         $this->addColumn('', '', 10, true);
         $this->addColumn(self::dic()->language()->txt('title'), 'title', 50);
@@ -56,13 +47,7 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         $this->addColumn('', '', 10, true);
     }
 
-
-    /**
-     * @param array $a_set
-     *
-     * @throws DICException
-     */
-    protected function fillRow($a_set)
+    protected function fillRow(array $a_set): void
     {
         $udf_definition = ilUserDefinedFields::_getInstance()->getDefinition($a_set['udf_field']);
 
@@ -101,11 +86,7 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         $this->tpl->setVariable('ACTIONS', $this->buildActions($a_set['id']));
     }
 
-
-    /**
-     * @throws DICException
-     */
-    protected function showMissingUdfMessage()
+    protected function showMissingUdfMessage(): void
     {
         static $already_shown;
         if (!$already_shown) {
@@ -114,12 +95,7 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         }
     }
 
-
-    /**
-     *
-     * @return string
-     */
-    protected function buildActions($id)
+    protected function buildActions($id): string
     {
         $actions = new ilAdvancedSelectionListGUI();
         $actions->setListTitle(self::dic()->language()->txt('actions'));

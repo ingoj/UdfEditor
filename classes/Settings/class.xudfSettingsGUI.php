@@ -5,13 +5,8 @@ use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
 use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
 
 /**
- *
- *
- *
- *
  * @ilCtrl_isCalledBy xudfSettingsGUI: ilObjUdfEditorGUI, ilPropertyFormGUI
  * @ilCtrl_Calls      xudfSettingsGUI: xudfSettingsFormGUI
- *
  * @ilCtrl_isCalledBy srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl: xudfSettingsGUI
  */
 class xudfSettingsGUI extends xudfGUI
@@ -28,7 +23,7 @@ class xudfSettingsGUI extends xudfGUI
     /**
      * @throws ilCtrlException
      */
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $this->setSubtabs();
         $next_class = $this->ctrl->getNextClass();
@@ -52,8 +47,7 @@ class xudfSettingsGUI extends xudfGUI
         }
     }
 
-
-    protected function setSubtabs()
+    protected function setSubtabs(): void
     {
         $this->tabs->addSubTab(self::SUBTAB_SETTINGS, $this->lng->txt(self::SUBTAB_SETTINGS), $this->ctrl->getLinkTarget($this, self::CMD_STANDARD));
         $this->tabs->addSubTab(self::SUBTAB_FORM_CONFIGURATION, $this->pl->txt(self::SUBTAB_FORM_CONFIGURATION), $this->ctrl->getLinkTargetByClass(xudfFormConfigurationGUI::class));
@@ -68,16 +62,14 @@ class xudfSettingsGUI extends xudfGUI
         $this->tabs->setSubTabActive(self::SUBTAB_SETTINGS);
     }
 
-
-    protected function index()
+    protected function index(): void
     {
         $xudfSettingsFormGUI = new xudfSettingsFormGUI($this);
         $xudfSettingsFormGUI->fillForm();
         $this->tpl->setContent($xudfSettingsFormGUI->getHTML());
     }
 
-
-    protected function update()
+    protected function update(): void
     {
         $xudfSettingsFormGUI = new xudfSettingsFormGUI($this);
         $xudfSettingsFormGUI->setValuesByPost();
@@ -89,7 +81,5 @@ class xudfSettingsGUI extends xudfGUI
         ilUtil::sendSuccess($this->pl->txt('form_saved'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
-
-
 
 }

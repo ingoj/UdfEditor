@@ -3,29 +3,17 @@
 use srag\DIC\UdfEditor\Exception\DICException;
 
 /**
- *
- *
- *
- *
  * @ilCtrl_isCalledBy xudfLogGUI: ilObjUdfEditorGUI
  */
 class xudfLogGUI extends xudfGUI
 {
-    /**
-     *
-     * @throws DICException
-     */
-    protected function index()
+    protected function index(): void
     {
         $table = new xudfLogTableGUI($this, self::CMD_STANDARD);
         $this->tpl->setContent($table->getHTML());
     }
 
-
-    /**
-     * @throws DICException
-     */
-    protected function applyFilter()
+    protected function applyFilter(): void
     {
         $table = new xudfLogTableGUI($this, self::CMD_STANDARD);
         $table->writeFilterToSession();
@@ -33,11 +21,7 @@ class xudfLogGUI extends xudfGUI
         $this->index();
     }
 
-
-    /**
-     * @throws DICException
-     */
-    protected function resetFilter()
+    protected function resetFilter(): void
     {
         $table = new xudfLogTableGUI($this, self::CMD_STANDARD);
         $table->resetFilter();

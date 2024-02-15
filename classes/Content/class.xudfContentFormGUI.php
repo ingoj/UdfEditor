@@ -7,25 +7,18 @@ use srag\Plugins\UdfEditor\Exception\UnknownUdfTypeException;
 class xudfContentFormGUI extends ilPropertyFormGUI
 {
     use DICTrait;
+
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
-    /**
-     * @var xudfContentGUI
-     */
-    protected $parent_gui;
-    /**
-     * @var int
-     */
-    protected $obj_id;
+
+    protected xudfContentGUI $parent_gui;
+
+    protected int $obj_id;
 
 
     /**
-     *
-     *
-     * @param boolean        $editable
-     *
      * @throws UnknownUdfTypeException
      */
-    public function __construct(xudfContentGUI $parent_gui, $editable = true)
+    public function __construct(xudfContentGUI $parent_gui, bool $editable = true)
     {
         parent::__construct();
         $this->parent_gui = $parent_gui;
@@ -34,9 +27,7 @@ class xudfContentFormGUI extends ilPropertyFormGUI
         $this->initForm($editable);
     }
 
-
-
-    protected function initForm($editable)
+    protected function initForm($editable): void
     {
         /** @var xudfContentElement $element */
         foreach (xudfContentElement::where(['obj_id' => $this->obj_id])->orderBy('sort')->get() as $element) {
@@ -92,12 +83,11 @@ class xudfContentFormGUI extends ilPropertyFormGUI
         }
     }
 
-
-
-    public function fillForm()
+    public function fillForm(): void
     {
         $udf_data = self::dic()->user()->getUserDefinedData();
         $values = [];
+
         /** @var xudfContentElement $element */
         foreach (xudfContentElement::where(['obj_id' => $this->obj_id, 'is_separator' => false])->get() as $element) {
             $values[$element->getUdfFieldId()] = $udf_data['f_' . $element->getUdfFieldId()];
@@ -109,11 +99,7 @@ class xudfContentFormGUI extends ilPropertyFormGUI
         $this->setValuesByArray($values);
     }
 
-
-    /**
-     * @return bool
-     */
-    public function saveForm()
+    public function saveForm(): bool
     {
         if (!$this->checkInput()) {
             return false;
@@ -121,6 +107,7 @@ class xudfContentFormGUI extends ilPropertyFormGUI
 
         $log_values = [];
         $udf_data = self::dic()->user()->getUserDefinedData();
+
         /** @var xudfContentElement $element */
         foreach (xudfContentElement::where(['obj_id' => $this->obj_id, 'is_separator' => false])->get() as $element) {
             $value = $this->getInput($element->getUdfFieldId());

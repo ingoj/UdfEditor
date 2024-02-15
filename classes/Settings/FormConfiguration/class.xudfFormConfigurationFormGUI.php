@@ -10,31 +10,20 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     public const F_IS_SEPARATOR = 'is_separator';
     public const F_ELEMENT_ID = 'element_id';
     public const F_REQUIRED = 'is_required';
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
-    /**
-     * @var ilLanguage
-     */
-    protected $lng;
-    /**
-     * @var ilUdfEditorPlugin
-     */
-    protected $pl;
-    /**
-     * @var xudfFormConfigurationGUI
-     */
-    protected $parent_gui;
-    /**
-     * @var xudfContentElement
-     */
-    protected $element;
 
+    protected ilCtrl $ctrl;
 
+    protected ilLanguage $lng;
+
+    protected ilUdfEditorPlugin $pl;
+
+    protected xudfFormConfigurationGUI $parent_gui;
+
+    protected xudfContentElement $element;
 
     public function __construct(xudfFormConfigurationGUI $parent_gui, xudfContentElement $element)
     {
+        parent::__construct();
         global $DIC;
         $this->ctrl = $DIC['ilCtrl'];
         $this->lng = $DIC['lng'];
@@ -47,9 +36,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->initForm();
     }
 
-
-
-    protected function initForm()
+    protected function initForm(): void
     {
         $input = new ilHiddenInputGUI(self::F_IS_SEPARATOR);
         $input->setValue($this->element->isSeparator());
@@ -71,9 +58,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->addCommandButton(xudfFormConfigurationGUI::CMD_STANDARD, $this->lng->txt('cancel'));
     }
 
-
-
-    protected function initUdfFieldForm()
+    protected function initUdfFieldForm(): void
     {
         // UDF FIELD
         $input = new ilSelectInputGUI($this->pl->txt(self::F_UDF_FIELD), self::F_UDF_FIELD);
@@ -97,9 +82,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->addItem($input);
     }
 
-
-
-    protected function initSeparatorForm()
+    protected function initSeparatorForm(): void
     {
         // TITLE
         $input = new ilTextInputGUI($this->lng->txt(self::F_TITLE), self::F_TITLE);
@@ -110,9 +93,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->addItem($input);
     }
 
-
-
-    public function fillForm()
+    public function fillForm(): void
     {
         try {
             $title = $this->element->getTitle();
@@ -130,11 +111,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->setValuesByArray($values, true);
     }
 
-
-    /**
-     * @return bool
-     */
-    public function saveForm()
+    public function saveForm(): bool
     {
         if (!$this->checkInput()) {
             return false;

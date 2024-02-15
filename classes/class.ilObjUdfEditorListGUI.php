@@ -2,16 +2,14 @@
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-
 class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
 {
-    public function getGuiClass()
+    public function getGuiClass(): string
     {
         return ilObjUdfEditorGUI::class;
     }
 
-
-    public function initCommands()
+    public function initCommands(): array
     {
         $this->timings_enabled = true;
         $this->subscribe_enabled = false;
@@ -41,9 +39,7 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
         return $commands;
     }
 
-
-
-    public function initType()
+    public function initType(): void
     {
         $this->setType(ilUdfEditorPlugin::PLUGIN_ID);
     }
@@ -51,10 +47,8 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
 
     /**
      * get all alert properties
-     *
-     * @return array
      */
-    public function getAlertProperties()
+    public function getAlertProperties(): array
     {
         $alert = [];
         foreach ((array) $this->getCustomProperties([]) as $prop) {
@@ -69,13 +63,12 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
 
     /**
      * Get item properties
-     *
      * @return    array        array of property arrays:
      *                        'alert' (boolean) => display as an alert property (usually in red)
      *                        'property' (string) => property name
      *                        'value' (string) => property value
      */
-    public function getCustomProperties($a_prop)
+    public function getCustomProperties($a_prop): array
     {
         $props = parent::getCustomProperties([]);
 

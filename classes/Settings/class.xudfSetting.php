@@ -8,6 +8,7 @@ class xudfSetting extends ActiveRecord
 {
     use DICTrait;
     use Notifications4PluginTrait;
+
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     public const DB_TABLE_NAME = 'xudf_setting';
 
@@ -15,199 +16,146 @@ class xudfSetting extends ActiveRecord
     public const REDIRECT_TO_ILIAS_OBJECT = 'to_ilias_object';
     public const REDIRECT_TO_URL = 'to_url';
 
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::DB_TABLE_NAME;
     }
 
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected $obj_id;
+    protected int $obj_id;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      * @con_is_notnull   true
      */
-    protected $is_online = false;
+    protected bool $is_online = false;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      * @con_is_notnull   true
      */
-    protected $show_info_tab = false;
+    protected bool $show_info_tab = false;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      * @con_is_notnull   true
      */
-    protected $mail_notification = false;
+    protected bool $mail_notification = false;
+
     /**
-     * @var string
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected $additional_notification = '';
+    protected string $additional_notification = '';
+
     /**
-     * @var string
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       64
      */
-    protected $redirect_type = self::REDIRECT_STAY_IN_FORM;
+    protected string $redirect_type = self::REDIRECT_STAY_IN_FORM;
+
     /**
-     * @var string
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected $redirect_value;
+    protected string $redirect_value;
+
     /**
-     * @var string
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_is_notnull   true
      */
-    protected $notification_name = "";
+    protected string $notification_name = "";
 
-
-    /**
-     * @return int
-     */
-    public function getObjId()
+    public function getObjId(): int
     {
         return $this->obj_id;
     }
 
-    /**
-     * @param int $obj_id
-     */
-    public function setObjId($obj_id)
+    public function setObjId(int $obj_id): void
     {
         $this->obj_id = $obj_id;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOnline()
+    public function isOnline(): bool
     {
         return $this->is_online;
     }
 
-    /**
-     * @param bool $is_online
-     */
-    public function setIsOnline($is_online)
+    public function setIsOnline(bool $is_online): void
     {
         $this->is_online = $is_online;
     }
 
-    /**
-     * @return bool
-     */
-    public function isShowInfoTab()
+    public function isShowInfoTab(): bool
     {
         return $this->show_info_tab;
     }
 
-    /**
-     * @param bool $show_info_tab
-     */
-    public function setShowInfoTab($show_info_tab)
+    public function setShowInfoTab(bool $show_info_tab): void
     {
         $this->show_info_tab = $show_info_tab;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasMailNotification()
+    public function hasMailNotification(): bool
     {
         return $this->mail_notification;
     }
 
-    /**
-     * @param bool $mail_notification
-     */
-    public function setMailNotification($mail_notification)
+    public function setMailNotification(bool $mail_notification): void
     {
         $this->mail_notification = $mail_notification;
     }
 
-    /**
-     * @return string
-     */
-    public function getAdditionalNotification()
+    public function getAdditionalNotification(): string
     {
         return $this->additional_notification;
     }
 
-    /**
-     * @param string $additional_notification
-     */
-    public function setAdditionalNotification($additional_notification)
+    public function setAdditionalNotification(string $additional_notification): void
     {
         $this->additional_notification = $additional_notification;
     }
-
-
 
     public function getRedirectType(): string
     {
         return $this->redirect_type ?: self::REDIRECT_STAY_IN_FORM;
     }
 
-
-
-    public function setRedirectType(string $redirect_type)
+    public function setRedirectType(string $redirect_type): void
     {
         $this->redirect_type = $redirect_type;
     }
-
-
 
     public function getRedirectValue(): string
     {
         return $this->redirect_value;
     }
 
-
-
-    public function setRedirectValue(string $redirect_value)
+    public function setRedirectValue(string $redirect_value): void
     {
         $this->redirect_value = $redirect_value;
     }
 
-    /**
-     * @return self
-     */
-    public static function find($primary_key, array $add_constructor_args = [])
+    public static function find($primary_key, array $add_constructor_args = []): ?self
     {
-        return parent::find($primary_key, $add_constructor_args); // TODO: Change the autogenerated stub
+        return parent::find($primary_key, $add_constructor_args);
     }
-
-
 
     public function getNotification(): NotificationInterface
     {

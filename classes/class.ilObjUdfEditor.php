@@ -4,63 +4,41 @@ use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
 require_once __DIR__ . "/../vendor/autoload.php";
 
-
 class ilObjUdfEditor extends ilObjectPlugin
 {
-    /**
-     * @var xudfSetting
-     */
-    protected $settings;
+    protected xudfSetting $settings;
 
-
-    /**
-     * @return string
-     */
-    protected function initType()
+    protected function initType(): void
     {
         $this->type = ilUdfEditorPlugin::PLUGIN_ID;
     }
 
-
-
-    protected function doCreate()
+    protected function doCreate(bool $clone_mode = false): void
     {
         $xudfSetting = new xudfSetting();
         $xudfSetting->setObjId($this->getId());
         $xudfSetting->create();
     }
 
-
-
-    protected function beforeDelete()
+    protected function beforeDelete(): bool
     {
         xudfSetting::find($this->getId())->delete();
+        return true;
     }
 
-
-    /**
-     * @param self $new_obj
-     * @param null $a_copy_id
-     */
-    protected function doCloneObject($new_obj, $a_target_id, $a_copy_id = null)
+    protected function doCloneObject(self|ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
     {
         $this->cloneSettings($new_obj);
         $this->cloneContentElements($new_obj);
         $this->clonePageObject($new_obj);
     }
 
-
-
-    public function getStyleSheetId()
+    public function getStyleSheetId(): void
     {
         ilObjStyleSheet::lookupObjectStyle($this->getId());
     }
 
-
-    /**
-     * @return xudfSetting
-     */
-    public function getSettings()
+    public function getSettings(): xudfSetting
     {
         if (!($this->settings instanceof xudfSetting)) {
             $this->settings = xudfSetting::find($this->id);
@@ -69,11 +47,7 @@ class ilObjUdfEditor extends ilObjectPlugin
         return $this->settings;
     }
 
-
-    /**
-     * @param self $new_obj
-     */
-    protected function cloneSettings($new_obj)
+    protected function cloneSettings(ilObjUdfEditor $new_obj): void
     {
         $old_settings = $this->getSettings();
         $new_settings = $new_obj->getSettings();
@@ -84,11 +58,7 @@ class ilObjUdfEditor extends ilObjectPlugin
         $new_settings->update();
     }
 
-
-    /**
-     * @param self $new_obj
-     */
-    protected function cloneContentElements($new_obj)
+    protected function cloneContentElements(ilObjUdfEditor $new_obj): void
     {
         /** @var xudfContentElement $old_content_element */
         foreach (xudfContentElement::where(['obj_id' => $this->getId()])->get() as $old_content_element) {
@@ -107,13 +77,10 @@ class ilObjUdfEditor extends ilObjectPlugin
         }
     }
 
-
-    /**
-     * @param self $new_obj
-     */
-    protected function clonePageObject($new_obj)
+    protected function clonePageObject(ilObjUdfEditor $new_obj): void
     {
         $old_page_object = new xudfPageObject($this->getId());
         $old_page_object->copy($new_obj->getId());
+
     }
 }

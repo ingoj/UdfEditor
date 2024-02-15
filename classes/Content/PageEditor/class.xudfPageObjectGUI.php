@@ -1,10 +1,6 @@
 <?php
 
 /**
- *
- *
- *
- *
  * @ilCtrl_isCalledBy xudfPageObjectGUI: xudfContentGUI
  * @ilCtrl_Calls      xudfPageObjectGUI: ilPageEditorGUI, ilEditClipboardGUI, ilMediaPoolTargetSelector
  * @ilCtrl_Calls      xudfPageObjectGUI: ilPublicUserProfileGUI, ilPageObjectGUI
@@ -46,16 +42,10 @@ class xudfPageObjectGUI extends ilPageObjectGUI
     }
 
 
-    public function executeCommand()
-    {
-        return parent::executeCommand();
-    }
-
-
     /**
      * for some reason the entry in copg_pobj_def gets deleted from time to time, so we check and add it everytime now
      */
-    protected function checkAndAddCOPageDefinition()
+    protected function checkAndAddCOPageDefinition(): void
     {
         global $DIC;
         $sql_query = $DIC->database()->query('SELECT * FROM copg_pobj_def WHERE parent_type = "xudf"');

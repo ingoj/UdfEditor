@@ -4,10 +4,6 @@ use srag\Notifications4Plugin\UdfEditor\Notification\NotificationCtrl;
 use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
 
 /**
- *
- *
- *
- *
  * @ilCtrl_isCalledBy xudfFormConfigurationGUI: ilObjUdfEditorGUI
  */
 class xudfFormConfigurationGUI extends xudfGUI
@@ -24,9 +20,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     public const CMD_CONFIRM_DELETE = 'confirmDelete';
     public const CMD_REORDER = 'reorder';
 
-
-
-    protected function performCommand($cmd)
+    protected function performCommand($cmd): void
     {
         switch ($cmd) {
             case self::CMD_STANDARD:
@@ -38,9 +32,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         parent::performCommand($cmd);
     }
 
-
-
-    protected function setSubtabs()
+    protected function setSubtabs(): void
     {
         $this->tabs->addSubTab(self::SUBTAB_SETTINGS, $this->lng->txt(self::SUBTAB_SETTINGS), $this->ctrl->getLinkTargetByClass(xudfSettingsGUI::class));
         $this->tabs->addSubTab(self::SUBTAB_FORM_CONFIGURATION, $this->pl->txt(self::SUBTAB_FORM_CONFIGURATION), $this->ctrl->getLinkTargetByClass(xudfFormConfigurationGUI::class, self::CMD_STANDARD));
@@ -51,13 +43,12 @@ class xudfFormConfigurationGUI extends xudfGUI
                 $this->pl->txt("notification"),
                 $this->ctrl->getLinkTargetByClass([xudfSettingsGUI::class, NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION)
             );
-        }   $this->tabs->setSubTabActive(self::SUBTAB_FORM_CONFIGURATION);
+        }
+        $this->tabs->setSubTabActive(self::SUBTAB_FORM_CONFIGURATION);
 
     }
 
-
-
-    protected function initToolbar()
+    protected function initToolbar(): void
     {
         $add_udf_field = ilLinkButton::getInstance();
         $add_udf_field->setCaption($this->pl->txt('add_udf_field'), false);
@@ -70,17 +61,13 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->toolbar->addButtonInstance($add_separator);
     }
 
-
-
-    protected function index()
+    protected function index(): void
     {
         $xudfFormConfigurationTableGUI = new xudfFormConfigurationTableGUI($this, self::CMD_STANDARD);
         $this->tpl->setContent($xudfFormConfigurationTableGUI->getHTML());
     }
 
-
-
-    protected function addUdfField()
+    protected function addUdfField(): void
     {
         $udf_fields = ilUserDefinedFields::_getInstance()->getDefinitions();
         if (!count($udf_fields)) {
@@ -91,9 +78,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
     }
 
-
-
-    protected function addSeparator()
+    protected function addSeparator(): void
     {
         $element = new xudfContentElement();
         $element->setIsSeparator(true);
@@ -101,9 +86,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
     }
 
-
-
-    protected function create()
+    protected function create(): void
     {
         $element = new xudfContentElement($_POST['element_id']);
         $element->setIsSeparator($_POST[xudfFormConfigurationFormGUI::F_IS_SEPARATOR]);
@@ -120,9 +103,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
-
-
-    protected function update()
+    protected function update(): void
     {
         $element = new xudfContentElement($_POST['element_id']);
 
@@ -138,9 +119,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
-
-
-    protected function edit()
+    protected function edit(): void
     {
         $element = xudfContentElement::find($_GET['element_id']);
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, $element);
@@ -148,9 +127,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
     }
 
-
-
-    protected function delete()
+    protected function delete(): void
     {
         $element = new xudfContentElement($_GET['element_id']);
 
@@ -168,9 +145,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->tpl->setContent($confirmationGUI->getHTML());
     }
 
-
-
-    protected function confirmDelete()
+    protected function confirmDelete(): void
     {
         $element = new xudfContentElement($_POST['element_id']);
         $element->delete();
@@ -178,9 +153,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
-
-
-    protected function reorder()
+    protected function reorder(): void
     {
         $sort = 10;
         foreach ($_POST['ids'] as $id) {

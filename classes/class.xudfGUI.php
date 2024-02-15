@@ -1,41 +1,23 @@
 <?php
 
-
 abstract class xudfGUI
 {
     public const CMD_STANDARD = 'index';
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
-    /**
-     * @var ilObjUser
-     */
-    protected $user;
-    /**
-     * @var ilLanguage
-     */
-    protected $lng;
-    /**
-     * @var ilTemplate
-     */
-    protected $tpl;
-    /**
-     * @var ilTabsGUI
-     */
-    protected $tabs;
-    /**
-     * @var ilToolbarGUI
-     */
-    protected $toolbar;
-    /**
-     * @var ilUdfEditorPlugin
-     */
-    protected $pl;
 
-    protected $parent_gui;
+    protected ilCtrl $ctrl;
 
+    protected ilObjUser $user;
 
+    protected ilLanguage $lng;
+    protected ilGlobalPageTemplate $tpl;
+
+    protected ilTabsGUI $tabs;
+
+    protected ilToolbarGUI $toolbar;
+
+    protected ilUdfEditorPlugin $pl;
+
+    protected ilObjUdfEditorGUI $parent_gui;
 
     public function __construct(ilObjUdfEditorGUI $parent_gui)
     {
@@ -51,9 +33,7 @@ abstract class xudfGUI
         $this->parent_gui = $parent_gui;
     }
 
-
-
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $this->setSubtabs();
         $next_class = $this->ctrl->getNextClass();
@@ -65,39 +45,25 @@ abstract class xudfGUI
         }
     }
 
-
-
-    protected function performCommand($cmd)
+    protected function performCommand($cmd): void
     {
         $this->{$cmd}();
     }
 
-
-
-    protected function setSubtabs()
+    protected function setSubtabs(): void
     {
         // overwrite if class has subtabs
     }
 
-
-    /**
-     * @return int
-     */
-    public function getObjId()
+    public function getObjId(): int
     {
         return $this->parent_gui->getObjId();
     }
 
-
-    /**
-     * @return ilObjUdfEditor
-     */
-    public function getObject()
+    public function getObject(): ilObjUdfEditor
     {
         return $this->parent_gui->getObject();
     }
-
-
 
     abstract protected function index();
 }

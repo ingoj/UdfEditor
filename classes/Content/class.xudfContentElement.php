@@ -6,18 +6,12 @@ class xudfContentElement extends ActiveRecord
 {
     public const DB_TABLE_NAME = 'xudf_element';
 
-
-    /**
-     * @return string
-     */
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::DB_TABLE_NAME;
     }
 
-
-
-    public function create()
+    public function create(): void
     {
         $element = self::orderBy('sort')->first();
         $sort = $element ? ($element->getSort() + 10) : 10;
@@ -25,19 +19,13 @@ class xudfContentElement extends ActiveRecord
         parent::create();
     }
 
-
-    /**
-     *
-     * @return self
-     */
-    public static function find($primary_key, array $add_constructor_args = [])
+    public static function find($primary_key, array $add_constructor_args = []): ?self
     {
         return parent::find($primary_key, $add_constructor_args);
     }
 
 
     /**
-     *
      * @con_has_field    true
      * @con_sequence     true
      * @con_fieldtype    integer
@@ -46,153 +34,112 @@ class xudfContentElement extends ActiveRecord
      * @con_is_primary   true
      */
     protected int $id;
+
     /**
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      * @con_is_notnull   true
      */
     protected int $obj_id;
+
     /**
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      */
     protected int $sort;
+
     /**
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      */
     protected bool $is_separator = false;
+
     /**
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      */
     protected int $udf_field;
+
     /**
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
     protected string $title;
+
     /**
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
     protected string $description;
+
     /**
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      */
     protected bool $is_required = false;
 
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-
-    /**
-     * @return int
-     */
-    public function getObjId()
+    public function getObjId(): int
     {
         return $this->obj_id;
     }
 
-
-    /**
-     * @param int $obj_id
-     */
-    public function setObjId($obj_id)
+    public function setObjId(int $obj_id): void
     {
         $this->obj_id = $obj_id;
     }
 
-
-    /**
-     * @return int
-     */
-    public function getSort()
+    public function getSort(): int
     {
         return $this->sort;
     }
 
-
-    /**
-     * @param int $sort
-     */
-    public function setSort($sort)
+    public function setSort(int $sort): void
     {
         $this->sort = $sort;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function isSeparator()
+    public function isSeparator(): bool
     {
         return $this->is_separator;
     }
 
-
-    /**
-     * @param bool $is_separator
-     */
-    public function setIsSeparator($is_separator)
+    public function setIsSeparator(bool $is_separator): void
     {
         $this->is_separator = $is_separator;
     }
 
-
-    /**
-     * @return int
-     */
-    public function getUdfFieldId()
+    public function getUdfFieldId(): int
     {
         return $this->udf_field;
     }
 
-
-    /**
-     * @param int $udf_field
-     */
-    public function setUdfFieldId($udf_field)
+    public function setUdfFieldId(int $udf_field): void
     {
         $this->udf_field = $udf_field;
     }
 
 
     /**
-     * @return array
      * @throws UDFNotFoundException
      */
-    public function getUdfFieldDefinition()
+    public function getUdfFieldDefinition(): array
     {
         $definition = ilUserDefinedFields::_getInstance()->getDefinition($this->getUdfFieldId());
         if (!is_array($definition) || empty($definition)) {
@@ -204,10 +151,9 @@ class xudfContentElement extends ActiveRecord
 
 
     /**
-     * @return String
      * @throws UDFNotFoundException
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         if (!$this->isSeparator()) {
             return $this->getUdfFieldDefinition()['field_name'];
@@ -216,47 +162,27 @@ class xudfContentElement extends ActiveRecord
         return $this->title;
     }
 
-
-    /**
-     * @param String $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-
-    /**
-     * @return String
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-
-    /**
-     * @param String $description
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function isRequired()
+    public function isRequired(): bool
     {
         return (bool) $this->is_required;
     }
 
-
-    /**
-     * @param bool $is_required
-     */
-    public function setIsRequired($is_required)
+    public function setIsRequired(bool $is_required): void
     {
         $this->is_required = $is_required;
     }

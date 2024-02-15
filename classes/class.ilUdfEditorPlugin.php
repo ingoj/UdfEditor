@@ -11,21 +11,16 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
 {
     use DICTrait;
     use Notifications4PluginTrait;
+
     public const PLUGIN_ID = 'xudf';
     public const PLUGIN_CLASS_NAME = self::class;
 
-    public function getPluginName()
+    public function getPluginName(): string
     {
         return 'UdfEditor';
     }
 
-
-    /**
-     * @var bool
-     */
-    protected static $init_notifications = false;
-
-
+    protected static bool $init_notifications = false;
 
     public static function initNotifications()/*:void*/
     {
@@ -40,25 +35,14 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
         }
     }
 
-    /**
-     * @var ilUdfEditorPlugin
-     */
-    protected static $instance = null;
+    protected static ?ilUdfEditorPlugin $instance = null;
 
-
-    /**
-     * @return bool
-     */
-    public function allowCopy()
+    public function allowCopy(): bool
     {
         return true;
     }
 
-
-    /**
-     * @return ilUdfEditorPlugin
-     */
-    public static function getInstance()
+    public static function getInstance(): ?ilUdfEditorPlugin
     {
         if (self::$instance === null) {
             self::$instance = new self();
@@ -67,14 +51,10 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
         return self::$instance;
     }
 
-
-
     protected function init()/*:void*/
     {
         self::initNotifications();
     }
-
-
 
     public function updateLanguages(/*array*/ $a_lang_keys = null)/*:void*/
     {
@@ -83,17 +63,14 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
         self::notifications4plugin()->installLanguages();
     }
 
-
-    protected function uninstallCustom()
+    protected function uninstallCustom(): void
     {
         global $DIC;
         $DIC->database()->dropTable(xudfSetting::DB_TABLE_NAME, false);
         $DIC->database()->dropTable(xudfContentElement::DB_TABLE_NAME, false);
-        $DIC->database()->manipulateF('DELETE FROM copg_pobj_def WHERE component=%s', [ 'text' ], [ 'Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor' ]);
+        $DIC->database()->manipulateF('DELETE FROM copg_pobj_def WHERE component=%s', ['text'], ['Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor']);
         self::notifications4plugin()->dropTables();
     }
-
-
 
     public function exchangeUIRendererAfterInitialization(Container $dic): Closure
     {

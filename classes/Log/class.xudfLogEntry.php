@@ -1,23 +1,16 @@
 <?php
 
-
 class xudfLogEntry extends ActiveRecord
 {
     public const TABLE_NAME = 'xudf_log_entry';
 
-
-    /**
-     * @return string
-     */
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::TABLE_NAME;
     }
 
 
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_sequence     true
      * @con_fieldtype    integer
@@ -25,49 +18,41 @@ class xudfLogEntry extends ActiveRecord
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected $id;
+    protected int $id;
+
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      * @con_is_notnull   true
      */
-    protected $obj_id;
+    protected int $obj_id;
+
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      * @con_is_notnull   true
      */
-    protected $usr_id;
+    protected int $usr_id;
+
     /**
-     * @var array
-     *
      * @con_has_field  true
      * @con_fieldtype  clob
      * @con_is_notnull true
      */
-    protected $values = [];
+    protected array $values = [];
+
     /**
-     * @var ilDateTime
-     *
      * @con_has_field  true
      * @con_fieldtype  timestamp
      * @con_index      true
      * @con_is_notnull true
      */
-    protected $timestamp;
+    protected ilDateTime $timestamp;
 
 
     /**
-     * @param $obj_id int
-     * @param $usr_id int
-     * @param $values array
-     *
      * @throws ilDateTimeException
      */
     public static function createNew(int $obj_id, int $usr_id, array $values): self
@@ -82,35 +67,25 @@ class xudfLogEntry extends ActiveRecord
         return $new;
     }
 
-
-
     public function getId(): int
     {
         return $this->id;
     }
-
-
 
     public function getObjId(): int
     {
         return $this->obj_id;
     }
 
-
-
     public function getUsrId(): int
     {
         return $this->usr_id;
     }
 
-
-
     public function getValues(): array
     {
         return $this->values;
     }
-
-
 
     public function getTimestamp(): ilDateTime
     {
@@ -119,10 +94,9 @@ class xudfLogEntry extends ActiveRecord
 
 
     /**
-     *
      * @return false|int|mixed|string
      */
-    public function sleep($field_name)
+    public function sleep($field_name): mixed
     {
         switch ($field_name) {
             case 'values':
@@ -136,11 +110,10 @@ class xudfLogEntry extends ActiveRecord
 
 
     /**
-     *
      * @return ilDateTime|mixed
      * @throws ilDateTimeException
      */
-    public function wakeUp($field_name, $field_value)
+    public function wakeUp($field_name, $field_value): mixed
     {
         switch ($field_name) {
             case 'values':
