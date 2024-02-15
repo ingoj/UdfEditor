@@ -14,52 +14,54 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
     public const PLUGIN_ID = 'xudf';
     public const PLUGIN_CLASS_NAME = self::class;
 
+    protected static bool $init_notifications = false;
+    protected static ?ilUdfEditorPlugin $instance = null;
+
     public function getPluginName(): string
     {
         return 'UdfEditor';
     }
 
-    protected static bool $init_notifications = false;
-
-    public static function initNotifications()/*:void*/
+    public static function initNotifications(): void
     {
         if (!self::$init_notifications) {
             self::$init_notifications = true;
 
-            self::notifications4plugin()->withTableNamePrefix(self::PLUGIN_ID)->withPlugin(self::plugin())->withPlaceholderTypes([
-                "object" => "object " . ilObjUdfEditor::class,
-                "user" => "object " . ilObjUser::class,
-                "user_defined_data" => "array"
-            ]);
+            self::notifications4plugin()->withTableNamePrefix(self::PLUGIN_ID)
+                ->withPlugin(self::getInstance())
+                ->withPlaceholderTypes([
+                    "object" => "object " . ilObjUdfEditor::class,
+                    "user" => "object " . ilObjUser::class,
+                    "user_defined_data" => "array"
+                ]);
         }
     }
 
-    protected static ?ilUdfEditorPlugin $instance = null;
 
     public function allowCopy(): bool
     {
         return true;
     }
 
-    public static function getInstance(): ?ilUdfEditorPlugin
+    public static function getInstance(): ilUdfEditorPlugin
     {
-        if (self::$instance === null) {
-            self::$instance = new self();
+        if (!isset(self::$instance)) {
+            global $DIC;
+
+            /** @var $component_factory ilComponentFactory */
+            $component_factory = $DIC['component.factory'];
+            /** @var $plugin ilUdfEditorPlugin */
+            $plugin = $component_factory->getPlugin(self::PLUGIN_ID);
+
+            self::$instance = $plugin;
         }
 
         return self::$instance;
     }
 
-    protected function init()/*:void*/
+    protected function init(): void
     {
         self::initNotifications();
-    }
-
-    public function updateLanguages(/*array*/ $a_lang_keys = null)/*:void*/
-    {
-        parent::updateLanguages($a_lang_keys);
-
-        self::notifications4plugin()->installLanguages();
     }
 
     protected function uninstallCustom(): void
@@ -67,7 +69,11 @@ class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
         global $DIC;
         $DIC->database()->dropTable(xudfSetting::DB_TABLE_NAME, false);
         $DIC->database()->dropTable(xudfContentElement::DB_TABLE_NAME, false);
-        $DIC->database()->manipulateF('DELETE FROM copg_pobj_def WHERE component=%s', ['text'], ['Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor']);
+        $DIC->database()->manipulateF(
+            'DELETE FROM copg_pobj_def WHERE component=%s',
+            ['text'],
+            ['Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor']
+        );
         self::notifications4plugin()->dropTables();
     }
 
