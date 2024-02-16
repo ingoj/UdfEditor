@@ -78,9 +78,9 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
             $udf_required = '&nbsp';
         } else {
             if ($a_set['is_required'] == 1) {
-                $udf_required = '<img src="./templates/default/images/icon_ok.svg">';
+                $udf_required = '<img style="width: 1rem" src="./templates/default/images/standard/icon_ok.svg">';
             } else {
-                $udf_required = '<img src="./templates/default/images/icon_not_ok.svg">';
+                $udf_required = '<img style="width: 1rem" src="./templates/default/images/standard/icon_not_ok.svg">';
             }
         }
 
