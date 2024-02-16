@@ -72,7 +72,13 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
     {
         $props = parent::getCustomProperties([]);
 
-        $settings = xudfSetting::find($this->obj_id);
+        try {
+            /** @var xudfSetting $settings */
+            $settings = xudfSetting::find($this->obj_id);
+        } catch (Throwable $ex) {
+            return $props;
+        }
+
         if (!$settings->isOnline()) {
             $props[] = [
                 'alert' => true,
