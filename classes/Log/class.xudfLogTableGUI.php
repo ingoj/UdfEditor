@@ -1,16 +1,25 @@
 <?php
 
 use ILIAS\DI\Container;
+use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\MultiLineNewInputGUI\MultiLineNewInputGUI;
+use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\PropertyFormGUI\Items\Items;
 use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\PropertyFormGUI\PropertyFormGUI;
 
-
-class xudfLogTableGUI extends TableGUI
+class xudfLogTableGUI extends ilTable2GUI
 {
     public const ID_PREFIX = 'xudf_log_table_';
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     public const ROW_TEMPLATE = 'tpl.log_table_row.html';
+    /**
+     * @var xudfLogGUI|xudfLogGUI
+     */
+    protected ?object $parent_obj;
+    /**
+     * @var ilFormPropertyGUI[]
+     *
+     */
+    private array $filter_cache = [];
 
-    protected xudfLogGUI $parent_obj;
     private Container $dic;
     private ilUdfEditorPlugin $plugin;
 
@@ -22,15 +31,6 @@ class xudfLogTableGUI extends TableGUI
         $this->dic = $DIC;
         $this->plugin = ilUdfEditorPlugin::getInstance();
         $this->dic->ui()->mainTemplate()->addCss($this->plugin->getDirectory() . '/templates/default/log_table.css');
-    }
-
-    protected function getColumnValue(string $column, array|object $row, int $format = self::DEFAULT_FORMAT): string
-    {
-    }
-
-    protected function getSelectableColumns2(): array
-    {
-        return [];
     }
 
     protected function initColumns(): void
@@ -46,7 +46,9 @@ class xudfLogTableGUI extends TableGUI
      */
     protected function initData(): void
     {
-        $filter_values = $this->getFilterValues();
+        $filter_values = array_map(static function ($item) {
+            return Items::getValueFromItem($item);
+        }, $this->filter_cache);
         $filter_user = $filter_values['user'];
 
         $where = xudfLogEntry::where(['obj_id' => $this->parent_obj->getObjId()]);
@@ -54,6 +56,65 @@ class xudfLogTableGUI extends TableGUI
             $where = $where->where(['usr_id' => $filter_user]);
         }
         $this->setData($where->getArray());
+    }
+
+    public function initFilter(): void
+    {
+        $this->setDisableFilterHiding(true);
+
+        $this->initFilterFields();
+
+        if (!is_array($this->filter_fields)) {
+            throw new Exception("\$filters needs to be an array!");
+        }
+
+        foreach ($this->filter_fields as $key => $field) {
+            if (!is_array($field)) {
+                throw new Exception("\$field needs to be an array!");
+            }
+
+            if ($field[PropertyFormGUI::PROPERTY_NOT_ADD]) {
+                continue;
+            }
+
+            $item = Items::getItem($key, $field, $this, $this);
+
+            /*if (!($item instanceof ilTableFilterItem)) {
+                throw new TableGUIException("\$item must be an instance of ilTableFilterItem!", TableGUIException::CODE_INVALID_FIELD);
+            }*/
+
+            if ($item instanceof MultiLineNewInputGUI) {
+                if (is_array($field[PropertyFormGUI::PROPERTY_SUBITEMS])) {
+                    foreach ($field[PropertyFormGUI::PROPERTY_SUBITEMS] as $child_key => $child_field) {
+                        if (!is_array($child_field)) {
+                            throw new Exception("\$fields needs to be an array!");
+                        }
+
+                        if ($child_field[PropertyFormGUI::PROPERTY_NOT_ADD]) {
+                            continue;
+                        }
+
+                        $child_item = Items::getItem($child_key, $child_field, $item, $this);
+
+                        $item->addInput($child_item);
+                    }
+                }
+            }
+
+            $this->filter_cache[$key] = $item;
+
+            $this->addFilterItem($item);
+
+            if ($this->hasSessionValue($item->getFieldId())) { // Supports filter default values
+                $item->readFromSession();
+            }
+        }
+    }
+
+    protected function hasSessionValue(string $field_id): bool
+    {
+        // Not set (null) on first visit, false on reset filter, string if is set
+        return (isset($_SESSION["form_" . $this->getId()][$field_id]) && $_SESSION["form_" . $this->getId()][$field_id] !== false);
     }
 
     protected function initFilterFields(): void
