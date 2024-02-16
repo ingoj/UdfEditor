@@ -7,18 +7,12 @@ use srag\Plugins\UdfEditor\Exception\UnknownUdfTypeException;
 
 class xudfContentFormGUI extends ilPropertyFormGUI
 {
-
-
-    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
-
     protected xudfContentGUI $parent_gui;
-
     protected int $obj_id;
     private Container $dic;
 
-
     /**
-     * @throws UnknownUdfTypeException
+     * @throws UnknownUdfTypeException|ilCtrlException
      */
     public function __construct(xudfContentGUI $parent_gui, bool $editable = true)
     {
@@ -31,6 +25,11 @@ class xudfContentFormGUI extends ilPropertyFormGUI
         $this->initForm($editable);
     }
 
+    /**
+     * @throws arException
+     * @throws UDFNotFoundException
+     * @throws UnknownUdfTypeException
+     */
     protected function initForm($editable): void
     {
         /** @var xudfContentElement $element */

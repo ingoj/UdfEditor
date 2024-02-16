@@ -3,7 +3,6 @@
 use ILIAS\DI\Container;
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
-
 require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
@@ -12,8 +11,6 @@ require_once __DIR__ . "/../vendor/autoload.php";
  */
 class ilObjUdfEditorGUI extends ilObjectPluginGUI
 {
-
-
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     public const TAB_CONTENT = 'content';
     public const TAB_INFO = 'info';

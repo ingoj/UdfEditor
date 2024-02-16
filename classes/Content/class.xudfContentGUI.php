@@ -10,10 +10,7 @@ use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginT
  */
 class xudfContentGUI extends xudfGUI
 {
-
     use Notifications4PluginTrait;
-
-    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
 
     public const SUBTAB_SHOW = 'show';
     public const SUBTAB_EDIT_PAGE = 'edit_page';

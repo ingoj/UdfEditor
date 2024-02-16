@@ -8,7 +8,6 @@ use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginT
 
 class ilUdfEditorPlugin extends ilRepositoryObjectPlugin
 {
-
     use Notifications4PluginTrait;
 
     public const PLUGIN_ID = 'xudf';

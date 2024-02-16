@@ -55,7 +55,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         }
 
         $this->addCommandButton(xudfFormConfigurationGUI::CMD_CREATE, $this->lng->txt('save'));
-        $this->addCommandButton(xudfFormConfigurationGUI::CMD_STANDARD, $this->lng->txt('cancel'));
+        $this->addCommandButton(xudfGUI::CMD_STANDARD, $this->lng->txt('cancel'));
     }
 
     protected function initUdfFieldForm(): void

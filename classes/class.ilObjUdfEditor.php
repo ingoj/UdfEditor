@@ -33,9 +33,9 @@ class ilObjUdfEditor extends ilObjectPlugin
         $this->clonePageObject($new_obj);
     }
 
-    public function getStyleSheetId(): void
+    public function getStyleSheetId(): int
     {
-        ilObjStyleSheet::lookupObjectStyle($this->getId());
+        return ilObjStyleSheet::lookupObjectStyle($this->getId());
     }
 
     public function getSettings(): xudfSetting

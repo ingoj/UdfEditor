@@ -83,7 +83,7 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
         $input->addOption($opt);
 
         $opt = new ilRadioOption($this->pl->txt(xudfSetting::REDIRECT_TO_ILIAS_OBJECT), xudfSetting::REDIRECT_TO_ILIAS_OBJECT);
-        $obj_input = new ilRepositorySelector2InputGUI('', self::F_REF_ID, false, get_class($this));
+        $obj_input = new ilRepositorySelector2InputGUI('', self::F_REF_ID, false, $this);
         $opt->addSubItem($obj_input);
         $input->addOption($opt);
 
