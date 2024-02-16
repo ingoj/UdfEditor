@@ -132,12 +132,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         return $this->obj_id;
     }
 
-    public function getObject(): ilObjUdfEditor
-    {
-        return $this->object;
-    }
-
-    protected function performCommand($cmd): void
+    public function performCommand($cmd): void
     {
         $this->{$cmd}();
     }
