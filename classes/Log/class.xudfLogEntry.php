@@ -18,7 +18,7 @@ class xudfLogEntry extends ActiveRecord
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected int $id;
+    protected ?int $id;
 
     /**
      * @con_has_field    true
@@ -100,7 +100,7 @@ class xudfLogEntry extends ActiveRecord
     {
         switch ($field_name) {
             case 'values':
-                return json_encode($this->values);
+                return json_encode($this->values, JSON_THROW_ON_ERROR);
             case 'timestamp':
                 return $this->timestamp->get(IL_CAL_DATETIME);
             default:
@@ -117,7 +117,7 @@ class xudfLogEntry extends ActiveRecord
     {
         switch ($field_name) {
             case 'values':
-                return json_decode($field_value, true);
+                return json_decode($field_value, true, 512, JSON_THROW_ON_ERROR);
             case 'timestamp':
                 return new ilDateTime($field_value, IL_CAL_DATETIME);
         }

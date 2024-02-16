@@ -6,7 +6,6 @@ use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginT
 
 class xudfSetting extends ActiveRecord
 {
-
     use Notifications4PluginTrait;
 
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
@@ -28,7 +27,7 @@ class xudfSetting extends ActiveRecord
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected int $obj_id;
+    protected ?int $obj_id;
 
     /**
      * @con_has_field    true
@@ -73,7 +72,7 @@ class xudfSetting extends ActiveRecord
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected string $redirect_value;
+    protected string $redirect_value = "";
 
     /**
      * @con_has_field    true

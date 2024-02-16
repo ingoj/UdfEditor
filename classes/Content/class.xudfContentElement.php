@@ -33,7 +33,7 @@ class xudfContentElement extends ActiveRecord
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected int $id;
+    protected ?int $id = null;
 
     /**
      * @con_has_field    true
@@ -85,7 +85,7 @@ class xudfContentElement extends ActiveRecord
      */
     protected bool $is_required = false;
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -142,7 +142,7 @@ class xudfContentElement extends ActiveRecord
     public function getUdfFieldDefinition(): array
     {
         $definition = ilUserDefinedFields::_getInstance()->getDefinition($this->getUdfFieldId());
-        if (!is_array($definition) || empty($definition)) {
+        if (empty($definition)) {
             throw new UDFNotFoundException('udf with id ' . $this->getUdfFieldId() . ' could not be found and was probably deleted');
         }
 
@@ -179,7 +179,7 @@ class xudfContentElement extends ActiveRecord
 
     public function isRequired(): bool
     {
-        return (bool) $this->is_required;
+        return $this->is_required;
     }
 
     public function setIsRequired(bool $is_required): void
