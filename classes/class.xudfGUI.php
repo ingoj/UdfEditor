@@ -1,6 +1,8 @@
 <?php
 
 use ILIAS\DI\Container;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
 
 abstract class xudfGUI
 {
@@ -51,7 +53,13 @@ abstract class xudfGUI
 
     protected function performCommand($cmd): void
     {
-        $this->{$cmd}();
+        if ((new NotificationCtrl($this))->handleCommand($cmd)) {
+//Do nothing special
+        } elseif ((new NotificationsCtrl())->handleCommand($cmd)) {
+            //Do nothing special
+        } else {
+            $this->{$cmd}();
+        }
     }
 
     protected function setSubtabs(): void

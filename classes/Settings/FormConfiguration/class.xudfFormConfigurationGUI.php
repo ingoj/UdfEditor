@@ -1,7 +1,6 @@
 <?php
 
 use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
-use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
 
 /**
  * @ilCtrl_isCalledBy xudfFormConfigurationGUI: ilObjUdfEditorGUI
@@ -36,12 +35,18 @@ class xudfFormConfigurationGUI extends xudfGUI
     {
         $this->tabs->addSubTab(self::SUBTAB_SETTINGS, $this->lng->txt(self::SUBTAB_SETTINGS), $this->ctrl->getLinkTargetByClass(xudfSettingsGUI::class));
         $this->tabs->addSubTab(self::SUBTAB_FORM_CONFIGURATION, $this->pl->txt(self::SUBTAB_FORM_CONFIGURATION), $this->ctrl->getLinkTargetByClass(xudfFormConfigurationGUI::class, self::CMD_STANDARD));
-        $this->ctrl->setParameterByClass(NotificationCtrl::class, NotificationCtrl::GET_PARAM_NOTIFICATION_ID, $this->getObject()->getSettings()->getNotification()->getId());
+
+        $this->ctrl->setParameterByClass(
+            self::class,
+            NotificationCtrl::GET_PARAM_NOTIFICATION_ID,
+            $this->getObject()->getSettings()->getNotification()->getId()
+        );
+
         if ($this->getObject()->getSettings()->hasMailNotification()) {
             $this->tabs->addSubTab(
                 xudfSettingsGUI::SUBTAB_MAIL_TEMPLATE,
                 $this->pl->txt("notification"),
-                $this->ctrl->getLinkTargetByClass([xudfSettingsGUI::class, NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION)
+                $this->ctrl->getLinkTargetByClass([self::class], NotificationCtrl::CMD_EDIT_NOTIFICATION)
             );
         }
         $this->tabs->setSubTabActive(self::SUBTAB_FORM_CONFIGURATION);
