@@ -6,7 +6,7 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 class ilObjUdfEditor extends ilObjectPlugin
 {
-    protected xudfSetting $settings;
+    protected ?xudfSetting $settings = null;
 
     protected function initType(): void
     {
