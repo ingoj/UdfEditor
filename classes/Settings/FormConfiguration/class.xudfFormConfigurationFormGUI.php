@@ -120,8 +120,8 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->element->setObjId($this->parent_gui->getObjId());
         $this->element->setTitle($this->getInput(self::F_TITLE));
         $this->element->setDescription($this->getInput(self::F_DESCRIPTION));
-        $this->element->setUdfFieldId($this->getInput(self::F_UDF_FIELD));
-        $this->element->setIsRequired($this->getInput(self::F_REQUIRED));
+        $this->element->setUdfFieldId((int) $this->getInput(self::F_UDF_FIELD));
+        $this->element->setIsRequired((bool) $this->getInput(self::F_REQUIRED));
         $this->element->store();
 
         return true;

@@ -65,7 +65,7 @@ class xudfContentGUI extends xudfGUI
 
             /** @var xudfContentElement $element */
             foreach ($where->get() as $element) {
-                if (!$element->isSeparator() && !$udf_values['f_' . $element->getUdfFieldId()]) {
+                if (!$element->isSeparator() && !isset($udf_values["f_{$element->getUdfFieldId()}"])) {
                     $has_open_fields = true;
                     break;
                 }
@@ -123,7 +123,7 @@ class xudfContentGUI extends xudfGUI
             foreach (xudfContentElement::where(['obj_id' => $this->getObjId(), 'is_separator' => false])->get() as $element) {
                 /** @var xudfContentElement $element */
                 try {
-                    $user_defined_data[$element->getTitle()] = $udf_data['f_' . $element->getUdfFieldId()];
+                    $user_defined_data[$element->getTitle()] = $udf_data['f_' . $element->getUdfFieldId()] ?? "";
                 } catch (UDFNotFoundException $e) {
                     $this->dic->logger()->root()->alert($e->getMessage());
                     $this->dic->logger()->root()->alert($e->getTraceAsString());

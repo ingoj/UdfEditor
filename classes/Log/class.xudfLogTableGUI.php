@@ -1,9 +1,7 @@
 <?php
 
 use ILIAS\DI\Container;
-use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\MultiLineNewInputGUI\MultiLineNewInputGUI;
 use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\PropertyFormGUI\Items\Items;
-use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\PropertyFormGUI\PropertyFormGUI;
 
 class xudfLogTableGUI extends ilTable2GUI
 {
@@ -26,18 +24,31 @@ class xudfLogTableGUI extends ilTable2GUI
     public function __construct($parent, $parent_cmd)
     {
         $this->parent_obj = $parent;
+        $this->setId(self::ID_PREFIX . $this->parent_obj->getObjId());
+
         parent::__construct($parent, $parent_cmd);
         global $DIC;
         $this->dic = $DIC;
         $this->plugin = ilUdfEditorPlugin::getInstance();
         $this->dic->ui()->mainTemplate()->addCss($this->plugin->getDirectory() . '/templates/default/log_table.css');
-    }
 
-    protected function initColumns(): void
-    {
-        $this->addColumn($this->plugin->txt('values'));
-        $this->addColumn($this->dic->language()->txt('user'), 'user');
-        $this->addColumn($this->dic->language()->txt('date'), 'timestamp');
+        if (!(strpos($this->parent_cmd, "applyFilter") === 0
+            || strpos($this->parent_cmd, "resetFilter") === 0)
+        ) {
+            $this->setFormAction($this->ctrl->getFormAction($this->parent_obj));
+            $this->setTitle($this->dic->language()->txt('history'));
+            $this->setRowTemplate(static::ROW_TEMPLATE, $this->plugin->getDirectory());
+
+            $this->initFilter();
+
+            $this->addColumn($this->plugin->txt('values'));
+            $this->addColumn($this->dic->language()->txt('user'), 'user');
+            $this->addColumn($this->dic->language()->txt('date'), 'timestamp');
+            $this->initData();
+        } else {
+            // Speed up, not init data on applyFilter or resetFilter, only filter
+            $this->initFilter();
+        }
     }
 
 
@@ -62,79 +73,37 @@ class xudfLogTableGUI extends ilTable2GUI
     {
         $this->setDisableFilterHiding(true);
 
-        $this->initFilterFields();
+        $userFilter = new ilSelectInputGUI($this->lng->txt("user"), "user");
+        $userFilter->setOptions($this->getUserFilterOptions());
+        $this->filter_cache["user"] = $userFilter;
 
-        if (!is_array($this->filter_fields)) {
-            throw new Exception("\$filters needs to be an array!");
+        $this->addFilterItem($userFilter);
+
+        if ($this->hasSessionValue($userFilter->getFieldId())) {
+            $userFilter->readFromSession();
         }
+    }
 
-        foreach ($this->filter_fields as $key => $field) {
-            if (!is_array($field)) {
-                throw new Exception("\$field needs to be an array!");
-            }
-
-            if ($field[PropertyFormGUI::PROPERTY_NOT_ADD]) {
-                continue;
-            }
-
-            $item = Items::getItem($key, $field, $this, $this);
-
-            /*if (!($item instanceof ilTableFilterItem)) {
-                throw new TableGUIException("\$item must be an instance of ilTableFilterItem!", TableGUIException::CODE_INVALID_FIELD);
-            }*/
-
-            if ($item instanceof MultiLineNewInputGUI) {
-                if (is_array($field[PropertyFormGUI::PROPERTY_SUBITEMS])) {
-                    foreach ($field[PropertyFormGUI::PROPERTY_SUBITEMS] as $child_key => $child_field) {
-                        if (!is_array($child_field)) {
-                            throw new Exception("\$fields needs to be an array!");
-                        }
-
-                        if ($child_field[PropertyFormGUI::PROPERTY_NOT_ADD]) {
-                            continue;
-                        }
-
-                        $child_item = Items::getItem($child_key, $child_field, $item, $this);
-
-                        $item->addInput($child_item);
-                    }
-                }
-            }
-
-            $this->filter_cache[$key] = $item;
-
-            $this->addFilterItem($item);
-
-            if ($this->hasSessionValue($item->getFieldId())) { // Supports filter default values
-                $item->readFromSession();
-            }
-        }
+    /**
+     * @param string $key
+     * @param string|null $default
+     *
+     * @return string
+     *
+     * @deprecated
+     */
+    public function txt(string $key,/*?*/ string $default = null): string
+    {
+        return $this->plugin->txt($key);
     }
 
     protected function hasSessionValue(string $field_id): bool
     {
         // Not set (null) on first visit, false on reset filter, string if is set
-        return (isset($_SESSION["form_" . $this->getId()][$field_id]) && $_SESSION["form_" . $this->getId()][$field_id] !== false);
-    }
-
-    protected function initFilterFields(): void
-    {
-        $this->filter_fields = [
-            "user" => [
-                PropertyFormGUI::PROPERTY_CLASS => ilSelectInputGUI::class,
-                PropertyFormGUI::PROPERTY_OPTIONS => $this->getUserFilterOptions()
-            ]
-        ];
-    }
-
-    protected function initId(): void
-    {
-        $this->setId(self::ID_PREFIX . $this->parent_obj->getObjId());
-    }
-
-    protected function initTitle(): void
-    {
-        $this->setTitle($this->dic->language()->txt('history'));
+        return (
+            isset($_SESSION["form_{$this->getId()}_$field_id"])
+            && $_SESSION["form_{$this->getId()}_$field_id"] !== false
+        );
     }
 
     protected function fillRow(array $row): void
