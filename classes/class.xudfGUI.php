@@ -54,7 +54,7 @@ abstract class xudfGUI
     protected function performCommand($cmd): void
     {
         if ((new NotificationCtrl($this))->handleCommand($cmd)) {
-//Do nothing special
+            //Do nothing special
         } elseif ((new NotificationsCtrl())->handleCommand($cmd)) {
             //Do nothing special
         } else {
