@@ -44,7 +44,10 @@ class ilObjUdfEditor extends ilObjectPlugin
         return true;
     }
 
-    protected function doCloneObject(self|ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
+    /**
+     * @param self|ilObject2 $new_obj
+     */
+    protected function doCloneObject(ilObject2 $new_obj, int $a_target_id, ?int $a_copy_id = null): void
     {
         $this->cloneSettings($new_obj);
         $this->cloneContentElements($new_obj);
