@@ -21,7 +21,7 @@ class xudfLogTableGUI extends ilTable2GUI
     private Container $dic;
     private ilUdfEditorPlugin $plugin;
 
-    public function __construct($parent, $parent_cmd)
+    public function __construct(xudfLogGUI $parent, string $parent_cmd)
     {
         $this->parent_obj = $parent;
         $this->setId(self::ID_PREFIX . $this->parent_obj->getObjId());
