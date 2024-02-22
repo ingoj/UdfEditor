@@ -12,9 +12,9 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
 
 
     /**
-     * @throws arException
+     * @throws arException|ilCtrlException
      */
-    public function __construct($parent_gui, $parent_cmd)
+    public function __construct(object $parent_gui, string $parent_cmd)
     {
         global $DIC;
         $this->dic = $DIC;
