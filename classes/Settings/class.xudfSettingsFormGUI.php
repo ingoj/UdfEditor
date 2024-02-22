@@ -1,78 +1,70 @@
 <?php
 
 /**
- * Class xudfSettingsFormGUI
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
  *
- * @author            Theodor Truffer <tt@studer-raimann.ch>
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
  *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
+/**
  * @ilCtrl_Calls      xudfSettingsFormGUI: ilFormPropertyDispatchGUI
  */
 class xudfSettingsFormGUI extends ilPropertyFormGUI
 {
+    public const F_TITLE = 'title';
+    public const F_DESCRIPTION = 'description';
+    public const F_ONLINE = 'online';
+    public const F_SHOW_INFOTAB = 'show_infotab';
+    public const F_MAIL_NOTIFICATION = 'mail_notification';
+    public const F_ADDITIONAL_NOTIFICATION = 'additional_notification';
+    public const F_REDIRECT_TYPE = 'redirect_type';
+    public const F_REF_ID = 'ref_id';
+    public const F_URL = 'url';
 
-    const F_TITLE = 'title';
-    const F_DESCRIPTION = 'description';
-    const F_ONLINE = 'online';
-    const F_SHOW_INFOTAB = 'show_infotab';
-    const F_MAIL_NOTIFICATION = 'mail_notification';
-    const F_ADDITIONAL_NOTIFICATION = 'additional_notification';
-    const F_REDIRECT_TYPE = 'redirect_type';
-    const F_REF_ID = 'ref_id';
-    const F_URL = 'url';
-    /**
-     * @var array
-     */
-    protected static $redirect_type_to_postvar
+    protected static array $redirect_type_to_postvar
         = [
-            xudfSetting::REDIRECT_STAY_IN_FORM    => false,
+            xudfSetting::REDIRECT_STAY_IN_FORM => false,
             xudfSetting::REDIRECT_TO_ILIAS_OBJECT => self::F_REF_ID,
-            xudfSetting::REDIRECT_TO_URL          => self::F_URL
+            xudfSetting::REDIRECT_TO_URL => self::F_URL
         ];
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
-    /**
-     * @var ilLanguage
-     */
-    protected $lng;
-    /**
-     * @var ilUdfEditorPlugin
-     */
-    protected $pl;
-    /**
-     * @var xudfSettingsGUI
-     */
-    protected $parent_gui;
-    /**
-     * @var xudfSetting
-     */
-    protected $settings;
 
+    protected ilCtrl $ctrl;
 
-    /**
-     * xudfSettingsFormGUI constructor.
-     *
-     * @param xudfSettingsGUI $parent_gui
-     */
+    protected ilLanguage $lng;
+
+    protected ilUdfEditorPlugin $pl;
+
+    protected xudfSettingsGUI $parent_gui;
+
+    protected xudfSetting $xudfSetting;
+
     public function __construct(xudfSettingsGUI $parent_gui)
     {
+        parent::__construct();
         global $DIC;
-        $this->ctrl = $DIC['ilCtrl'];
-        $this->lng = $DIC['lng'];
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
         $this->pl = ilUdfEditorPlugin::getInstance();
         $this->parent_gui = $parent_gui;
-        $this->settings = xudfSetting::find($this->parent_gui->getObjId());
+        $this->xudfSetting = xudfSetting::find($this->parent_gui->getObjId());
         $this->setTitle($this->lng->txt('settings'));
         $this->setFormAction($this->ctrl->getFormAction($parent_gui));
         $this->initForm();
     }
 
-
-    /**
-     *
-     */
-    protected function initForm()
+    protected function initForm(): void
     {
         // TITLE
         $input = new ilTextInputGUI($this->lng->txt(self::F_TITLE), self::F_TITLE);
@@ -109,7 +101,7 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
         $input->addOption($opt);
 
         $opt = new ilRadioOption($this->pl->txt(xudfSetting::REDIRECT_TO_ILIAS_OBJECT), xudfSetting::REDIRECT_TO_ILIAS_OBJECT);
-        $obj_input = new ilRepositorySelector2InputGUI('', self::F_REF_ID, false, get_class($this));
+        $obj_input = new ilRepositorySelector2InputGUI('', self::F_REF_ID, false, $this);
         $opt->addSubItem($obj_input);
         $input->addOption($opt);
 
@@ -123,34 +115,26 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
         $this->addCommandButton(xudfSettingsGUI::CMD_UPDATE, $this->lng->txt('save'));
     }
 
-
-    /**
-     *
-     */
-    public function fillForm()
+    public function fillForm(): void
     {
-        $values = array(
-            self::F_TITLE                   => $this->parent_gui->getObject()->getTitle(),
-            self::F_DESCRIPTION             => $this->parent_gui->getObject()->getDescription(),
-            self::F_ONLINE                  => $this->settings->isOnline(),
-            self::F_SHOW_INFOTAB            => $this->settings->isShowInfoTab(),
-            self::F_MAIL_NOTIFICATION       => $this->settings->hasMailNotification(),
-            self::F_ADDITIONAL_NOTIFICATION => $this->settings->getAdditionalNotification(),
-            self::F_REDIRECT_TYPE           => $this->settings->getRedirectType()
-        );
-        $redirect_value_postvar = self::$redirect_type_to_postvar[$this->settings->getRedirectType()];
+        $values = [
+            self::F_TITLE => $this->parent_gui->getObject()->getTitle(),
+            self::F_DESCRIPTION => $this->parent_gui->getObject()->getDescription(),
+            self::F_ONLINE => $this->xudfSetting->isOnline(),
+            self::F_SHOW_INFOTAB => $this->xudfSetting->isShowInfoTab(),
+            self::F_MAIL_NOTIFICATION => $this->xudfSetting->hasMailNotification(),
+            self::F_ADDITIONAL_NOTIFICATION => $this->xudfSetting->getAdditionalNotification(),
+            self::F_REDIRECT_TYPE => $this->xudfSetting->getRedirectType()
+        ];
+        $redirect_value_postvar = self::$redirect_type_to_postvar[$this->xudfSetting->getRedirectType()];
         if ($redirect_value_postvar !== false) {
-            $values[$redirect_value_postvar] = $this->settings->getRedirectValue();
+            $values[$redirect_value_postvar] = $this->xudfSetting->getRedirectValue();
         }
 
         $this->setValuesByArray($values);
     }
 
-
-    /**
-     * @return bool
-     */
-    public function saveForm()
+    public function saveForm(): bool
     {
         if (!$this->checkInput()) {
             return false;
@@ -160,22 +144,22 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
         $this->parent_gui->getObject()->setDescription($this->getInput(self::F_DESCRIPTION));
         $this->parent_gui->getObject()->update();
 
-        $this->settings->setIsOnline($this->getInput(self::F_ONLINE));
-        $this->settings->setShowInfoTab($this->getInput(self::F_SHOW_INFOTAB));
-        $this->settings->setMailNotification($this->getInput(self::F_MAIL_NOTIFICATION));
-        $this->settings->setAdditionalNotification($this->getInput(self::F_ADDITIONAL_NOTIFICATION));
-        $this->settings->setRedirectType($this->getInput(self::F_REDIRECT_TYPE));
-        switch ($this->settings->getRedirectType()) {
+        $this->xudfSetting->setIsOnline($this->getInput(self::F_ONLINE));
+        $this->xudfSetting->setShowInfoTab($this->getInput(self::F_SHOW_INFOTAB));
+        $this->xudfSetting->setMailNotification($this->getInput(self::F_MAIL_NOTIFICATION));
+        $this->xudfSetting->setAdditionalNotification($this->getInput(self::F_ADDITIONAL_NOTIFICATION));
+        $this->xudfSetting->setRedirectType($this->getInput(self::F_REDIRECT_TYPE));
+        switch ($this->xudfSetting->getRedirectType()) {
             case xudfSetting::REDIRECT_TO_ILIAS_OBJECT:
-                $this->settings->setRedirectValue($this->getInput(self::F_REF_ID));
+                $this->xudfSetting->setRedirectValue($this->getInput(self::F_REF_ID));
                 break;
             case xudfSetting::REDIRECT_TO_URL:
-                $this->settings->setRedirectValue($this->getInput(self::F_URL));
+                $this->xudfSetting->setRedirectValue($this->getInput(self::F_URL));
                 break;
             default:
                 break;
         }
-        $this->settings->update();
+        $this->xudfSetting->update();
 
         return true;
     }

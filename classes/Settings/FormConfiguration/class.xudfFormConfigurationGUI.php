@@ -1,35 +1,43 @@
 <?php
 
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationCtrl;
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
 
 /**
- * Class xudfFormConfigurationGUI
- *
- * @author            Theodor Truffer <tt@studer-raimann.ch>
- *
  * @ilCtrl_isCalledBy xudfFormConfigurationGUI: ilObjUdfEditorGUI
  */
 class xudfFormConfigurationGUI extends xudfGUI
 {
+    public const SUBTAB_SETTINGS = 'settings';
+    public const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
+    public const CMD_FORM_CONFIGURATION = 'index';
+    public const CMD_ADD_UDF_FIELD = 'addUdfField';
+    public const CMD_ADD_SEPARATOR = 'addSeparator';
+    public const CMD_CREATE = 'create';
+    public const CMD_EDIT = 'edit';
+    public const CMD_UPDATE = 'update';
+    public const CMD_DELETE = 'delete';
+    public const CMD_CONFIRM_DELETE = 'confirmDelete';
+    public const CMD_REORDER = 'reorder';
 
-    const SUBTAB_SETTINGS = 'settings';
-    const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
-    const CMD_FORM_CONFIGURATION = 'index';
-    const CMD_ADD_UDF_FIELD = 'addUdfField';
-    const CMD_ADD_SEPARATOR = 'addSeparator';
-    const CMD_CREATE = 'create';
-    const CMD_EDIT = 'edit';
-    const CMD_UPDATE = 'update';
-    const CMD_DELETE = 'delete';
-    const CMD_CONFIRM_DELETE = 'confirmDelete';
-    const CMD_REORDER = 'reorder';
-
-
-    /**
-     * @param $cmd
-     */
-    protected function performCommand($cmd)
+    protected function performCommand(string $cmd): void
     {
         switch ($cmd) {
             case self::CMD_STANDARD:
@@ -41,27 +49,29 @@ class xudfFormConfigurationGUI extends xudfGUI
         parent::performCommand($cmd);
     }
 
-
-    /**
-     *
-     */
-    protected function setSubtabs()
+    protected function setSubtabs(): void
     {
         $this->tabs->addSubTab(self::SUBTAB_SETTINGS, $this->lng->txt(self::SUBTAB_SETTINGS), $this->ctrl->getLinkTargetByClass(xudfSettingsGUI::class));
         $this->tabs->addSubTab(self::SUBTAB_FORM_CONFIGURATION, $this->pl->txt(self::SUBTAB_FORM_CONFIGURATION), $this->ctrl->getLinkTargetByClass(xudfFormConfigurationGUI::class, self::CMD_STANDARD));
-        $this->ctrl->setParameterByClass(NotificationCtrl::class, NotificationCtrl::GET_PARAM_NOTIFICATION_ID, $this->getObject()->getSettings()->getNotification()->getId());
+
+        $this->ctrl->setParameterByClass(
+            self::class,
+            NotificationCtrl::GET_PARAM_NOTIFICATION_ID,
+            $this->getObject()->getSettings()->getNotification()->getId()
+        );
+
         if ($this->getObject()->getSettings()->hasMailNotification()) {
-            $this->tabs->addSubTab(xudfSettingsGUI::SUBTAB_MAIL_TEMPLATE, $this->pl->txt("notification"),
-                $this->ctrl->getLinkTargetByClass([xudfSettingsGUI::class, NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION));
-        }   $this->tabs->setSubTabActive(self::SUBTAB_FORM_CONFIGURATION);
+            $this->tabs->addSubTab(
+                xudfSettingsGUI::SUBTAB_MAIL_TEMPLATE,
+                $this->pl->txt("notification"),
+                $this->ctrl->getLinkTargetByClass([self::class], NotificationCtrl::CMD_EDIT_NOTIFICATION)
+            );
+        }
+        $this->tabs->setSubTabActive(self::SUBTAB_FORM_CONFIGURATION);
 
     }
 
-
-    /**
-     *
-     */
-    protected function initToolbar()
+    protected function initToolbar(): void
     {
         $add_udf_field = ilLinkButton::getInstance();
         $add_udf_field->setCaption($this->pl->txt('add_udf_field'), false);
@@ -74,36 +84,24 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->toolbar->addButtonInstance($add_separator);
     }
 
-
-    /**
-     *
-     */
-    protected function index()
+    protected function index(): void
     {
         $xudfFormConfigurationTableGUI = new xudfFormConfigurationTableGUI($this, self::CMD_STANDARD);
         $this->tpl->setContent($xudfFormConfigurationTableGUI->getHTML());
     }
 
-
-    /**
-     *
-     */
-    protected function addUdfField()
+    protected function addUdfField(): void
     {
         $udf_fields = ilUserDefinedFields::_getInstance()->getDefinitions();
         if (!count($udf_fields)) {
-            ilUtil::sendFailure($this->pl->txt('msg_no_udfs'), true);
+            $this->tpl->setOnScreenMessage("failure", $this->pl->txt('msg_no_udfs'), true);
             $this->ctrl->redirect($this, self::CMD_STANDARD);
         }
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, new xudfContentElement());
         $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
     }
 
-
-    /**
-     *
-     */
-    protected function addSeparator()
+    protected function addSeparator(): void
     {
         $element = new xudfContentElement();
         $element->setIsSeparator(true);
@@ -111,11 +109,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
     }
 
-
-    /**
-     *
-     */
-    protected function create()
+    protected function create(): void
     {
         $element = new xudfContentElement($_POST['element_id']);
         $element->setIsSeparator($_POST[xudfFormConfigurationFormGUI::F_IS_SEPARATOR]);
@@ -123,40 +117,32 @@ class xudfFormConfigurationGUI extends xudfGUI
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, $element);
         $xudfFormConfigurationFormGUI->setValuesByPost();
         if (!$xudfFormConfigurationFormGUI->saveForm()) {
-            ilUtil::sendFailure($this->pl->txt('msg_incomplete'));
+            $this->tpl->setOnScreenMessage("failure", $this->pl->txt('msg_incomplete'));
             $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
 
             return;
         }
-        ilUtil::sendSuccess($this->pl->txt('form_saved'), true);
+        $this->tpl->setOnScreenMessage("success", $this->pl->txt('form_saved'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
-
-    /**
-     *
-     */
-    protected function update()
+    protected function update(): void
     {
         $element = new xudfContentElement($_POST['element_id']);
 
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, $element);
         $xudfFormConfigurationFormGUI->setValuesByPost();
         if (!$xudfFormConfigurationFormGUI->saveForm()) {
-            ilUtil::sendFailure($this->pl->txt('msg_incomplete'));
+            $this->tpl->setOnScreenMessage("failure", $this->pl->txt('msg_incomplete'));
             $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
 
             return;
         }
-        ilUtil::sendSuccess($this->pl->txt('form_saved'), true);
+        $this->tpl->setOnScreenMessage("success", $this->pl->txt('form_saved'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
-
-    /**
-     *
-     */
-    protected function edit()
+    protected function edit(): void
     {
         $element = xudfContentElement::find($_GET['element_id']);
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, $element);
@@ -164,11 +150,7 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->tpl->setContent($xudfFormConfigurationFormGUI->getHTML());
     }
 
-
-    /**
-     *
-     */
-    protected function delete()
+    protected function delete(): void
     {
         $element = new xudfContentElement($_GET['element_id']);
 
@@ -186,23 +168,15 @@ class xudfFormConfigurationGUI extends xudfGUI
         $this->tpl->setContent($confirmationGUI->getHTML());
     }
 
-
-    /**
-     *
-     */
-    protected function confirmDelete()
+    protected function confirmDelete(): void
     {
         $element = new xudfContentElement($_POST['element_id']);
         $element->delete();
-        ilUtil::sendSuccess($this->pl->txt('msg_successfully_deleted'), true);
+        $this->tpl->setOnScreenMessage("success", $this->pl->txt('msg_successfully_deleted'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
 
-
-    /**
-     *
-     */
-    protected function reorder()
+    protected function reorder(): void
     {
         $sort = 10;
         foreach ($_POST['ids'] as $id) {

@@ -1,21 +1,33 @@
 <?php
-require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
- * Class ilObjUdfEditorListGUI
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
+require_once __DIR__ . "/../vendor/autoload.php";
+
 class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
 {
-
-    function getGuiClass()
+    public function getGuiClass(): string
     {
         return ilObjUdfEditorGUI::class;
     }
 
-
-    function initCommands()
+    public function initCommands(): array
     {
         $this->timings_enabled = true;
         $this->subscribe_enabled = false;
@@ -32,38 +44,31 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
         $commands = [
             [
                 "permission" => "read",
-                "cmd"        => ilObjUdfEditorGUI::CMD_INDEX,
-                "default"    => true,
+                "cmd" => ilObjUdfEditorGUI::CMD_INDEX,
+                "default" => true,
             ],
             [
                 "permission" => "write",
-                "cmd"        => ilObjUdfEditorGUI::CMD_SETTINGS,
-                "lang_var"   => 'settings'
+                "cmd" => ilObjUdfEditorGUI::CMD_SETTINGS,
+                "lang_var" => 'settings'
             ]
         ];
 
         return $commands;
     }
 
-
-    /**
-     *
-     */
-    function initType()
+    public function initType(): void
     {
         $this->setType(ilUdfEditorPlugin::PLUGIN_ID);
     }
 
-
     /**
      * get all alert properties
-     *
-     * @return array
      */
-    public function getAlertProperties()
+    public function getAlertProperties(): array
     {
-        $alert = array();
-        foreach ((array) $this->getCustomProperties(array()) as $prop) {
+        $alert = [];
+        foreach ((array) $this->getCustomProperties([]) as $prop) {
             if ($prop['alert'] == true) {
                 $alert[] = $prop;
             }
@@ -72,28 +77,32 @@ class ilObjUdfEditorListGUI extends ilObjectPluginListGUI
         return $alert;
     }
 
-
     /**
      * Get item properties
-     *
      * @return    array        array of property arrays:
      *                        'alert' (boolean) => display as an alert property (usually in red)
      *                        'property' (string) => property name
      *                        'value' (string) => property value
      */
-    public function getCustomProperties($a_prop)
+    public function getCustomProperties($a_prop): array
     {
-        $props = parent::getCustomProperties(array());
+        $props = parent::getCustomProperties([]);
 
-        $settings = xudfSetting::find($this->obj_id);
+        try {
+            /** @var xudfSetting $settings */
+            $settings = xudfSetting::find($this->obj_id);
+        } catch (Throwable $ex) {
+            return $props;
+        }
+
         if (!$settings->isOnline()) {
-            $props[] = array(
-                'alert'               => true,
-                'newline'             => true,
-                'property'            => 'Status',
-                'value'               => 'Offline',
+            $props[] = [
+                'alert' => true,
+                'newline' => true,
+                'property' => 'Status',
+                'value' => 'Offline',
                 'propertyNameVisible' => true
-            );
+            ];
         }
 
         return $props;

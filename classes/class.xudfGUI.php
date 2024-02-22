@@ -1,72 +1,63 @@
 <?php
 
 /**
- * Class xudfGUI
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
+use ILIAS\DI\Container;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
+
 abstract class xudfGUI
 {
+    public const CMD_STANDARD = 'index';
 
-    const CMD_STANDARD = 'index';
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
-    /**
-     * @var ilObjUser
-     */
-    protected $user;
-    /**
-     * @var ilLanguage
-     */
-    protected $lng;
-    /**
-     * @var ilTemplate
-     */
-    protected $tpl;
-    /**
-     * @var ilTabsGUI
-     */
-    protected $tabs;
-    /**
-     * @var ilToolbarGUI
-     */
-    protected $toolbar;
-    /**
-     * @var ilUdfEditorPlugin
-     */
-    protected $pl;
-    /**
-     * @var
-     */
-    protected $parent_gui;
+    protected ilCtrl $ctrl;
 
+    protected ilObjUser $user;
 
-    /**
-     * xudfGUI constructor.
-     *
-     * @param ilObjUdfEditorGUI $parent_gui
-     */
+    protected ilLanguage $lng;
+    protected ilGlobalTemplateInterface $tpl;
+
+    protected ilTabsGUI $tabs;
+
+    protected ilToolbarGUI $toolbar;
+
+    protected ilUdfEditorPlugin $pl;
+
+    protected ilObjUdfEditorGUI $parent_gui;
+    protected Container $dic;
+
     public function __construct(ilObjUdfEditorGUI $parent_gui)
     {
         global $DIC;
-        $this->ctrl = $DIC['ilCtrl'];
-        $this->user = $DIC['ilUser'];
-        $this->lng = $DIC['lng'];
-        $this->tpl = $DIC['tpl'];
-        $this->tabs = $DIC['ilTabs'];
-        $this->toolbar = $DIC['ilToolbar'];
+        $this->dic = $DIC;
+        $this->ctrl = $DIC->ctrl();
+        $this->user = $DIC->user();
+        $this->lng = $DIC->language();
+        $this->tpl = $DIC->ui()->mainTemplate();
+        $this->tabs = $DIC->tabs();
+        $this->toolbar = $DIC->toolbar();
         $this->tree = $DIC->repositoryTree();
         $this->pl = ilUdfEditorPlugin::getInstance();
         $this->parent_gui = $parent_gui;
     }
 
-
-    /**
-     *
-     */
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $this->setSubtabs();
         $next_class = $this->ctrl->getNextClass();
@@ -78,45 +69,31 @@ abstract class xudfGUI
         }
     }
 
-
-    /**
-     * @param $cmd
-     */
-    protected function performCommand($cmd)
+    protected function performCommand(string $cmd): void
     {
-        $this->{$cmd}();
+        if ((new NotificationCtrl($this))->handleCommand($cmd)) {
+            //Do nothing special
+        } elseif ((new NotificationsCtrl())->handleCommand($cmd)) {
+            //Do nothing special
+        } else {
+            $this->{$cmd}();
+        }
     }
 
-
-    /**
-     *
-     */
-    protected function setSubtabs()
+    protected function setSubtabs(): void
     {
         // overwrite if class has subtabs
     }
 
-
-    /**
-     * @return int
-     */
-    public function getObjId()
+    public function getObjId(): int
     {
         return $this->parent_gui->getObjId();
     }
 
-
-    /**
-     * @return ilObjUdfEditor
-     */
-    public function getObject()
+    public function getObject(): ilObjUdfEditor
     {
         return $this->parent_gui->getObject();
     }
 
-
-    /**
-     *
-     */
-    protected abstract function index();
+    abstract protected function index();
 }
