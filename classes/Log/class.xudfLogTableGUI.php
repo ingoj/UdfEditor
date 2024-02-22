@@ -9,7 +9,7 @@ class xudfLogTableGUI extends ilTable2GUI
     public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
     public const ROW_TEMPLATE = 'tpl.log_table_row.html';
     /**
-     * @var xudfLogGUI|xudfLogGUI
+     * @var xudfLogGUI|null
      */
     protected ?object $parent_obj;
     /**
