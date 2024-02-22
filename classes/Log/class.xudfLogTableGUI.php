@@ -89,7 +89,7 @@ class xudfLogTableGUI extends ilTable2GUI
      *
      * @deprecated
      */
-    public function txt(string $key, /*?*/ string $default = null): string
+    public function txt(string $key, ?string $default = null): string
     {
         return $this->plugin->txt($key);
     }
