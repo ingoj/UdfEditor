@@ -1,219 +1,179 @@
 <?php
 
-use srag\DIC\UdfEditor\DICTrait;
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationInterface;
-use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
-
 /**
- * Class xudfSetting
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
-class xudfSetting extends ActiveRecord {
-    use DICTrait;
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationInterface;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginTrait;
+
+class xudfSetting extends ActiveRecord
+{
     use Notifications4PluginTrait;
-    const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
-    const DB_TABLE_NAME = 'xudf_setting';
 
-    const REDIRECT_STAY_IN_FORM = 'stay_in_form';
-    const REDIRECT_TO_ILIAS_OBJECT = 'to_ilias_object';
-    const REDIRECT_TO_URL = 'to_url';
+    public const PLUGIN_CLASS_NAME = ilUdfEditorPlugin::class;
+    public const DB_TABLE_NAME = 'xudf_setting';
 
-    public function getConnectorContainerName() {
+    public const REDIRECT_STAY_IN_FORM = 'stay_in_form';
+    public const REDIRECT_TO_ILIAS_OBJECT = 'to_ilias_object';
+    public const REDIRECT_TO_URL = 'to_url';
+
+    public function getConnectorContainerName(): string
+    {
         return self::DB_TABLE_NAME;
     }
 
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected $obj_id;
+    protected ?int $obj_id;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      * @con_is_notnull   true
      */
-    protected $is_online = false;
+    protected bool $is_online = false;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      * @con_is_notnull   true
      */
-    protected $show_info_tab = false;
+    protected bool $show_info_tab = false;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      * @con_is_notnull   true
      */
-    protected $mail_notification = false;
-	/**
-	 * @var string
-	 *
-	 * @con_has_field    true
-	 * @con_fieldtype    text
-	 * @con_length       256
-	 */
-    protected $additional_notification = '';
+    protected bool $mail_notification = false;
+
     /**
-     * @var string
-     *
-     * @con_has_field    true
-     * @con_fieldtype    text
-     * @con_length       64
-     */
-    protected $redirect_type = self::REDIRECT_STAY_IN_FORM;
-    /**
-     * @var string
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected $redirect_value;
+    protected string $additional_notification = '';
+
     /**
-     * @var string
-     *
+     * @con_has_field    true
+     * @con_fieldtype    text
+     * @con_length       64
+     */
+    protected string $redirect_type = self::REDIRECT_STAY_IN_FORM;
+
+    /**
+     * @con_has_field    true
+     * @con_fieldtype    text
+     * @con_length       256
+     */
+    protected string $redirect_value = "";
+
+    /**
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_is_notnull   true
      */
-    protected $notification_name = "";
+    protected string $notification_name = "";
 
-
-    /**
-     * @return int
-     */
-    public function getObjId() {
+    public function getObjId(): int
+    {
         return $this->obj_id;
     }
 
-    /**
-     * @param int $obj_id
-     */
-    public function setObjId($obj_id) {
+    public function setObjId(int $obj_id): void
+    {
         $this->obj_id = $obj_id;
     }
 
-    /**
-     * @return bool
-     */
-    public function isOnline() {
+    public function isOnline(): bool
+    {
         return $this->is_online;
     }
 
-    /**
-     * @param bool $is_online
-     */
-    public function setIsOnline($is_online) {
+    public function setIsOnline(bool $is_online): void
+    {
         $this->is_online = $is_online;
     }
 
-    /**
-     * @return bool
-     */
-    public function isShowInfoTab() {
+    public function isShowInfoTab(): bool
+    {
         return $this->show_info_tab;
     }
 
-    /**
-     * @param bool $show_info_tab
-     */
-    public function setShowInfoTab($show_info_tab) {
+    public function setShowInfoTab(bool $show_info_tab): void
+    {
         $this->show_info_tab = $show_info_tab;
     }
 
-    /**
-     * @return bool
-     */
-    public function hasMailNotification() {
+    public function hasMailNotification(): bool
+    {
         return $this->mail_notification;
     }
 
-    /**
-     * @param bool $mail_notification
-     */
-    public function setMailNotification($mail_notification) {
+    public function setMailNotification(bool $mail_notification): void
+    {
         $this->mail_notification = $mail_notification;
     }
 
-	/**
-	 * @return string
-	 */
-	public function getAdditionalNotification() {
-		return $this->additional_notification;
-	}
+    public function getAdditionalNotification(): string
+    {
+        return $this->additional_notification;
+    }
 
-	/**
-	 * @param string $additional_notification
-	 */
-	public function setAdditionalNotification($additional_notification) {
-		$this->additional_notification = $additional_notification;
-	}
+    public function setAdditionalNotification(string $additional_notification): void
+    {
+        $this->additional_notification = $additional_notification;
+    }
 
-
-    /**
-     * @return string
-     */
-    public function getRedirectType() : string
+    public function getRedirectType(): string
     {
         return $this->redirect_type ?: self::REDIRECT_STAY_IN_FORM;
     }
 
-
-    /**
-     * @param string $redirect_type
-     */
-    public function setRedirectType(string $redirect_type)
+    public function setRedirectType(string $redirect_type): void
     {
         $this->redirect_type = $redirect_type;
     }
 
-
-    /**
-     * @return string
-     */
-    public function getRedirectValue() : string
+    public function getRedirectValue(): string
     {
         return $this->redirect_value;
     }
 
-
-    /**
-     * @param string $redirect_value
-     */
-    public function setRedirectValue(string $redirect_value)
+    public function setRedirectValue(string $redirect_value): void
     {
         $this->redirect_value = $redirect_value;
     }
 
-    /**
-     * @param $primary_key
-     * @param array $add_constructor_args
-     * @return self
-     */
-    public static function find($primary_key, array $add_constructor_args = array()) {
-        return parent::find($primary_key, $add_constructor_args); // TODO: Change the autogenerated stub
+    public static function find($primary_key, array $add_constructor_args = []): ?self
+    {
+        return parent::find($primary_key, $add_constructor_args);
     }
 
-
-    /**
-     * @return NotificationInterface
-     */
-    public function getNotification() : NotificationInterface
+    public function getNotification(): NotificationInterface
     {
         if (empty($this->notification_name)) {
             $this->notification_name = "object_" . $this->getObjId();
@@ -226,7 +186,7 @@ class xudfSetting extends ActiveRecord {
         if ($notification === null) {
             $notification = self::notifications4plugin()->notifications()->factory()->newInstance();
 
-            $notification->setTitle(self::plugin()->translate("notification"));
+            $notification->setTitle(ilUdfEditorPlugin::getInstance()->txt("notification"));
 
             $notification->setName($this->notification_name);
 

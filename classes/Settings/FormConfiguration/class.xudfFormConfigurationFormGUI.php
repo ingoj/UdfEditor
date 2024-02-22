@@ -1,54 +1,50 @@
 <?php
 
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
-/**
- * Class xudfFormConfigurationFormGUI
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
 class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
 {
+    public const F_TITLE = 'title';
+    public const F_DESCRIPTION = 'description';
+    public const F_UDF_FIELD = 'udf_field';
+    public const F_IS_SEPARATOR = 'is_separator';
+    public const F_ELEMENT_ID = 'element_id';
+    public const F_REQUIRED = 'is_required';
 
-    const F_TITLE = 'title';
-    const F_DESCRIPTION = 'description';
-    const F_UDF_FIELD = 'udf_field';
-    const F_IS_SEPARATOR = 'is_separator';
-    const F_ELEMENT_ID = 'element_id';
-    const F_REQUIRED = 'is_required';
-    /**
-     * @var ilCtrl
-     */
-    protected $ctrl;
-    /**
-     * @var ilLanguage
-     */
-    protected $lng;
-    /**
-     * @var ilUdfEditorPlugin
-     */
-    protected $pl;
-    /**
-     * @var xudfFormConfigurationGUI
-     */
-    protected $parent_gui;
-    /**
-     * @var xudfContentElement
-     */
-    protected $element;
+    protected ilCtrl $ctrl;
 
+    protected ilLanguage $lng;
 
-    /**
-     * xudfFormConfigurationFormGUI constructor.
-     *
-     * @param xudfFormConfigurationGUI $parent_gui
-     * @param xudfContentElement       $element
-     */
+    protected ilUdfEditorPlugin $pl;
+
+    protected xudfFormConfigurationGUI $parent_gui;
+
+    protected xudfContentElement $element;
+
     public function __construct(xudfFormConfigurationGUI $parent_gui, xudfContentElement $element)
     {
+        parent::__construct();
         global $DIC;
-        $this->ctrl = $DIC['ilCtrl'];
-        $this->lng = $DIC['lng'];
+        $this->ctrl = $DIC->ctrl();
+        $this->lng = $DIC->language();
         $this->pl = ilUdfEditorPlugin::getInstance();
         $this->parent_gui = $parent_gui;
         $this->element = $element;
@@ -58,11 +54,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->initForm();
     }
 
-
-    /**
-     *
-     */
-    protected function initForm()
+    protected function initForm(): void
     {
         $input = new ilHiddenInputGUI(self::F_IS_SEPARATOR);
         $input->setValue($this->element->isSeparator());
@@ -81,21 +73,17 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         }
 
         $this->addCommandButton(xudfFormConfigurationGUI::CMD_CREATE, $this->lng->txt('save'));
-        $this->addCommandButton(xudfFormConfigurationGUI::CMD_STANDARD, $this->lng->txt('cancel'));
+        $this->addCommandButton(xudfGUI::CMD_STANDARD, $this->lng->txt('cancel'));
     }
 
-
-    /**
-     *
-     */
-    protected function initUdfFieldForm()
+    protected function initUdfFieldForm(): void
     {
         // UDF FIELD
         $input = new ilSelectInputGUI($this->pl->txt(self::F_UDF_FIELD), self::F_UDF_FIELD);
 
         /** @var ilUserDefinedFields $udf_fields */
         $udf_fields = ilUserDefinedFields::_getInstance()->getDefinitions();
-        $options = array();
+        $options = [];
         foreach ($udf_fields as $udf_field) {
             $options[$udf_field['field_id']] = $udf_field['field_name'];
         }
@@ -112,11 +100,7 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->addItem($input);
     }
 
-
-    /**
-     *
-     */
-    protected function initSeparatorForm()
+    protected function initSeparatorForm(): void
     {
         // TITLE
         $input = new ilTextInputGUI($this->lng->txt(self::F_TITLE), self::F_TITLE);
@@ -127,33 +111,25 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->addItem($input);
     }
 
-
-    /**
-     *
-     */
-    public function fillForm()
+    public function fillForm(): void
     {
         try {
             $title = $this->element->getTitle();
         } catch (UDFNotFoundException $e) {
-            ilUtil::sendInfo($this->pl->txt('msg_choose_new_type'));
+            $this->global_tpl->setOnScreenMessage("info", $this->pl->txt('msg_choose_new_type'));
             $title = '';
         }
-        $values = array(
-            self::F_TITLE       => $title,
+        $values = [
+            self::F_TITLE => $title,
             self::F_DESCRIPTION => $this->element->getDescription(),
-            self::F_UDF_FIELD   => $this->element->getUdfFieldId(),
-            self::F_REQUIRED    => $this->element->isRequired()
-        );
+            self::F_UDF_FIELD => $this->element->getUdfFieldId(),
+            self::F_REQUIRED => $this->element->isRequired()
+        ];
 
         $this->setValuesByArray($values, true);
     }
 
-
-    /**
-     * @return bool
-     */
-    public function saveForm()
+    public function saveForm(): bool
     {
         if (!$this->checkInput()) {
             return false;
@@ -162,8 +138,8 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
         $this->element->setObjId($this->parent_gui->getObjId());
         $this->element->setTitle($this->getInput(self::F_TITLE));
         $this->element->setDescription($this->getInput(self::F_DESCRIPTION));
-        $this->element->setUdfFieldId($this->getInput(self::F_UDF_FIELD));
-        $this->element->setIsRequired($this->getInput(self::F_REQUIRED));
+        $this->element->setUdfFieldId((int) $this->getInput(self::F_UDF_FIELD));
+        $this->element->setIsRequired((bool) $this->getInput(self::F_REQUIRED));
         $this->element->store();
 
         return true;

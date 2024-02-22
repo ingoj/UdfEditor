@@ -1,24 +1,30 @@
 <?php
-require_once __DIR__ . "/../vendor/autoload.php";
 
 /**
- * Class ilObjUdfEditorAccess
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
  *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
+require_once __DIR__ . "/../vendor/autoload.php";
+
 class ilObjUdfEditorAccess extends ilObjectPluginAccess
 {
+    protected static ?ilObjUdfEditorAccess $instance = null;
 
-    /**
-     * @var ilObjUdfEditorAccess
-     */
-    protected static $instance = null;
-
-
-    /**
-     * @return ilObjUdfEditorAccess
-     */
-    public static function getInstance()
+    public static function getInstance(): ilObjUdfEditorAccess
     {
         if (self::$instance === null) {
             self::$instance = new self();
@@ -27,39 +33,20 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
         return self::$instance;
     }
 
+    protected ilAccessHandler $access;
 
-    /**
-     * @var ilAccessHandler
-     */
-    protected $access;
-    /**
-     * @var ilObjUser
-     */
-    protected $usr;
+    protected ilObjUser $usr;
 
-
-    /**
-     *
-     */
     public function __construct()
     {
+        parent::__construct();
         global $DIC;
 
         $this->access = $DIC->access();
         $this->usr = $DIC->user();
     }
 
-
-    /**
-     * @param string   $a_cmd
-     * @param string   $a_permission
-     * @param int|null $a_ref_id
-     * @param int|null $a_obj_id
-     * @param int|null $a_user_id
-     *
-     * @return bool
-     */
-    public function _checkAccess($a_cmd, $a_permission, $a_ref_id = null, $a_obj_id = null, $a_user_id = null)
+    public function _checkAccess(string $a_cmd, string $a_permission, ?int $a_ref_id = null, ?int $a_obj_id = null, ?int $a_user_id = null): bool
     {
         if ($a_ref_id === null) {
             $a_ref_id = filter_input(INPUT_GET, "ref_id");
@@ -90,33 +77,18 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
         }
     }
 
-
-    /**
-     * @param string   $a_cmd
-     * @param string   $a_permission
-     * @param int|null $a_ref_id
-     * @param int|null $a_obj_id
-     * @param int|null $a_user_id
-     *
-     * @return bool
-     */
-    protected static function checkAccess($a_cmd, $a_permission, $a_ref_id = null, $a_obj_id = null, $a_user_id = null)
+    protected static function checkAccess(string $a_cmd, string $a_permission, ?int $a_ref_id = null, ?int $a_obj_id = null, ?int $a_user_id = null): bool
     {
         return self::getInstance()->_checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id);
     }
 
-
-    /**
-     * @param class|string $class
-     * @param string       $cmd
-     */
-    public static function redirectNonAccess($class, $cmd = "")
+    public static function redirectNonAccess(string $class, string $cmd = ""): void
     {
         global $DIC;
 
         $ctrl = $DIC->ctrl();
 
-        ilUtil::sendFailure($DIC->language()->txt("permission_denied"), true);
+        $DIC->ui()->mainTemplate()->setOnScreenMessage("failure", $DIC->language()->txt("permission_denied"), true);
 
         if (is_object($class)) {
             $ctrl->clearParameters($class);
@@ -127,57 +99,27 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
         }
     }
 
-
-    /**
-     * @param int|null $ref_id
-     *
-     * @return bool
-     */
-    public static function hasVisibleAccess($ref_id = null)
+    public static function hasVisibleAccess(?int $ref_id = null): bool
     {
         return self::checkAccess("visible", "visible", $ref_id);
     }
 
-
-    /**
-     * @param int|null $ref_id
-     *
-     * @return bool
-     */
-    public static function hasReadAccess($ref_id = null)
+    public static function hasReadAccess(?int $ref_id = null): bool
     {
         return self::checkAccess("read", "read", $ref_id);
     }
 
-
-    /**
-     * @param int|null $ref_id
-     *
-     * @return bool
-     */
-    public static function hasWriteAccess($ref_id = null)
+    public static function hasWriteAccess(?int $ref_id = null): bool
     {
         return self::checkAccess("write", "write", $ref_id);
     }
 
-
-    /**
-     * @param int|null $ref_id
-     *
-     * @return bool
-     */
-    public static function hasDeleteAccess($ref_id = null)
+    public static function hasDeleteAccess(?int $ref_id = null): bool
     {
         return self::checkAccess("delete", "delete", $ref_id);
     }
 
-
-    /**
-     * @param int|null $ref_id
-     *
-     * @return bool
-     */
-    public static function hasEditPermissionAccess($ref_id = null)
+    public static function hasEditPermissionAccess(?int $ref_id = null): bool
     {
         return self::checkAccess("edit_permission", "edit_permission", $ref_id);
     }

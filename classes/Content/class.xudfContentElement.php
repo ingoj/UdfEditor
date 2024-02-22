@@ -1,31 +1,35 @@
 <?php
 
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
 use srag\Plugins\UdfEditor\Exception\UDFNotFoundException;
 
-/**
- * Class xudfContentElement
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- */
 class xudfContentElement extends ActiveRecord
 {
+    public const DB_TABLE_NAME = 'xudf_element';
 
-    const DB_TABLE_NAME = 'xudf_element';
-
-
-    /**
-     * @return string
-     */
-    public function getConnectorContainerName()
+    public function getConnectorContainerName(): string
     {
         return self::DB_TABLE_NAME;
     }
 
-
-    /**
-     *
-     */
-    public function create()
+    public function create(): void
     {
         $element = self::orderBy('sort')->first();
         $sort = $element ? ($element->getSort() + 10) : 10;
@@ -33,22 +37,12 @@ class xudfContentElement extends ActiveRecord
         parent::create();
     }
 
-
-    /**
-     * @param       $primary_key
-     * @param array $add_constructor_args
-     *
-     * @return self
-     */
-    public static function find($primary_key, array $add_constructor_args = array())
+    public static function find($primary_key, array $add_constructor_args = []): ?self
     {
         return parent::find($primary_key, $add_constructor_args);
     }
 
-
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_sequence     true
      * @con_fieldtype    integer
@@ -56,176 +50,125 @@ class xudfContentElement extends ActiveRecord
      * @con_is_notnull   true
      * @con_is_primary   true
      */
-    protected $id;
+    protected ?int $id = null;
+
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      * @con_is_notnull   true
      */
-    protected $obj_id;
+    protected int $obj_id;
+
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      */
-    protected $sort;
+    protected int $sort;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      */
-    protected $is_separator = false;
+    protected bool $is_separator = false;
+
     /**
-     * @var int
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      */
-    protected $udf_field;
+    protected int $udf_field;
+
     /**
-     * @var String
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected $title;
+    protected string $title;
+
     /**
-     * @var String
-     *
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected $description;
+    protected string $description;
+
     /**
-     * @var bool
-     *
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       1
      */
-    protected $is_required = false;
+    protected bool $is_required = false;
 
-
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = $id;
     }
 
-
-    /**
-     * @return int
-     */
-    public function getObjId()
+    public function getObjId(): int
     {
         return $this->obj_id;
     }
 
-
-    /**
-     * @param int $obj_id
-     */
-    public function setObjId($obj_id)
+    public function setObjId(int $obj_id): void
     {
         $this->obj_id = $obj_id;
     }
 
-
-    /**
-     * @return int
-     */
-    public function getSort()
+    public function getSort(): int
     {
         return $this->sort;
     }
 
-
-    /**
-     * @param int $sort
-     */
-    public function setSort($sort)
+    public function setSort(int $sort): void
     {
         $this->sort = $sort;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function isSeparator()
+    public function isSeparator(): bool
     {
         return $this->is_separator;
     }
 
-
-    /**
-     * @param bool $is_separator
-     */
-    public function setIsSeparator($is_separator)
+    public function setIsSeparator(bool $is_separator): void
     {
         $this->is_separator = $is_separator;
     }
 
-
-    /**
-     * @return int
-     */
-    public function getUdfFieldId()
+    public function getUdfFieldId(): int
     {
         return $this->udf_field;
     }
 
-
-    /**
-     * @param int $udf_field
-     */
-    public function setUdfFieldId($udf_field)
+    public function setUdfFieldId(int $udf_field): void
     {
         $this->udf_field = $udf_field;
     }
 
-
     /**
-     * @return array
      * @throws UDFNotFoundException
      */
-    public function getUdfFieldDefinition()
+    public function getUdfFieldDefinition(): array
     {
         $definition = ilUserDefinedFields::_getInstance()->getDefinition($this->getUdfFieldId());
-        if (!is_array($definition) || empty($definition)) {
+        if (empty($definition)) {
             throw new UDFNotFoundException('udf with id ' . $this->getUdfFieldId() . ' could not be found and was probably deleted');
         }
 
         return $definition;
     }
 
-
     /**
-     * @return String
      * @throws UDFNotFoundException
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         if (!$this->isSeparator()) {
             return $this->getUdfFieldDefinition()['field_name'];
@@ -234,47 +177,27 @@ class xudfContentElement extends ActiveRecord
         return $this->title;
     }
 
-
-    /**
-     * @param String $title
-     */
-    public function setTitle($title)
+    public function setTitle(string $title): void
     {
         $this->title = $title;
     }
 
-
-    /**
-     * @return String
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-
-    /**
-     * @param String $description
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-
-    /**
-     * @return bool
-     */
-    public function isRequired()
+    public function isRequired(): bool
     {
-        return (bool) $this->is_required;
+        return $this->is_required;
     }
 
-
-    /**
-     * @param bool $is_required
-     */
-    public function setIsRequired($is_required)
+    public function setIsRequired(bool $is_required): void
     {
         $this->is_required = $is_required;
     }

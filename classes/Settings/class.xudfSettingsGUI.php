@@ -1,91 +1,104 @@
 <?php
 
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationCtrl;
-use srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl;
-use srag\Notifications4Plugin\UdfEditor\Utils\Notifications4PluginTrait;
+/**
+ * This file is part of ILIAS, a powerful learning management system
+ * published by ILIAS open source e-Learning e.V.
+ *
+ * ILIAS is licensed with the GPL-3.0,
+ * see https://www.gnu.org/licenses/gpl-3.0.en.html
+ * You should have received a copy of said license along with the
+ * source code, too.
+ *
+ * If this is not the case or you just want to try ILIAS, you'll find
+ * us at:
+ * https://www.ilias.de
+ * https://github.com/ILIAS-eLearning
+ *
+ *********************************************************************/
+
+declare(strict_types=1);
+
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
+use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Utils\Notifications4PluginTrait;
 
 /**
- * Class xudfSettingsGUI
- *
- * @author Theodor Truffer <tt@studer-raimann.ch>
- *
  * @ilCtrl_isCalledBy xudfSettingsGUI: ilObjUdfEditorGUI, ilPropertyFormGUI
  * @ilCtrl_Calls      xudfSettingsGUI: xudfSettingsFormGUI
- *
- * @ilCtrl_isCalledBy srag\Notifications4Plugin\UdfEditor\Notification\NotificationsCtrl: xudfSettingsGUI
+ * @ilCtrl_isCalledBy srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl: xudfSettingsGUI
  */
-class xudfSettingsGUI extends xudfGUI {
-
+class xudfSettingsGUI extends xudfGUI
+{
     use Notifications4PluginTrait;
 
-    const SUBTAB_SETTINGS = 'settings';
-    const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
-    const SUBTAB_MAIL_TEMPLATE = NotificationsCtrl::TAB_NOTIFICATIONS;
+    public const SUBTAB_SETTINGS = 'settings';
+    public const SUBTAB_FORM_CONFIGURATION = 'form_configuration';
+    public const SUBTAB_MAIL_TEMPLATE = NotificationsCtrl::TAB_NOTIFICATIONS;
 
-    const CMD_UPDATE = 'update';
-
+    public const CMD_UPDATE = 'update';
 
     /**
      * @throws ilCtrlException
      */
-    public function executeCommand()
+    public function executeCommand(): void
     {
         $this->setSubtabs();
         $next_class = $this->ctrl->getNextClass();
         switch ($next_class) {
-            case strtolower(NotificationsCtrl::class):
-                if ($this->getObject()->getSettings()->hasMailNotification()
-                    && $this->getObject()->getSettings()->getNotification()->getId() === intval(filter_input(INPUT_GET, NotificationCtrl::GET_PARAM_NOTIFICATION_ID))
-                ) {
-                    $this->tabs->activateSubTab(self::SUBTAB_MAIL_TEMPLATE);
-                    $this->ctrl->forwardCommand(new NotificationsCtrl());
-                }
-                break;
             case strtolower(xudfSettingsFormGUI::class):
                 $xudfSettingsFormGUI = new xudfSettingsFormGUI($this);
                 $this->ctrl->forwardCommand($xudfSettingsFormGUI);
                 break;
             default:
+                if ($this->getObject()->getSettings()->hasMailNotification()
+                    && $this->getObject()->getSettings()->getNotification()->getId() === (int) filter_input(INPUT_GET, NotificationCtrl::GET_PARAM_NOTIFICATION_ID)
+                ) {
+                    $this->tabs->activateSubTab(self::SUBTAB_MAIL_TEMPLATE);
+                }
                 $cmd = $this->ctrl->getCmd(self::CMD_STANDARD);
                 $this->performCommand($cmd);
                 break;
         }
     }
 
-
-    protected function setSubtabs() {
+    protected function setSubtabs(): void
+    {
         $this->tabs->addSubTab(self::SUBTAB_SETTINGS, $this->lng->txt(self::SUBTAB_SETTINGS), $this->ctrl->getLinkTarget($this, self::CMD_STANDARD));
         $this->tabs->addSubTab(self::SUBTAB_FORM_CONFIGURATION, $this->pl->txt(self::SUBTAB_FORM_CONFIGURATION), $this->ctrl->getLinkTargetByClass(xudfFormConfigurationGUI::class));
-        $this->ctrl->setParameterByClass(NotificationCtrl::class, NotificationCtrl::GET_PARAM_NOTIFICATION_ID, $this->getObject()->getSettings()->getNotification()->getId());
+        $this->ctrl->setParameterByClass(self::class, NotificationCtrl::GET_PARAM_NOTIFICATION_ID, $this->getObject()->getSettings()->getNotification()->getId());
         if ($this->getObject()->getSettings()->hasMailNotification()) {
-            $this->tabs->addSubTab(self::SUBTAB_MAIL_TEMPLATE, $this->pl->txt("notification"),
-                $this->ctrl->getLinkTargetByClass([NotificationsCtrl::class, NotificationCtrl::class], NotificationCtrl::CMD_EDIT_NOTIFICATION));
+            $this->ctrl->setParameterByClass(
+                self::class,
+                NotificationCtrl::GET_PARAM_NOTIFICATION_ID,
+                $this->getObject()->getSettings()->getNotification()->getId()
+            );
+            $this->tabs->addSubTab(
+                self::SUBTAB_MAIL_TEMPLATE,
+                $this->pl->txt("notification"),
+                $this->ctrl->getLinkTargetByClass([self::class], NotificationCtrl::CMD_EDIT_NOTIFICATION)
+            );
         }
         $this->tabs->setSubTabActive(self::SUBTAB_SETTINGS);
     }
 
-
-    protected function index() {
+    protected function index(): void
+    {
         $xudfSettingsFormGUI = new xudfSettingsFormGUI($this);
         $xudfSettingsFormGUI->fillForm();
         $this->tpl->setContent($xudfSettingsFormGUI->getHTML());
     }
 
-    /**
-     *
-     */
-    protected function update() {
+    protected function update(): void
+    {
         $xudfSettingsFormGUI = new xudfSettingsFormGUI($this);
         $xudfSettingsFormGUI->setValuesByPost();
         if (!$xudfSettingsFormGUI->saveForm()) {
-            ilUtil::sendFailure($this->pl->txt('msg_incomplete'));
+            $this->tpl->setOnScreenMessage("failure", $this->pl->txt('msg_incomplete'));
             $this->tpl->setContent($xudfSettingsFormGUI->getHTML());
             return;
         }
-        ilUtil::sendSuccess($this->pl->txt('form_saved'), true);
+        $this->tpl->setOnScreenMessage("success", $this->pl->txt('form_saved'), true);
         $this->ctrl->redirect($this, self::CMD_STANDARD);
     }
-
-
 
 }
