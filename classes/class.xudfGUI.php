@@ -51,7 +51,7 @@ abstract class xudfGUI
         }
     }
 
-    protected function performCommand($cmd): void
+    protected function performCommand(string $cmd): void
     {
         if ((new NotificationCtrl($this))->handleCommand($cmd)) {
             //Do nothing special

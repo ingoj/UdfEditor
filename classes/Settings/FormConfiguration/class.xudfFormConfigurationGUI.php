@@ -19,7 +19,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     public const CMD_CONFIRM_DELETE = 'confirmDelete';
     public const CMD_REORDER = 'reorder';
 
-    protected function performCommand($cmd): void
+    protected function performCommand(string $cmd): void
     {
         switch ($cmd) {
             case self::CMD_STANDARD:

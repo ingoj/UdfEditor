@@ -129,7 +129,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         return $this->obj_id;
     }
 
-    public function performCommand($cmd): void
+    public function performCommand(string $cmd): void
     {
         $this->{$cmd}();
     }
