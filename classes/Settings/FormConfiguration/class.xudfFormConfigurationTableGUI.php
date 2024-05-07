@@ -50,7 +50,12 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         $this->dic->ui()->mainTemplate()->addOnLoadCode("xudf = {'base_link': '$base_link'};");
 
         $this->initColumns();
-        $this->setData(xudfContentElement::where(['obj_id' => ilObjUdfEditor::_lookupObjectId((int) filter_input(INPUT_GET, 'ref_id'))])->orderBy('sort')->getArray());
+
+        try {
+            $this->setData(xudfContentElement::where(['obj_id' => ilObjUdfEditor::_lookupObjectId((int) filter_input(INPUT_GET, 'ref_id'))])->orderBy('sort')->getArray());
+        } catch (Exception $e) {
+            $this->setData([]);
+        }
     }
 
     protected function initColumns(): void
