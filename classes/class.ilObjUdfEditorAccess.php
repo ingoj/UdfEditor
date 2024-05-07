@@ -49,7 +49,7 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
     public function _checkAccess(string $a_cmd, string $a_permission, ?int $a_ref_id = null, ?int $a_obj_id = null, ?int $a_user_id = null): bool
     {
         if ($a_ref_id === null) {
-            $a_ref_id = filter_input(INPUT_GET, "ref_id");
+            $a_ref_id = (int) filter_input(INPUT_GET, "ref_id");
         }
 
         if ($a_obj_id === null) {
