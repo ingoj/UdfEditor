@@ -67,10 +67,10 @@ class xudfContentFormGUI extends ilPropertyFormGUI
 
                 switch ($definition['field_type']) {
                     case 1:
-                        $input = new ilTextInputGUI($element->getTitle(), $element->getUdfFieldId());
+                        $input = new ilTextInputGUI($element->getTitle(), (string) $element->getUdfFieldId());
                         break;
                     case 2:
-                        $input = new ilSelectInputGUI($element->getTitle(), $element->getUdfFieldId());
+                        $input = new ilSelectInputGUI($element->getTitle(), (string) $element->getUdfFieldId());
                         $options = ['' => $this->dic->language()->txt('please_choose')];
                         foreach ($definition['field_values'] as $key => $values) {
                             $options[$values] = $values;
@@ -78,7 +78,7 @@ class xudfContentFormGUI extends ilPropertyFormGUI
                         $input->setOptions($options);
                         break;
                     case 3:
-                        $input = new ilTextAreaInputGUI($element->getTitle(), $element->getUdfFieldId());
+                        $input = new ilTextAreaInputGUI($element->getTitle(), (string) $element->getUdfFieldId());
                         break;
                     case 51:
                         $input = ilCustomUserFieldsHelper::getInstance()->getFormPropertyForDefinition($definition, true);
@@ -130,7 +130,7 @@ class xudfContentFormGUI extends ilPropertyFormGUI
 
         /** @var xudfContentElement $element */
         foreach (xudfContentElement::where(['obj_id' => $this->obj_id, 'is_separator' => false])->get() as $element) {
-            $value = $this->getInput($element->getUdfFieldId());
+            $value = $this->getInput((string) $element->getUdfFieldId());
 
             if ($value === null) {
                 $value = $this->getInput("udf_" . $element->getUdfFieldId());
