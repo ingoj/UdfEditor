@@ -58,14 +58,14 @@ class xudfContentElement extends ActiveRecord
      * @con_length       8
      * @con_is_notnull   true
      */
-    protected int $obj_id;
+    protected ?int $obj_id = null;
 
     /**
      * @con_has_field    true
      * @con_fieldtype    integer
      * @con_length       8
      */
-    protected int $sort;
+    protected int $sort = 0;
 
     /**
      * @con_has_field    true
@@ -79,21 +79,21 @@ class xudfContentElement extends ActiveRecord
      * @con_fieldtype    integer
      * @con_length       8
      */
-    protected int $udf_field;
+    protected ?int $udf_field = null;
 
     /**
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected string $title;
+    protected string $title = "";
 
     /**
      * @con_has_field    true
      * @con_fieldtype    text
      * @con_length       256
      */
-    protected string $description;
+    protected string $description = "";
 
     /**
      * @con_has_field    true
