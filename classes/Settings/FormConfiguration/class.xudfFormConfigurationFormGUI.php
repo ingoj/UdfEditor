@@ -57,12 +57,12 @@ class xudfFormConfigurationFormGUI extends ilPropertyFormGUI
     protected function initForm(): void
     {
         $input = new ilHiddenInputGUI(self::F_IS_SEPARATOR);
-        $input->setValue($this->element->isSeparator());
+        $input->setValue((string) $this->element->isSeparator());
         $this->addItem($input);
 
         if ($this->element->getId()) {
             $input = new ilHiddenInputGUI(self::F_ELEMENT_ID);
-            $input->setValue($this->element->getId());
+            $input->setValue((string) $this->element->getId());
             $this->addItem($input);
         }
 

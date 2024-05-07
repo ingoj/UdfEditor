@@ -50,18 +50,23 @@ class xudfFormConfigurationTableGUI extends ilTable2GUI
         $this->dic->ui()->mainTemplate()->addOnLoadCode("xudf = {'base_link': '$base_link'};");
 
         $this->initColumns();
-        $this->setData(xudfContentElement::where(['obj_id' => ilObjUdfEditor::_lookupObjectId(filter_input(INPUT_GET, 'ref_id'))])->orderBy('sort')->getArray());
+
+        try {
+            $this->setData(xudfContentElement::where(['obj_id' => ilObjUdfEditor::_lookupObjectId((int) filter_input(INPUT_GET, 'ref_id'))])->orderBy('sort')->getArray());
+        } catch (Exception $e) {
+            $this->setData([]);
+        }
     }
 
     protected function initColumns(): void
     {
-        $this->addColumn('', '', 10, true);
-        $this->addColumn($this->dic->language()->txt('title'), 'title', 50);
-        $this->addColumn($this->dic->language()->txt('description'), 'description', 100);
-        $this->addColumn($this->dic->language()->txt('type'), 'type', 30);
-        $this->addColumn($this->pl->txt('udf_type'), 'udf_type', 30);
-        $this->addColumn($this->pl->txt('is_required'), 'is_required', 30);
-        $this->addColumn('', '', 10, true);
+        $this->addColumn('', '', "10", true);
+        $this->addColumn($this->dic->language()->txt('title'), 'title', "50");
+        $this->addColumn($this->dic->language()->txt('description'), 'description', "100");
+        $this->addColumn($this->dic->language()->txt('type'), 'type', "30");
+        $this->addColumn($this->pl->txt('udf_type'), 'udf_type', "30");
+        $this->addColumn($this->pl->txt('is_required'), 'is_required', "30");
+        $this->addColumn('', '', "10", true);
     }
 
     protected function fillRow(array $a_set): void

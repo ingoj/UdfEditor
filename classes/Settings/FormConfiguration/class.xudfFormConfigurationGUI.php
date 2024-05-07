@@ -112,7 +112,7 @@ class xudfFormConfigurationGUI extends xudfGUI
     protected function create(): void
     {
         $element = new xudfContentElement($_POST['element_id']);
-        $element->setIsSeparator($_POST[xudfFormConfigurationFormGUI::F_IS_SEPARATOR]);
+        $element->setIsSeparator((bool) $_POST[xudfFormConfigurationFormGUI::F_IS_SEPARATOR]);
 
         $xudfFormConfigurationFormGUI = new xudfFormConfigurationFormGUI($this, $element);
         $xudfFormConfigurationFormGUI->setValuesByPost();
