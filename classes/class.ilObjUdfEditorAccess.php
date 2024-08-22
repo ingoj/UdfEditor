@@ -29,6 +29,9 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
         if ($ref_id === null) {
             $ref_id = filter_input(INPUT_GET, "ref_id");
         }
+        if ($ref_id === null) {
+            return false;
+        }
         if ($obj_id === null) {
             $obj_id = ilObjUdfEditor::_lookupObjectId($ref_id);
         }
@@ -79,16 +82,10 @@ class ilObjUdfEditorAccess extends ilObjectPluginAccess
     }
     public static function hasReadAccess(int $ref_id = null): bool
     {
-        if(is_null($ref_id)) {
-            return true;
-        }
         return self::checkAccess("read", "read", $ref_id);
     }
     public static function hasWriteAccess(int $ref_id = null): bool
     {
-        if(is_null($ref_id)) {
-            return true;
-        }
         return self::checkAccess("write", "write", $ref_id);
     }
     public static function hasDeleteAccess(int $ref_id = null): bool
