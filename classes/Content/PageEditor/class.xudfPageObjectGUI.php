@@ -37,7 +37,7 @@ class xudfPageObjectGUI extends ilPageObjectGUI
             $style_id = 0;
         }
         $tpl->setVariable("LOCATION_CONTENT_STYLESHEET",
-            ilObjStyleSheet::getContentStylePath($style_id);
+            ilObjStyleSheet::getContentStylePath($style_id));
         $tpl->parseCurrentBlock();
     }
 
