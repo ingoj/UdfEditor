@@ -43,7 +43,7 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
             if (count($a_referer)) {
                 foreach ($a_referer as $entry) {
                     $a_entry = explode('=',$entry);
-                    if ($a_entry[0] == 'ref_id' && $isset($a_entry[1])) {
+                    if ($a_entry[0] == 'ref_id' && isset($a_entry[1])) {
                         $rref = $a_entry[1];
                     }
                 }
