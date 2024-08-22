@@ -32,7 +32,7 @@ class xudfPageObjectGUI extends ilPageObjectGUI
         $tpl->parseCurrentBlock();
 
         $tpl->setCurrentBlock("ContentStyle");
-        $style_id = $parent_gui->getObject()->getStyleSheetiId();
+        $style_id = $parent_gui->getObject()->getStyleSheetId();
         if ($style_id == null) {
             $style_id = 0;
         }
