@@ -204,7 +204,7 @@ class xudfContentGUI extends xudfGUI {
                $this->ctrl->redirectToURL($url);
                break;
 	   case xudfSetting::REDIRECT_TO_CALLER:
-	       $this->redirectToCaller();
+	       $this->returnToCaller();
 	       break;
        }
     }
