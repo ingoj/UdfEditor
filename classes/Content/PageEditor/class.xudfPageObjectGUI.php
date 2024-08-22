@@ -32,8 +32,12 @@ class xudfPageObjectGUI extends ilPageObjectGUI
         $tpl->parseCurrentBlock();
 
         $tpl->setCurrentBlock("ContentStyle");
-       /* $tpl->setVariable("LOCATION_CONTENT_STYLESHEET",
-            ilObjStyleSheet::getContentStylePath($parent_gui->getObject()->getStyleSheetId()));*/
+        $style_id = $parent_gui->get_Object()->getStyleSheet();
+        if ($style_id == null) {
+            $style_id = 0;
+        }
+        $tpl->setVariable("LOCATION_CONTENT_STYLESHEET",
+            ilObjStyleSheet::getContentStylePath($style_id);
         $tpl->parseCurrentBlock();
     }
 
