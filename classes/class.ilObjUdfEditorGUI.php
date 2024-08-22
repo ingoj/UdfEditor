@@ -37,6 +37,22 @@ class ilObjUdfEditorGUI extends ilObjectPluginGUI
         $component_factory = $DIC['component.factory'];
         /** @var $plugin ilUdfEditorPlugin */
         $plugin = $component_factory->getPlugin(ilUdfEditorPlugin::PLUGIN_ID);
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $rref = 0;
+            $a_referer = explode('&',$_SERVER['HTTP_REFERER']);
+            if (count($a_referer)) {
+                foreach ($a_referer as $entry) {
+                    $a_entry = explode('=',$entry);
+                    if ($a_entry[0] == 'ref_id' && $isset($a_entry[1])) {
+                        $rref = $a_entry[1];
+                    }
+                }
+            }
+            if ($rref != $this->ref_id) {
+                $_SESSION['xudfreturn'] = $_SERVER['HTTP_REFERER'];
+            }
+        }
+        
     }
 
     /**
