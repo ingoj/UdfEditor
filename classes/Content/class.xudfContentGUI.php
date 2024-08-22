@@ -163,6 +163,18 @@ class xudfContentGUI extends xudfGUI {
         $this->ctrl->redirectByClass(ilRepositoryGUI::class);
     }
 
+    /**
+     *
+     */
+    protected function returnToCaller() {
+	if (isset($_SESSION['xudfreturn'])) {
+		$backlink = $_SESSION['xudfreturn'];
+		unset($_SESSION['xudfreturn']);
+		ilUtil::redirect($backlink);
+	} else {
+		$this->ctrl->redirect($this);
+	}
+    }
 
     /**
      *
@@ -171,17 +183,29 @@ class xudfContentGUI extends xudfGUI {
     {
        switch ($this->getObject()->getSettings()->getRedirectType())  {
            case xudfSetting::REDIRECT_STAY_IN_FORM:
-               $this->ctrl->redirect($this);
+	       if (isset($_SESSION['xudfreturn'])) {
+		       unset($_SESSION['xudfreturn']);
+               }
+	               $this->ctrl->redirect($this);
                break;
            case xudfSetting::REDIRECT_TO_ILIAS_OBJECT:
+	       if (isset($_SESSION['xudfreturn'])) {
+		       unset($_SESSION['xudfreturn']);
+	       }
                $ref_id = $this->getObject()->getSettings()->getRedirectValue();
                $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $ref_id);
                $this->ctrl->redirectByClass(ilRepositoryGUI::class);
                break;
            case xudfSetting::REDIRECT_TO_URL:
+	       if (isset($_SESSION['xudfreturn'])) {
+		       unset($_SESSION['xudfreturn']);
+	       }
                $url = $this->getObject()->getSettings()->getRedirectValue();
                $this->ctrl->redirectToURL($url);
                break;
+	   case xudfSetting::REDIRECT_TO_CALLER:
+	       $this->redirectToCaller();
+	       break;
        }
     }
 }
