@@ -6,6 +6,7 @@ class xudfSetting extends ActiveRecord {
     const REDIRECT_STAY_IN_FORM = 'stay_in_form';
     const REDIRECT_TO_ILIAS_OBJECT = 'to_ilias_object';
     const REDIRECT_TO_URL = 'to_url';
+    const REDIRECT_TO_CALLER = 'to_caller';
 
     public function getConnectorContainerName(): string
     {
