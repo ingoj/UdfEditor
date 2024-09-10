@@ -80,7 +80,7 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
 
         // Configure Edit Mode
         $input = new ilCheckboxInputGUI($this->pl->txt(self::F_ALWAYS_EDIT), self::F_ALWAYS_EDIT);
-        $input->setInfo($this->pl->txt(self::F_ALWAYS_EDIT . '_info');
+        $input->setInfo($this->pl->txt(self::F_ALWAYS_EDIT . '_info'));
         $this->addItem($input);
         
         // MAIL NOTIFICATION
