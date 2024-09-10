@@ -86,7 +86,7 @@ class xudfSetting extends ActiveRecord {
      * @var bool
      *
      * @con_has_field	 true
-     * @confieldtype     integer
+     * @con_fieldtype     integer
      * @con_length       1
      * @con_is_notnull   false
      */
