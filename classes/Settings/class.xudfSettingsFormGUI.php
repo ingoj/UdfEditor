@@ -131,7 +131,7 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
             self::F_DESCRIPTION             => $this->parent_gui->getObject()->getDescription(),
             self::F_ONLINE                  => $this->xudfSetting->isOnline(),
             self::F_SHOW_INFOTAB            => $this->xudfSetting->isShowInfoTab(),
-            self::F_ALWAYS_EDIT             => $this->xudfSetting->getAlwaysEdit();
+            self::F_ALWAYS_EDIT             => $this->xudfSetting->getAlwaysEdit(),
             self::F_MAIL_NOTIFICATION       => $this->xudfSetting->hasMailNotification(),
             self::F_ADDITIONAL_NOTIFICATION => $this->xudfSetting->getAdditionalNotification(),
             self::F_REDIRECT_TYPE           => $this->xudfSetting->getRedirectType()
