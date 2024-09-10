@@ -52,5 +52,5 @@ xudfSetting::updateDB();
 ?>
 <#8>
 <?php
-xudfSetting::updateDB();
+\xudfSetting::updateDB();
 ?>
