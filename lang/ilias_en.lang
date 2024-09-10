@@ -9,6 +9,8 @@ udf_field_type_2#:#Selector
 udf_field_type_3#:#Textarea
 udf_field_type_51#:#Cascading
 show_infotab#:#Show Tab "Info"
+always_edit#:#Directly editable
+always_edit_info#:#Users dont need to turn on editmode if form is already filled completely
 delete_confirmation_text#:#Do you really want to delete the following element?
 msg_successfully_deleted#:#Element deleted successfully.
 msg_no_udfs#:#There are no user defined fields on this platform. These can be created in the user administration.
