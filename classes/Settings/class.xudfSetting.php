@@ -82,8 +82,16 @@ class xudfSetting extends ActiveRecord {
      * @con_is_notnull   true
      */
     protected $notification_name = "";
-
-
+    /**
+     * @var bool
+     *
+     * @con_has_field	 true
+     * @confieldtype     integer
+     * @con_length       1
+     * @con_is_notnull   false
+     */
+    protected $always_edit = false;
+    
     /**
      * @return int
      */
@@ -191,7 +199,6 @@ class xudfSetting extends ActiveRecord {
         return $this->redirect_value;
     }
 
-
     /**
      * @param string $redirect_value
      */
@@ -199,7 +206,27 @@ class xudfSetting extends ActiveRecord {
     {
         $this->redirect_value = $redirect_value;
     }
+	
+    /**
+     * @param bool $always_edit
+     */
+    public function setAlwaysEdit(bool $always_edit): void
+    {
+	$this->always_edit = $always_edit;
+    }
 
+    /**
+     * @return bool
+     */
+    public function getAlwaysEdit() : bool
+    {
+	if ($this->always_edit == null) 
+	{
+		return false;
+	}
+	return $this->always_edit;
+    }
+	
     /**
      * @param $primary_key
      * @param array $add_constructor_args
