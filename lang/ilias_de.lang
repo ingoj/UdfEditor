@@ -34,7 +34,8 @@ fold_create_xudf#:#UdfEditor Erstellen
 grp_create_xudf#:#UdfEditor Erstellen
 root_create_xudf#:#UdfEditor Erstellen
 xudf_visible#:#Anzeigen: UdfEditor ist sichtbar
-xudf_read#:#Lesezugriff: Videos können angezeigt werden
+xudf_read#:#Lesezugriff: Inhalte können gesehen werden
+xudf_copy#:#Kopieren: UdfEditor kann kopiert werden
 xudf_write#:#Einstellungen bearbeiten: Einstellungen und Inhalte können bearbeitet werden
 xudf_delete#:#Löschen: Objekt kann gelöscht werden
 xudf_edit_permission#:#Rechteeinstellungen ändern: Rechteeinstellungen ändern
@@ -49,7 +50,6 @@ stay_in_form#:#Im Formular bleiben
 to_ilias_object#:#ILIAS-Objekt
 to_url#:#URL
 notification#:#Benachrichtigung
-
 notifications4plugin_actions#:#Aktionen
 notifications4plugin_add#:#Hinzugefügen
 notifications4plugin_add_notification#:#Benachrichtigung hinzufügen
