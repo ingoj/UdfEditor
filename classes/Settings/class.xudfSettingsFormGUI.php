@@ -38,7 +38,8 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
         = [
             xudfSetting::REDIRECT_STAY_IN_FORM => false,
             xudfSetting::REDIRECT_TO_ILIAS_OBJECT => self::F_REF_ID,
-            xudfSetting::REDIRECT_TO_URL => self::F_URL
+            xudfSetting::REDIRECT_TO_URL => self::F_URL,
+            xudfSetting::REDIRECT_TO_CALLER => false
         ];
 
     protected ilCtrl $ctrl;
@@ -115,6 +116,9 @@ class xudfSettingsFormGUI extends ilPropertyFormGUI
         $url_input = new ilTextInputGUI('', self::F_URL);
         $opt->addSubItem($url_input);
         $input->addOption($opt);
+
+        $opt = new ilRadioOption($this->pl->txt(xudfSetting::REDIRECT_TO_CALLER), xudfSetting::REDIRECT_TO_CALLER);
+        $input->addOption($opt); 
 
         $this->addItem($input);
 
