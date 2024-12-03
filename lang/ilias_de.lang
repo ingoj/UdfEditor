@@ -50,8 +50,8 @@ redirect_type_info#:#Wählen Sie hier aus, wohin ein Benutzer nach dem Speichern
 stay_in_form#:#Im Formular bleiben
 to_ilias_object#:#ILIAS-Objekt
 to_url#:#URL
+to_caller#:#Zurück zur aufrufenden Seite
 notification#:#Benachrichtigung
-
 notifications4plugin_actions#:#Aktionen
 notifications4plugin_add#:#Hinzugefügen
 notifications4plugin_add_notification#:#Benachrichtigung hinzufügen
