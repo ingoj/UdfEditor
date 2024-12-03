@@ -51,7 +51,6 @@ stay_in_form#:#stay in form
 to_ilias_object#:#to ILIAS object
 to_url#:#to URL
 notification#:#Notification
-
 notifications4plugin_actions#:#Actions
 notifications4plugin_add#:#Add
 notifications4plugin_add_notification#:#Add notification
