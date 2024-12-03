@@ -36,7 +36,8 @@ fold_create_xudf#:#Create UdfEditor
 grp_create_xudf#:#Create UdfEditor
 root_create_xudf#:#Create UdfEditor
 xudf_visible#:#Visible: UdfEditor is visible
-xudf_read#:#Read: User can watch the videos
+xudf_read#:#Read: User can see UdfEditor content
+xudf_copy#:#User can copy UdfEditor
 xudf_rep_robj_xudf_perm_upload#:#Upload: User can upload videos
 xudf_write#:#Edit Settings: User can edit content and settings of UdfEditor object
 xudf_delete#:#Delete: User can delete UdfEditor object
