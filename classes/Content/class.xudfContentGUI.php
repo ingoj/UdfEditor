@@ -159,7 +159,7 @@ class xudfContentGUI extends xudfGUI {
      *
      */
     protected function returnToParent() {
-        $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->tree->getParentId($_GET['ref_id']));
+        $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $this->tree->getParentId((int) $_GET['ref_id']));
         $this->ctrl->redirectByClass(ilRepositoryGUI::class);
     }
 
@@ -167,9 +167,9 @@ class xudfContentGUI extends xudfGUI {
      *
      */
     protected function returnToCaller() {
-	if (isset($_SESSION['xudfreturn'])) {
-		$backlink = $_SESSION['xudfreturn'];
-		unset($_SESSION['xudfreturn']);
+	if (ilSession::has('xudfreturn')) {
+		$backlink = ilSession::get('xudfreturn');
+		ilSession::clear('xudfreturn');
 		ilUtil::redirect($backlink);
 	} else {
 		$this->ctrl->redirect($this);
@@ -183,22 +183,21 @@ class xudfContentGUI extends xudfGUI {
     {
        switch ($this->getObject()->getSettings()->getRedirectType())  {
            case xudfSetting::REDIRECT_STAY_IN_FORM:
-	       if (isset($_SESSION['xudfreturn'])) {
-		       unset($_SESSION['xudfreturn']);
+	       if (ilSession:has('xudfreturn')) {
+		       ilSession::clear('xudfreturn');
                }
 	               $this->ctrl->redirect($this);
                break;
            case xudfSetting::REDIRECT_TO_ILIAS_OBJECT:
-	       if (isset($_SESSION['xudfreturn'])) {
-		       unset($_SESSION['xudfreturn']);
+	       if (ilSession::has('xudfreturn')) {
+		       ilSession::clear('xudfreturn');
 	       }
                $ref_id = $this->getObject()->getSettings()->getRedirectValue();
-               $this->ctrl->setParameterByClass(ilRepositoryGUI::class, 'ref_id', $ref_id);
-               $this->ctrl->redirectByClass(ilRepositoryGUI::class);
+	       $this->ctrl->redirectToUrl('goto.php?target=' . ilObject::_lookupType((int) $ref_id,true) . '_' .$ref_id);
                break;
            case xudfSetting::REDIRECT_TO_URL:
-	       if (isset($_SESSION['xudfreturn'])) {
-		       unset($_SESSION['xudfreturn']);
+	       if (ilSession::has('xudfreturn')) {
+		       ilSession::clear('xudfreturn');
 	       }
                $url = $this->getObject()->getSettings()->getRedirectValue();
                $this->ctrl->redirectToURL($url);
