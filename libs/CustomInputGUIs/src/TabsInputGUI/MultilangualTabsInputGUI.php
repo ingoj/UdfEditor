@@ -1,9 +1,8 @@
 <?php
 
-namespace srag\Plugins\UdfEditor\Libs\CustomInputGUIs\TabsInputGUI;
+namespace ILIAS\Plugin\UdfEditor\Libs\CustomInputGUIs\TabsInputGUI;
 
 use ilFormPropertyGUI;
-use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\PropertyFormGUI\PropertyFormGUI;
 
 class MultilangualTabsInputGUI
 {
@@ -23,15 +22,15 @@ class MultilangualTabsInputGUI
                 $tab_item = $item;
 
                 if ($default_required && $lang_key === "default") {
-                    $tab_item[PropertyFormGUI::PROPERTY_REQUIRED] = true;
+                    $tab_item["required"] = true;
                 }
 
                 $tab_items[$item_key] = $tab_item;
             }
 
             $tab = [
-                PropertyFormGUI::PROPERTY_CLASS => TabsInputGUITab::class,
-                PropertyFormGUI::PROPERTY_SUBITEMS => $tab_items,
+                "class" => TabsInputGUITab::class,
+                "subitems" => $tab_items,
                 "setTitle" => $lang_title,
                 "setActive" => ($lang_key === ($default_language ? "default" : $DIC->language()->getLangKey()))
             ];
@@ -77,14 +76,11 @@ class MultilangualTabsInputGUI
             array_unshift($lang_keys, "default");
         }
 
-        return array_combine($lang_keys, array_map("strtoupper", $lang_keys));
+        return array_combine($lang_keys, array_map(strtoupper(...), $lang_keys));
     }
 
 
-    /**
-     * @return mixed
-     */
-    public static function getValueForLang(array $values, /*?*/ string $lang_key = null, string $sub_key = null, bool $use_default_if_not_set = true)
+    public static function getValueForLang(array $values, string $lang_key = null, string $sub_key = null, bool $use_default_if_not_set = true): mixed
     {
         global $DIC;
         if (empty($lang_key)) {
@@ -123,10 +119,7 @@ class MultilangualTabsInputGUI
     }
 
 
-    /**
-     * @param mixed $value
-     */
-    public static function setValueForLang(array &$values, $value, string $lang_key, string $sub_key = null): void
+    public static function setValueForLang(array &$values, mixed $value, string $lang_key, string $sub_key = null): void
     {
         if (!empty($sub_key)) {
             if (!isset($values[$lang_key])) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace srag\Plugins\UdfEditor\Libs\CustomInputGUIs\Loader;
+namespace ILIAS\Plugin\UdfEditor\Libs\CustomInputGUIs\Loader;
 
 use Closure;
 use ILIAS\Data\Factory;
@@ -10,16 +10,15 @@ use ILIAS\UI\Implementation\Render\ComponentRenderer;
 use ILIAS\UI\Implementation\Render\Loader;
 use ILIAS\UI\Implementation\Render\RendererFactory;
 use ILIAS\UI\Renderer;
+use ilImagePathResolver;
 use Pimple\Container;
-use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent\InputGUIWrapperUIInputComponent;
-use srag\Plugins\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent\Renderer as InputGUIWrapperUIInputComponentRenderer;
+use ILIAS\Plugin\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent\InputGUIWrapperUIInputComponent;
+use ILIAS\Plugin\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent\Renderer as InputGUIWrapperUIInputComponentRenderer;
+use Throwable;
 
 class CustomInputGUIsLoaderDetector implements Loader
 {
-    /**
-     * @var bool
-     */
-    protected static $has_fix_ctrl_namespace_current_url = false;
+    protected static bool $has_fix_ctrl_namespace_current_url = false;
     private Container $dic;
     protected Loader $loader;
 
@@ -30,31 +29,29 @@ class CustomInputGUIsLoaderDetector implements Loader
         $this->loader = $loader;
     }
 
-
-    /**
-     * @param callable[]|null $get_renderer_for_hooks
-     */
-    public static function exchangeUIRendererAfterInitialization(?array $get_renderer_for_hooks = null): callable
+    public static function exchangeUIRendererAfterInitialization(Closure $renderer, \ILIAS\DI\Container $dic): Closure
     {
-        global $DIC;
         self::fixCtrlNamespaceCurrentUrl();
 
-        $previous_renderer = Closure::bind(function (): callable {
-            return $this->raw("ui.renderer");
-        }, $DIC, Container::class)();
+        return function () use ($dic, $renderer): Renderer|Closure {
+            try {
+                $rendererObj = $renderer($dic);
 
-        return function () use ($DIC, $previous_renderer, $get_renderer_for_hooks): Renderer {
-            $previous_renderer = $previous_renderer($DIC);
-
-            if ($previous_renderer instanceof DefaultRenderer) {
-                $previous_renderer_loader = Closure::bind(function (): Loader {
-                    return $this->component_renderer_loader;
-                }, $previous_renderer, DefaultRenderer::class)();
-            } else {
-                $previous_renderer_loader = null; // TODO:
+                if ($rendererObj instanceof DefaultRenderer) {
+                    /** @var DefaultRenderer|Closure $renderer */
+                    $previous_renderer_loader = Closure::bind(function (): Loader {
+                        return $this->component_renderer_loader;
+                    }, $rendererObj, DefaultRenderer::class)();
+                    return new DefaultRenderer(
+                        new self($previous_renderer_loader),
+                        $dic["ui.javascript_binding"],
+                        $dic->language()
+                    );
+                }
+                return $rendererObj;
+            } catch (Throwable) {
+                return $renderer($dic);
             }
-
-            return new DefaultRenderer(new self($previous_renderer_loader, $get_renderer_for_hooks));
         };
     }
 
@@ -63,11 +60,15 @@ class CustomInputGUIsLoaderDetector implements Loader
     {
         if (!self::$has_fix_ctrl_namespace_current_url) {
             self::$has_fix_ctrl_namespace_current_url = true;
+            global $DIC;
 
+            /*
+             * Likely not used anymore/ever
+            $serverParams = $DIC->http()->request()->getServerParams();
             // Fix language select meta bar which current ctrl gui has namespaces (public page)
-            if (isset($_SERVER["REQUEST_URI"])) {
-                $_SERVER["REQUEST_URI"] = str_replace("\\", "%5C", $_SERVER["REQUEST_URI"]);
-            }
+            if (isset($serverParams["REQUEST_URI"])) {
+                $_SERVER["REQUEST_URI"] = str_replace("\\", "%5C", $serverParams["REQUEST_URI"]);
+            }*/
         }
     }
 
@@ -96,8 +97,7 @@ class CustomInputGUIsLoaderDetector implements Loader
                     $this->dic["ui.template_factory"],
                     $this->dic->language(),
                     $this->dic["ui.javascript_binding"],
-                    $this->dic->refinery(),
-                    $this->dic["ui.pathresolver"],
+                    new ilImagePathResolver(),
                     new Factory(),
                     $this->dic["help.text_retriever"],
                     $this->dic["ui.upload_limit_resolver"]

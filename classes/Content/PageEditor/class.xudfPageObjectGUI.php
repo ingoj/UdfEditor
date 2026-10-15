@@ -30,17 +30,14 @@ class xudfPageObjectGUI extends ilPageObjectGUI
         $this->checkAndAddCOPageDefinition();
 
         // we always need a page object - create on demand
-        if (!xudfPageObject::_exists(xudfPageObject::PARENT_TYPE, $parent_gui->getObjId())) {
+        if (!xudfPageObject::_exists(ilUdfEditorPlugin::ID, $parent_gui->getObjId())) {
             $page_obj = new xudfPageObject();
             $page_obj->setId($parent_gui->getObjId());
             $page_obj->setParentId($parent_gui->getObjId());
             $page_obj->create();
         }
 
-        parent::__construct(xudfPageObject::PARENT_TYPE, $parent_gui->getObjId());
-
-        // content style
-        include_once("./Services/Style/Content/classes/class.ilObjStyleSheet.php");
+        parent::__construct(ilUdfEditorPlugin::ID, $parent_gui->getObjId());
 
         global $DIC;
         $tpl = $DIC->ui()->mainTemplate();
@@ -65,13 +62,17 @@ class xudfPageObjectGUI extends ilPageObjectGUI
     protected function checkAndAddCOPageDefinition(): void
     {
         global $DIC;
-        $sql_query = $DIC->database()->query('SELECT * FROM copg_pobj_def WHERE parent_type = "xudf"');
+        $sql_query = $DIC->database()->queryF(
+            "SELECT * FROM copg_pobj_def WHERE parent_type = %s",
+            [ilDBConstants::T_TEXT],
+            [ilUdfEditorPlugin::ID]
+        );
         if ($DIC->database()->numRows($sql_query) === 0) {
-            $DIC->database()->insert('copg_pobj_def', [
-                'parent_type' => ['text', 'xudf'],
-                'class_name' => ['text', 'xudfPageObject'],
-                'directory' => ['text', 'classes/Content/PageEditor'],
-                'component' => ['text', 'Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor']
+            $DIC->database()->insert("copg_pobj_def", [
+                "parent_type" => [ilDBConstants::T_TEXT, ilUdfEditorPlugin::ID],
+                "class_name" => [ilDBConstants::T_TEXT, "xudfPageObject"],
+                "directory" => [ilDBConstants::T_TEXT, "classes/Content/PageEditor"],
+                "component" => [ilDBConstants::T_TEXT, "Customizing/global/plugins/Services/Repository/RepositoryObject/UdfEditor"]
             ]);
         }
     }

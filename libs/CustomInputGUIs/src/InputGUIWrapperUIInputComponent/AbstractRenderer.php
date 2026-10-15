@@ -1,7 +1,8 @@
 <?php
 
-namespace srag\Plugins\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent;
+namespace ILIAS\Plugin\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent;
 
+use Exception;
 use ILIAS\UI\Component\Component;
 use ILIAS\UI\Implementation\Component\Input\Field\Renderer;
 use ILIAS\UI\Implementation\Render\ResourceRegistry;
@@ -34,10 +35,9 @@ abstract class AbstractRenderer extends Renderer
     {
         if ($name === "input.html") {
             return __DIR__ . "/templates/" . $name;
-        } else {
-            // return parent::getTemplatePath($name);
-            return "src/UI/templates/default/Input/" . $name;
         }
+
+        return "components/ILIAS/UI/src/templates/default/Input/$name";
     }
 
 
@@ -94,7 +94,7 @@ abstract class AbstractRenderer extends Renderer
 
                     // Not supported!
                 default:
-                    throw new DICException("Class " . get_class($value) . " is not supported for output!", DICException::CODE_OUTPUT_INVALID_VALUE);
+                    throw new Exception("Class " . $value::class . " is not supported for output!");
                     break;
             }
         }

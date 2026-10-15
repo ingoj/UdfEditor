@@ -19,14 +19,18 @@
 declare(strict_types=1);
 
 use ILIAS\DI\Container;
-use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
-use srag\Plugins\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
+use ILIAS\HTTP\Wrapper\WrapperFactory;
+use ILIAS\Plugin\UdfEditor\Repository\ContentElementRepository;
+use ILIAS\Plugin\UdfEditor\Utils\UiUtil;
+use ILIAS\Refinery\Factory;
+use ILIAS\Plugin\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationCtrl;
+use ILIAS\Plugin\UdfEditor\Libs\Notifications4Plugin\Notification\NotificationsCtrl;
 
 abstract class xudfGUI
 {
-    public const CMD_STANDARD = 'index';
+    public const string CMD_STANDARD = "index";
 
-    protected ilCtrl $ctrl;
+    protected ilCtrlInterface $ctrl;
 
     protected ilObjUser $user;
 
@@ -38,11 +42,14 @@ abstract class xudfGUI
     protected ilToolbarGUI $toolbar;
 
     protected ilUdfEditorPlugin $pl;
-
-    protected ilObjUdfEditorGUI $parent_gui;
     protected Container $dic;
+    protected ilTree $tree;
+    protected WrapperFactory $http_wrapper;
+    protected Factory $refinery;
+    protected ContentElementRepository $content_element_repo;
+    protected UiUtil $ui_util;
 
-    public function __construct(ilObjUdfEditorGUI $parent_gui)
+    public function __construct(protected ilObjUdfEditorGUI $parent_gui)
     {
         global $DIC;
         $this->dic = $DIC;
@@ -54,7 +61,10 @@ abstract class xudfGUI
         $this->toolbar = $DIC->toolbar();
         $this->tree = $DIC->repositoryTree();
         $this->pl = ilUdfEditorPlugin::getInstance();
-        $this->parent_gui = $parent_gui;
+        $this->http_wrapper = $this->dic->http()->wrapper();
+        $this->refinery = $this->dic->refinery();
+        $this->content_element_repo = new ContentElementRepository();
+        $this->ui_util = new UiUtil();
     }
 
     public function executeCommand(): void
@@ -69,6 +79,7 @@ abstract class xudfGUI
         }
     }
 
+    /** @noinspection PhpStatementHasEmptyBodyInspection */
     protected function performCommand(string $cmd): void
     {
         if ((new NotificationCtrl($this))->handleCommand($cmd)) {

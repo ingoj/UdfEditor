@@ -1,6 +1,6 @@
 <?php
 
-namespace srag\Plugins\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent;
+namespace ILIAS\Plugin\UdfEditor\Libs\CustomInputGUIs\InputGUIWrapperUIInputComponent;
 
 use ilHiddenInputGUI;
 use ILIAS\UI\Component\Component;
@@ -18,7 +18,16 @@ class Renderer extends AbstractRenderer
 
         $input_tpl = $this->getTemplate("input.html", true, true);
 
-        $html = $this->wrapInFormContext($component, $this->renderInputField($input_tpl, $component, "", $default_renderer));
+        $html = $this->wrapInFormContext(
+            $component,
+            "",
+            $this->renderInputField(
+                $input_tpl,
+                $component,
+                "",
+                $default_renderer
+            ),
+        );
 
         return $html;
     }
